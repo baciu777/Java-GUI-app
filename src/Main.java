@@ -21,13 +21,14 @@ public class Main {
     public static void main(String[] args)
     {
         System.out.println("baciu");
+        System.out.println("ioana");
         //Repository<Long, User> repo = new UserFile("data/text.in", new UserValidator());
         //System.out.println("Friendships:");
         //Repository<Tuple<Long,Long>, Friendship> repofriends = new FriendshipFile("data/friendships.in", new FriendshipValidator());
 
-        Repository<Long, User> repoDb=new UserDbRepository("jdbc:postgresql://localhost:5432/network","postgres","calculator7",new UserValidator());
+        Repository<Long, User> repoDb=new UserDbRepository("jdbc:postgresql://localhost:5432/network","postgres","ioana",new UserValidator());
         repoDb.findAll().forEach(System.out::println);
-        Repository<Tuple<Long,Long>, Friendship> repoDbFr=new FriendshipDbRepository("jdbc:postgresql://localhost:5432/network","postgres","calculator7",new FriendshipValidator());
+        Repository<Tuple<Long,Long>, Friendship> repoDbFr=new FriendshipDbRepository("jdbc:postgresql://localhost:5432/network","postgres","ioana",new FriendshipValidator());
         repoDbFr.findAll().forEach(System.out::println);
 
 
