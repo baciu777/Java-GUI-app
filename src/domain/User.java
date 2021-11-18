@@ -99,7 +99,13 @@ public class User extends Entity<Long> {
         s = s + '}';
         return s;
     }
-
+    public String toString2() {
+        String s;
+        s = "Friend: " +
+                 firstName + " " +
+                 lastName + " ";
+        return s;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

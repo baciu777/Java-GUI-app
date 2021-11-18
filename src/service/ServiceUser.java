@@ -5,11 +5,13 @@ import domain.Friendship;
 import domain.Tuple;
 import domain.User;
 import domain.validation.ValidationException;
+import org.w3c.dom.ls.LSOutput;
 import repository.Repository;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * class Service that manage the operations for Users
@@ -141,24 +143,36 @@ public class ServiceUser {
      * @return the list of users friends with the one given
      * @throws ValidationException if the id for user given is invalid
      */
-    public Iterable<User> getFriends(Long id) throws ValidationException{
-        try{
-            Set<User> users= new HashSet<>();
-            User resp = repoUser.findOne(id);
-            if(resp == null)
+    public List<String> getFriends(Long id) throws ValidationException{
+        User resp = repoUser.findOne(id);
+           if(resp == null)
                 throw new ValidationException("id invalid");
-            else
-                for (Friendship fr : repoFriends.findAll()){
-                    if(Objects.equals(fr.getId().getLeft(), id))
-                        users.add(repoUser.findOne(fr.getId().getRight()));
-                    if(Objects.equals(fr.getId().getRight(), id))
-                        users.add(repoUser.findOne(fr.getId().getLeft()));
-                }
-            return users;
-        }
-        catch (ValidationException exception){
-            throw new ValidationException(exception);
-        }
+
+        HashMap<User, LocalDateTime> users= new HashMap();
+        List<Friendship> result=new ArrayList<>();
+        Iterable<Friendship> friendships=repoFriends.findAll();
+        friendships.forEach(result::add);//add all the elements in the list result
+
+        Predicate<Friendship> testfr1= x->x.getId().getLeft().equals(id);
+        Predicate<Friendship> testfr2= x->x.getId().getRight().equals(id);
+        Predicate<Friendship> testCompound=testfr1.or(testfr2);
+
+        List<String> list = Arrays.asList();
+        list=result
+                .stream()
+                .filter(testCompound)
+                .map(x->{
+                    String s="";
+                    if(x.getId().getLeft().equals(id))//if the id of our user is on the left side we take the user from the right
+                    s=   repoUser.findOne(x.getId().getRight()).toString2()+" "+x.getDate().toString();
+                    else s=   repoUser.findOne(x.getId().getLeft()).toString2()+" "+x.getDate().toString();
+                    return s;
+                })
+                .collect(Collectors.toCollection(ArrayList::new));
+
+
+         return list;
+
     }
     public User findOne(Long nr) {
         if(repoUser.findOne(nr) != null)
