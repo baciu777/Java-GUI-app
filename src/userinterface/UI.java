@@ -41,7 +41,8 @@ public class UI {
             System.out.println("-----------------------------MENU------------------");
             System.out.println("1-Add user\n2-Update user\n3-Delete user\n4-Add a friendship\n" +
                     "5-Delete a friendship\n6-Print the number of communities\n" +
-                    "7-Biggest community\n8-Print users\n9-Print friendships\n10-Show the friendships of a user\nx-Exit");
+                    "7-Biggest community\n8-Print users\n9-Print friendships\n10-Show the friendships of a user" +
+                    "\n11-Show friendships made in a month by a user\nx-Exit");
             cmd = scanner.nextLine();
             if (Objects.equals(cmd, "x"))
                 break;
@@ -87,6 +88,8 @@ public class UI {
                 break;
             case "10":
                 friendsUser();
+            case "11":
+                friendsUserMonth();
                 break;
             default:
                 System.out.println("wrong command");
@@ -279,6 +282,32 @@ public class UI {
         }
         catch (ValidationException e) {
             System.out.println(e.getMessage());
+        }
+    }
+    private void friendsUserMonth()
+    {
+        Long nr,m;
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("id user:");
+        String id = scanner.nextLine();
+        System.out.println("month:");
+        String month = scanner.nextLine();
+        try {
+            nr = Long.parseLong(id);
+            m = Long.parseLong(month);
+            if(m>12 || m<1)
+                throw new IllegalArgumentException();
+            System.out.println(servUser.findOne(nr).toString() + "\n Friends: ");
+            servUser.getFriendsByMonth(nr,m).forEach(System.out::println);
+        }
+        catch (NumberFormatException e) {
+            System.out.println("Id and month must be an integer number");
+        }
+        catch (ValidationException e) {
+            System.out.println(e.getMessage());
+        }
+        catch (IllegalArgumentException e) {
+            System.out.println("month must be between 1 and 12");
         }
     }
 }
