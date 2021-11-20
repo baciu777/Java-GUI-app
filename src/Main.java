@@ -1,12 +1,16 @@
 import domain.Friendship;
+import domain.Message;
 import domain.Tuple;
 import domain.User;
 import domain.validation.FriendshipValidator;
+import domain.validation.MessageValidator;
 import domain.validation.UserValidator;
 import repository.Repository;
 import repository.database.FriendshipDbRepository;
+import repository.database.MessageDbRepository;
 import repository.database.UserDbRepository;
 import service.ServiceFriendship;
+import service.ServiceMessage;
 import service.ServiceUser;
 import userinterface.UI;
 
@@ -30,11 +34,13 @@ public class Main {
         repoDb.findAll().forEach(System.out::println);
         Repository<Tuple<Long,Long>, Friendship> repoDbFr=new FriendshipDbRepository("jdbc:postgresql://localhost:5432/network","postgres","ioana",new FriendshipValidator());
         repoDbFr.findAll().forEach(System.out::println);
+        Repository<Long, Message> repoDbMs=new MessageDbRepository("jdbc:postgresql://localhost:5432/network","postgres","ioana",new MessageValidator());
 
 
         ServiceUser servUser=new ServiceUser(repoDb,repoDbFr);
         ServiceFriendship servFriendship=new ServiceFriendship(repoDb,repoDbFr);
-        UI userInterface=new UI(servUser,servFriendship);
+        ServiceMessage servMessage=new ServiceMessage(repoDbMs,repoDb);
+        UI userInterface=new UI(servUser,servFriendship,servMessage);
         userInterface.show();
     }
 }

@@ -180,7 +180,13 @@ public class ServiceUser {
         else
             throw new ValidationException(" id invalid");
     }
-
+    public User userexist(Long id)
+    {
+        for(User ur: repoUser.findAll())
+            if(Objects.equals(ur.getId(), id))
+                return repoUser.findOne(id);
+        throw new ValidationException(" id invalid");
+    }
 
 
 }
