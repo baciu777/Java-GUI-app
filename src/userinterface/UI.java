@@ -272,7 +272,7 @@ public class UI {
         try {
             nr = Long.parseLong(id);
             System.out.println(servUser.findOne(nr).toString() + "\n Friends: ");
-            servUser.getFriends(nr).forEach(x -> System.out.println(x.toString()));
+            servUser.getFriends(nr).forEach(System.out::println);
         }
         catch (NumberFormatException e) {
             System.out.println("Id must be an integer number");
