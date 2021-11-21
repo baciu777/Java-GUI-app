@@ -37,7 +37,7 @@ public class ServiceMessage {
         User from=repoUser.findOne(fromId);
         List<User> to=new ArrayList<>();
         toIds.forEach(x->to.add(repoUser.findOne(x)));
-        Message mess=new Message( from,  to,  message,-1L);
+        Message mess=new Message( from,  to,  message,null);
         mess.setDate(LocalDateTime.now());
         long id = 0L;
         for (Message ms:  repoMessage.findAll()) {
@@ -67,7 +67,8 @@ public class ServiceMessage {
         List<User> to=new ArrayList<>();
         to =findTo(reply,fromId);
         checkMessageReply(reply,fromId);
-        Message mess=new Message( from,to,message,reply);
+        Message replyMess=repoMessage.findOne(reply);
+        Message mess=new Message( from,to,message,replyMess);
         mess.setDate(LocalDateTime.now());
         long id = 0L;
         for (Message ms:  repoMessage.findAll()) {

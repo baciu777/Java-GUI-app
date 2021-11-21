@@ -10,17 +10,17 @@ public class Message extends Entity<Long> {
     private User from;
     private List<User> to=new ArrayList<>();;
     private String message;
-    private Long reply;
+    private Message reply;
     LocalDateTime date;
 
     public Message(User from, List<User> to, String message) {
         this.from = from;
         this.to = to;
         this.message = message;
-        this.reply=-1L;
+        this.reply=null;
     }
 
-    public Message(User from, List<User> to, String message, Long reply) {
+    public Message(User from, List<User> to, String message, Message reply) {
         this.from = from;
         this.to = to;
         this.message = message;
@@ -60,11 +60,11 @@ public class Message extends Entity<Long> {
         this.message = message;
     }
 
-    public Long getReply() {
+    public Message getReply() {
         return reply;
     }
 
-    public void setReply(Long reply) {
+    public void setReply(Message reply) {
         this.reply = reply;
     }
 
@@ -78,6 +78,9 @@ public class Message extends Entity<Long> {
 
     @Override
     public String toString() {
+        if(getReply()==null)
         return from.getFirstName()+" "+from.getLastName()+":"+message;
+        else
+            return from.getFirstName()+" "+from.getLastName()+" reply to: "+reply.getMessage()+"with:"+message;
     }
 }
