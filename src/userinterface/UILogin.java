@@ -9,25 +9,47 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
+/**
+ * UI for the login
+ * ID- the ID of the user logged in
+ * servMessage - service of messages
+ * servUser - service of users
+ */
 public class UILogin {
     private Long ID;
     ServiceMessage servMessage;
     ServiceUser servUser;
 
+    /**
+     * constructor
+     * @param servMessage-serviceMessage
+     * @param servUser-serviceUser
+     */
     public UILogin(ServiceMessage servMessage, ServiceUser servUser) {
         this.servMessage = servMessage;
         this.servUser = servUser;
 
     }
 
+    /**
+     * get the log in id
+     * @return id
+     */
     public Long getLoginID() {
         return ID;
     }
 
+    /**
+     * set the id
+     * @param ID long
+     */
     public void setID(Long ID) {
         this.ID = ID;
     }
 
+    /**
+     * start the ui+ menu
+     */
     public void showUser() {
         String cmd = "";
         int nr = 0;
@@ -45,6 +67,10 @@ public class UILogin {
         }
     }
 
+    /**
+     * choose the option
+     * @param cmd-string chosen
+     */
     private void meniuUser(String cmd) {
         switch (cmd) {
             case "1":
@@ -60,6 +86,9 @@ public class UILogin {
         }
     }
 
+    /**
+     * read the data and try to add message
+     */
     private void addMessage() {
         Scanner scanner = new Scanner(System.in);
 
@@ -89,13 +118,16 @@ public class UILogin {
         }
 
         try {
-            servMessage.save(getLoginID(), to, mess, -1L);
+            servMessage.save(getLoginID(), to, mess);
             System.out.println("Message saved");
         } catch (ValidationException e) {
             System.out.println(e.getMessage());
         }
     }
 
+    /**
+     * read the data and try to save a reply message
+     */
     private void addReply() {
         Scanner scanner = new Scanner(System.in);
         String cmd="";

@@ -149,7 +149,12 @@ public class MessageDbRepository implements Repository<Long, Message> {
     }
 
 
-
+    /**
+     * function that return the user with a specific id
+     * @param aLong-id
+     * @return one user
+     * otherwise, throw exception
+     */
     private User findOneUser(Long aLong) {
         if (aLong == null)
             throw new IllegalArgumentException("Id must be not null");
@@ -176,6 +181,12 @@ public class MessageDbRepository implements Repository<Long, Message> {
         }
         return null;
     }
+
+    /**
+     * find the friends of one user
+     * @param id-user id
+     * @return list of users
+     */
     private List<User> findFr(Long id) {
         List<User> users = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(url, username, password);

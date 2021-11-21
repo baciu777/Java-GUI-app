@@ -12,6 +12,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * Service of Message
+ * repoMessage-Message Repository
+ * repoUser-User Repository
+ */
 public class ServiceMessage {
     private Repository<Long, Message> repoMessage;
     private Repository<Long, User> repoUser;
@@ -21,11 +26,18 @@ public class ServiceMessage {
         this.repoMessage = repoMessage;
         this.repoUser=repoUser;
     }
-    public void save( Long fromId, List<Long> toIds, String message,Long reply) {
+
+    /**
+     * save one message
+     * @param fromId-id of the user that sends the message
+     * @param toIds-list of user's ids
+     * @param message-string
+     */
+    public void save( Long fromId, List<Long> toIds, String message) {
         User from=repoUser.findOne(fromId);
         List<User> to=new ArrayList<>();
         toIds.forEach(x->to.add(repoUser.findOne(x)));
-        Message mess=new Message( from,  to,  message,reply);
+        Message mess=new Message( from,  to,  message,-1L);
         mess.setDate(LocalDateTime.now());
         long id = 0L;
         for (Message ms:  repoMessage.findAll()) {
@@ -43,6 +55,13 @@ public class ServiceMessage {
 
 
     }
+
+    /**
+     * save a reply of a message
+     * @param fromId-the user id that sends the reply
+     * @param message-string
+     * @param reply-the id of the old message
+     */
     public void saveReply( Long fromId, String message,Long reply) {
         User from=repoUser.findOne(fromId);
         List<User> to=new ArrayList<>();
@@ -66,12 +85,26 @@ public class ServiceMessage {
 
 
     }
+
+    /**
+     * find one message
+     * @param nr-id of the message
+     * @return the message if exists
+     * otherwise, throw exception
+     */
     public Message findOne(Long nr) {
         if(repoMessage.findOne(nr) != null)
             return repoMessage.findOne(nr);
         else
             throw new ValidationException("message id invalid");
     }
+
+    /**
+     * find the receivers of a reply
+     * @param idMessageOld-id of old message
+     * @param idMessageNew-id of new message
+     * @returnthe list of users
+     */
     public List<User> findTo(Long idMessageOld,Long idMessageNew)
     {
         Message messOld=findOne(idMessageOld);
@@ -80,10 +113,18 @@ public class ServiceMessage {
         listTo.add(oldFrom);
         return listTo;
     }
-    public User checkMessageReply(Long idMessageOld,Long idMessageNew)
+
+    /**
+     * check if the old message was sent to the user that wants to send a reply
+     * @param idMessageOld-id of old message
+     * @param idUserNew-id of the user that wants to send a reply
+     * @returnthe user if is founded
+     * throw exception otherwise
+     */
+    public User checkMessageReply(Long idMessageOld,Long idUserNew)
     {
         Message mess=findOne(idMessageOld);
-        User userFromNew=repoUser.findOne(idMessageNew);
+        User userFromNew=repoUser.findOne(idUserNew);
         if(Objects.equals(userFromNew.getId(), mess.getFrom().getId()))
             throw new ValidationException("you cant reply to yourself dude") ;
 
