@@ -1,9 +1,12 @@
 package userinterface;
 
 import domain.Entity;
+import domain.Message;
 import domain.validation.ValidationException;
 import graph.Network;
 import service.ServiceFriendship;
+import service.ServiceFriendshipRequest;
+import service.ServiceMessage;
 import service.ServiceUser;
 
 import java.util.List;
@@ -17,16 +20,21 @@ import java.util.Scanner;
 public class UI {
     ServiceUser servUser;
     ServiceFriendship servFriendship;
-
+    ServiceMessage servMessage;
+    ServiceFriendshipRequest servRequest;
+    UILogin uiLogin;
     /**
      * constructor for UI
-     *
      * @param servUser       the service for the users
      * @param servFriendship the service for the friendships
+     * @param servMessage
+     * @param servFriendReq
      */
-    public UI(ServiceUser servUser, ServiceFriendship servFriendship) {
+    public UI(ServiceUser servUser, ServiceFriendship servFriendship, ServiceMessage servMessage, ServiceFriendshipRequest servFriendReq) {
         this.servUser = servUser;
         this.servFriendship = servFriendship;
+        this.servMessage = servMessage;
+        this.servRequest =servFriendReq;
     }
 
     /**
@@ -41,8 +49,9 @@ public class UI {
             System.out.println("-----------------------------MENU------------------");
             System.out.println("1-Add user\n2-Update user\n3-Delete user\n4-Add a friendship\n" +
                     "5-Delete a friendship\n6-Print the number of communities\n" +
-                    "7-Biggest community\n8-Print users\n9-Print friendships\n10-Show the friendships of a user" +
-                    "\n11-Show friendships made in a month by a user\nx-Exit");
+                    "7-Biggest community\n8-Print users\n9-Print friendships\n10-Show the friendships of a user\n11-Login\n12-Print private chat\nx-Exit");
+
+
             cmd = scanner.nextLine();
             if (Objects.equals(cmd, "x"))
                 break;
@@ -51,6 +60,7 @@ public class UI {
 
         }
     }
+
 
     /**
      * select the command chosen
@@ -91,11 +101,76 @@ public class UI {
             case "11":
                 friendsUserMonth();
                 break;
+            case "11":
+                login();
+                break;
+            case "12":
+                privateChat();
+                break;
             default:
                 System.out.println("wrong command");
 
 
         }
+    }
+
+    private void privateChat() {
+
+        Scanner scanner = new Scanner(System.in);
+        String idd="";
+
+        try
+        {
+            System.out.println("id first user:");
+             idd = scanner.nextLine();
+            long id1=Long.parseLong(idd);
+            servUser.userexist(id1);
+            System.out.println("id second user:");
+            idd = scanner.nextLine();
+            long id2=Long.parseLong(idd);
+            servUser.userexist(id2);
+            List<Message> conversation=servMessage.showPrivateChat(id1,id2);
+            conversation.forEach(System.out::println);
+
+        }
+        catch (NumberFormatException e)
+        {
+            System.out.println(idd+" is not a valid id");
+        }
+        catch (ValidationException e) {
+            System.out.println(e.getMessage());
+        }
+
+
+    }
+
+
+    private void login() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("id:");
+        String id = scanner.nextLine();
+        try
+        {
+            long idd=Long.parseLong(id);
+
+            servUser.userexist(idd);
+            uiLogin=new UILogin(servMessage,servUser,servRequest);//start a new ui ,yaay
+            uiLogin.setID(idd);
+            uiLogin.showUser();
+
+        }
+        catch (NumberFormatException e)
+        {
+            System.out.println(id+" is not a valid id");
+        }
+        catch (ValidationException e) {
+            System.out.println(e.getMessage());
+        }
+
+
+
+
     }
 
     /**
@@ -284,6 +359,9 @@ public class UI {
             System.out.println(e.getMessage());
         }
     }
+<<<<<<< HEAD
+
+=======
     private void friendsUserMonth()
     {
         Long nr,m;
@@ -310,4 +388,5 @@ public class UI {
             System.out.println("month must be between 1 and 12");
         }
     }
+>>>>>>> 78a745292879994be3564ef8121c4117f35f0d49
 }
