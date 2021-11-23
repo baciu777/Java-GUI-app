@@ -70,7 +70,7 @@ public class ServiceUser {
      */
     public void update(Long id, String firstname, String lastname) {
         User user = new User(firstname, lastname);
-        //user.setFriends(findOneUser(id).getFriends());
+
         user.setId(id);
 
 
@@ -122,21 +122,6 @@ public class ServiceUser {
         return repoUser.findAll();
     }
 
-
-
-    /**
-     * find one user with a specific id
-     * @return the user
-     * throw exception if is not found
-     * @param id-Long
-     */
-    public User findOneUser(Long id) {
-
-        if (repoUser.findOne(id) == null)
-            throw new ValidationException("this id does not belong to the list");
-        return repoUser.findOne(id);
-    }
-
     /**
      * Display friends for a given user
      * @param id integer id of a possible user
@@ -174,19 +159,21 @@ public class ServiceUser {
          return list;
 
     }
+
+    /**
+     * Find one user
+     * @param nr-id of user
+     * @return the user if exists
+     * otherwise, throw exception
+     */
     public User findOne(Long nr) {
         if(repoUser.findOne(nr) != null)
             return repoUser.findOne(nr);
         else
             throw new ValidationException(" id invalid");
     }
-    public User userexist(Long id)
-    {
-        for(User ur: repoUser.findAll())
-            if(Objects.equals(ur.getId(), id))
-                return repoUser.findOne(id);
-        throw new ValidationException(" id invalid");
-    }
+
+
 
 
 }

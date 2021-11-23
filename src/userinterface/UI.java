@@ -106,6 +106,9 @@ public class UI {
         }
     }
 
+    /**
+     * read 2 ids and print the private chat between them
+     */
     private void privateChat() {
 
         Scanner scanner = new Scanner(System.in);
@@ -116,11 +119,11 @@ public class UI {
             System.out.println("id first user:");
              idd = scanner.nextLine();
             long id1=Long.parseLong(idd);
-            servUser.userexist(id1);
+            servUser.findOne(id1);
             System.out.println("id second user:");
             idd = scanner.nextLine();
             long id2=Long.parseLong(idd);
-            servUser.userexist(id2);
+            servUser.findOne(id2);
             List<Message> conversation=servMessage.showPrivateChat(id1,id2);
             conversation.forEach(System.out::println);
 
@@ -136,7 +139,10 @@ public class UI {
 
     }
 
-
+    /**
+     * login function
+     * read an id and start a new LoginUI
+     */
     private void login() {
         Scanner scanner = new Scanner(System.in);
 
@@ -146,7 +152,7 @@ public class UI {
         {
             long idd=Long.parseLong(id);
 
-            servUser.userexist(idd);
+            servUser.findOne(idd);
             uiLogin=new UILogin(servMessage,servUser);//start a new ui ,yaay
             uiLogin.setID(idd);
             uiLogin.showUser();
@@ -203,7 +209,7 @@ public class UI {
         List<Long> list = nw.biggestComponent();
         try {
 
-            list.forEach(x -> System.out.println(servUser.findOneUser(x)));
+            list.forEach(x -> System.out.println(servUser.findOne(x)));
         } catch (ValidationException e) {
             System.out.println("there is no community");
         }

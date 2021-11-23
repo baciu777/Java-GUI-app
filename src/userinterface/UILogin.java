@@ -104,8 +104,9 @@ public class UILogin {
             if (Objects.equals(cmd, "x"))
                 break;
             try {
+
                 long idd = Long.parseLong(cmd);
-                servUser.userexist(idd);
+                servUser.findOne(idd);
                 if (getLoginID() == idd)
                     throw new ValidationException("you cant send a message to yourself");
                 to.add(idd);
@@ -120,6 +121,7 @@ public class UILogin {
         try {
             servMessage.save(getLoginID(), to, mess);
             System.out.println("Message saved");
+
         } catch (ValidationException e) {
             System.out.println(e.getMessage());
         }

@@ -21,7 +21,11 @@ public class ServiceMessage {
     private Repository<Long, Message> repoMessage;
     private Repository<Long, User> repoUser;
 
-
+    /**
+     * constructor
+     * @param repoMessage Repository Messages
+     * @param repoUser Repository Users
+     */
     public ServiceMessage(Repository<Long, Message> repoMessage,Repository<Long, User> repoUser) {
         this.repoMessage = repoMessage;
         this.repoUser=repoUser;
@@ -111,7 +115,7 @@ public class ServiceMessage {
         Message messOld=findOne(idMessageOld);
         List<User> listTo=messOld.getToReply(repoUser.findOne(idMessageNew));
         User oldFrom=messOld.getFrom();
-        listTo.add(oldFrom);
+        listTo.add(oldFrom);//add the sender of the old message in listTo
         return listTo;
     }
 
@@ -132,13 +136,18 @@ public class ServiceMessage {
         for(User ur:mess.getTo())
         {
             if(Objects.equals(userFromNew.getId(), ur.getId()))
-                return userFromNew;}
+                return userFromNew;}//return only if the new id is in the list of receiver of the old message
         throw new ValidationException("you cant reply to a message from a conversation you dont belong") ;
 
 
     }
 
-
+    /**
+     * show a private conversation between 2 users
+     * @param id1-id of user 1
+     * @param id2-id of user 2
+     * @return List<Messages>
+     */
     public List<Message> showPrivateChat(Long id1,Long id2) {
         List<Message> conversation=new ArrayList<>();
         User user1=repoUser.findOne(id1);
