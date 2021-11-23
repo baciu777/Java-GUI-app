@@ -87,5 +87,9 @@ public class ServiceFriendship  {
     public Iterable<Friendship> printFr() {
         return repoFriends.findAll();
     }
-
+    public boolean areFriends(Long id1, Long id2)
+    {
+        Tuple t1 = new Tuple(id1, id2);
+        return repoFriends.findOne(t1)!=null;
+    }
 }
