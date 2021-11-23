@@ -22,6 +22,10 @@ public class Tuple<E1, E2> {
         this.e2 = e2;
     }
 
+    public Tuple() {
+
+    }
+
     /**
      * return the first value from the tuple
      * @return e1

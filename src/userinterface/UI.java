@@ -5,6 +5,7 @@ import domain.Message;
 import domain.validation.ValidationException;
 import graph.Network;
 import service.ServiceFriendship;
+import service.ServiceFriendshipRequest;
 import service.ServiceMessage;
 import service.ServiceUser;
 
@@ -20,17 +21,20 @@ public class UI {
     ServiceUser servUser;
     ServiceFriendship servFriendship;
     ServiceMessage servMessage;
+    ServiceFriendshipRequest servRequest;
     UILogin uiLogin;
     /**
      * constructor for UI
-     *  @param servUser       the service for the users
+     * @param servUser       the service for the users
      * @param servFriendship the service for the friendships
      * @param servMessage
+     * @param servFriendReq
      */
-    public UI(ServiceUser servUser, ServiceFriendship servFriendship, ServiceMessage servMessage) {
+    public UI(ServiceUser servUser, ServiceFriendship servFriendship, ServiceMessage servMessage, ServiceFriendshipRequest servFriendReq) {
         this.servUser = servUser;
         this.servFriendship = servFriendship;
         this.servMessage = servMessage;
+        this.servRequest =servFriendReq;
     }
 
     /**
@@ -147,7 +151,7 @@ public class UI {
             long idd=Long.parseLong(id);
 
             servUser.userexist(idd);
-            uiLogin=new UILogin(servMessage,servUser);//start a new ui ,yaay
+            uiLogin=new UILogin(servMessage,servUser,servRequest);//start a new ui ,yaay
             uiLogin.setID(idd);
             uiLogin.showUser();
 
