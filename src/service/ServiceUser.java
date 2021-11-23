@@ -24,7 +24,8 @@ public class ServiceUser {
 
     /**
      * constructor for the service
-     * @param RepoUser UserRepository
+     *
+     * @param RepoUser    UserRepository
      * @param RepoFriends FriendsRepository
      */
     public ServiceUser(Repository<Long, User> RepoUser, Repository<Tuple<Long, Long>, Friendship> RepoFriends) {
@@ -32,7 +33,6 @@ public class ServiceUser {
         repoUser = RepoUser;
 
     }
-
 
 
     /**
@@ -70,7 +70,7 @@ public class ServiceUser {
      */
     public void update(Long id, String firstname, String lastname) {
         User user = new User(firstname, lastname);
-        //user.setFriends(findOneUser(id).getFriends());
+
         user.setId(id);
 
 
@@ -122,91 +122,36 @@ public class ServiceUser {
         return repoUser.findAll();
     }
 
-
-
-    /**
-     * find one user with a specific id
-     * @return the user
-     * throw exception if is not found
-     * @param id-Long
-     */
-    public User findOneUser(Long id) {
-
-        if (repoUser.findOne(id) == null)
-            throw new ValidationException("this id does not belong to the list");
-        return repoUser.findOne(id);
-    }
-
     /**
      * Display friends for a given user
+     *
      * @param id integer id of a possible user
      * @return the list of users friends with the one given
      * @throws ValidationException if the id for user given is invalid
      */
-    public List<String> getFriends(Long id) throws ValidationException{
+    public List<String> getFriends(Long id) throws ValidationException {
         User resp = repoUser.findOne(id);
-           if(resp == null)
-                throw new ValidationException("id invalid");
-
-        HashMap<User, LocalDateTime> users= new HashMap();
-        List<Friendship> result=new ArrayList<>();
-        Iterable<Friendship> friendships=repoFriends.findAll();
-        friendships.forEach(result::add);//add all the elements in the list result
-
-        Predicate<Friendship> testfr1= x->x.getId().getLeft().equals(id);
-        Predicate<Friendship> testfr2= x->x.getId().getRight().equals(id);
-        Predicate<Friendship> testCompound=testfr1.or(testfr2);
-
-        List<String> list = Arrays.asList();
-        list=result
-                .stream()
-                .filter(testCompound)
-                .map(x->{
-                    String s="";
-                    if(x.getId().getLeft().equals(id))//if the id of our user is on the left side we take the user from the right
-                    s=   repoUser.findOne(x.getId().getRight()).toString2()+" "+x.getDate().toString();
-                    else s=   repoUser.findOne(x.getId().getLeft()).toString2()+" "+x.getDate().toString();
-                    return s;
-                })
-                .collect(Collectors.toCollection(ArrayList::new));
-
-
-         return list;
-
-    }
-
-    /**
-     *  gets all the friends made in a month for a user
-     * @param id : Long , the user id
-     * @param Month : Long
-     * @return List<String>
-     */
-    public List<String> getFriendsByMonth(Long id, Long Month)
-    {
-        User resp = repoUser.findOne(id);
-        if(resp == null)
+        if (resp == null)
             throw new ValidationException("id invalid");
 
-        HashMap<User, LocalDateTime> users= new HashMap();
-        List<Friendship> result=new ArrayList<>();
-        Iterable<Friendship> friendships=repoFriends.findAll();
+        HashMap<User, LocalDateTime> users = new HashMap();
+        List<Friendship> result = new ArrayList<>();
+        Iterable<Friendship> friendships = repoFriends.findAll();
         friendships.forEach(result::add);//add all the elements in the list result
 
-        Predicate<Friendship> testfr1= x->x.getId().getLeft().equals(id);
-        Predicate<Friendship> testfr2= x->x.getId().getRight().equals(id);
-        Predicate<Friendship> testCompound=testfr1.or(testfr2);
-        Predicate<Friendship> checkMonth = x->x.getDate().getMonthValue() == Month;
+        Predicate<Friendship> testfr1 = x -> x.getId().getLeft().equals(id);
+        Predicate<Friendship> testfr2 = x -> x.getId().getRight().equals(id);
+        Predicate<Friendship> testCompound = testfr1.or(testfr2);
 
         List<String> list = Arrays.asList();
-        list=result
+        list = result
                 .stream()
                 .filter(testCompound)
-                .filter(checkMonth)
-                .map(x->{
-                    String s="";
-                    if(x.getId().getLeft().equals(id))//if the id of our user is on the left side we take the user from the right
-                        s=   repoUser.findOne(x.getId().getRight()).toString2()+" "+x.getDate().toString();
-                    else s=   repoUser.findOne(x.getId().getLeft()).toString2()+" "+x.getDate().toString();
+                .map(x -> {
+                    String s = "";
+                    if (x.getId().getLeft().equals(id))//if the id of our user is on the left side we take the user from the right
+                        s = repoUser.findOne(x.getId().getRight()).toString2() + " " + x.getDate().toString();
+                    else s = repoUser.findOne(x.getId().getLeft()).toString2() + " " + x.getDate().toString();
                     return s;
                 })
                 .collect(Collectors.toCollection(ArrayList::new));
@@ -215,18 +160,60 @@ public class ServiceUser {
         return list;
 
     }
+
+    /**
+     * gets all the friends made in a month for a user
+     *
+     * @param id    : Long , the user id
+     * @param Month : Long
+     * @return List<String>
+     */
+    public List<String> getFriendsByMonth(Long id, Long Month) {
+        User resp = repoUser.findOne(id);
+        if (resp == null)
+            throw new ValidationException("id invalid");
+
+        HashMap<User, LocalDateTime> users = new HashMap();
+        List<Friendship> result = new ArrayList<>();
+        Iterable<Friendship> friendships = repoFriends.findAll();
+        friendships.forEach(result::add);//add all the elements in the list result
+
+        Predicate<Friendship> testfr1 = x -> x.getId().getLeft().equals(id);
+        Predicate<Friendship> testfr2 = x -> x.getId().getRight().equals(id);
+        Predicate<Friendship> testCompound = testfr1.or(testfr2);
+        Predicate<Friendship> checkMonth = x -> x.getDate().getMonthValue() == Month;
+
+        List<String> list = Arrays.asList();
+        list = result
+                .stream()
+                .filter(testCompound)
+                .filter(checkMonth)
+                .map(x -> {
+                    String s = "";
+                    if (x.getId().getLeft().equals(id))//if the id of our user is on the left side we take the user from the right
+                        s = repoUser.findOne(x.getId().getRight()).toString2() + " " + x.getDate().toString();
+                    else s = repoUser.findOne(x.getId().getLeft()).toString2() + " " + x.getDate().toString();
+                    return s;
+                })
+                .collect(Collectors.toCollection(ArrayList::new));
+
+
+        return list;
+
+    }
+
+    /**
+     * Find one user
+     *
+     * @param nr-id of user
+     * @return the user if exists
+     * otherwise, throw exception
+     */
     public User findOne(Long nr) {
-        if(repoUser.findOne(nr) != null)
+        if (repoUser.findOne(nr) != null)
             return repoUser.findOne(nr);
         else
             throw new ValidationException(" id invalid");
-    }
-    public User userexist(Long id)
-    {
-        for(User ur: repoUser.findAll())
-            if(Objects.equals(ur.getId(), id))
-                return repoUser.findOne(id);
-        throw new ValidationException(" id invalid");
     }
 
 

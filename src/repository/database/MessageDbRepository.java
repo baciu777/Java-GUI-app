@@ -54,9 +54,12 @@ public class MessageDbRepository implements Repository<Long, Message> {
                         .collect(Collectors.toList());
                 idList.forEach(x->to.add(findOneUser(x)));
                 String message=resultSet.getString("messagem");
+                Long idreply=resultSet.getLong("replym");
+                Message reply=this.findOne(idreply);
                 mess=new Message(from,to,message);
                 mess.setId(id);
                 mess.setDate(date);
+                mess.setReply(reply);
                 return mess;
 
             }
@@ -91,9 +94,12 @@ public class MessageDbRepository implements Repository<Long, Message> {
                         .collect(Collectors.toList());
                 idList.forEach(x->to.add(findOneUser(x)));
                 String message=resultSet.getString("messagem");
+                Long idreply=resultSet.getLong("replym");
+                Message reply=this.findOne(idreply);
                 mess=new Message(from,to,message);
                 mess.setId(id);
                 mess.setDate(date);
+                mess.setReply(reply);
                 messages.add(mess);
 
 
@@ -127,8 +133,10 @@ public class MessageDbRepository implements Repository<Long, Message> {
 
             ps.setString(2,ss);
             ps.setString(3,entity.getMessage());
-            ps.setLong(4,entity.getReply());
-
+            if(entity.getReply()!=null)
+            ps.setLong(4,entity.getReply().getId());
+            else
+                ps.setLong(4,-1L);
 
             ps.executeUpdate();
         } catch (SQLException e) {

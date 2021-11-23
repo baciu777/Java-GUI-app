@@ -29,7 +29,7 @@ public class User extends Entity<Long> {
         this.lastName = lastName;
     }
     /**
-     * getter funtion
+     * getter function
      * @return the first name of the user
      */
     public String getFirstName() {
@@ -44,7 +44,7 @@ public class User extends Entity<Long> {
     }
     /**
      * getter function for user's friends
-     * @return the list of friends for the curent user
+     * @return the list of friends for the current user
      */
     public List<User> getFriends() {
         return friends;
@@ -65,7 +65,7 @@ public class User extends Entity<Long> {
     }
     /**
      * setter function
-     * @param friends new friends of the curent user
+     * @param friends new friends of the current user
      */
     public void setFriends(List<User> friends) {
         this.friends = friends;
