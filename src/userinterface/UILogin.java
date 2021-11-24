@@ -114,6 +114,7 @@ public class UILogin {
         System.out.println("message");
         String mess = scanner.nextLine();
         String cmd = "";
+        List<Long> toList=new ArrayList<>();
         System.out.println("to:");
         while (true) {
             System.out.println("Choose a user id\nX-Stop");
@@ -124,6 +125,9 @@ public class UILogin {
 
                 long idd = Long.parseLong(cmd);
                 servUser.findOne(idd);
+                if(toList.contains(idd))
+                    throw new ValidationException("this id was chosen");
+                toList.add(idd);
                 if (getLoginID() == idd)
                     throw new ValidationException("you cant send a message to yourself");
                 to.add(idd);
