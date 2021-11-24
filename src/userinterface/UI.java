@@ -98,6 +98,7 @@ public class UI {
                 break;
             case "10":
                 friendsUser();
+                break;
             case "11":
                 friendsUserMonth();
                 break;

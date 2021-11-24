@@ -176,7 +176,20 @@ public class UILogin {
             System.out.println("send request to(user id):");
 
             id = Long.parseLong(scanner.nextLine());
-            servRequest.addFriend(this.ID, id);
+            List<FriendRequest> req2 =
+                    (List<FriendRequest>) servRequest.findAllFrom(servRequest.findAllTo(servRequest.findWithStatus(servRequest.findAll(), "PENDING"), this.ID), id);
+            boolean executeAdd = true;
+            if (req2.size()!=0) {
+                System.out.println("there a request from this id. Do you want to accept it?");
+                System.out.println("1-Yes");
+                System.out.println("2-No");
+                Long answer = Long.parseLong(scanner.nextLine());
+                if (answer == 2)
+                    executeAdd = false;
+            }
+            if (executeAdd)
+                servRequest.addFriend(this.ID, id);
+            System.out.println("Request sent");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -191,18 +204,19 @@ public class UILogin {
             System.out.println("accept request from(user id):");
 
             id = Long.parseLong(scanner.nextLine());
-            req = (List<FriendRequest>) servRequest.findAllFrom(req,id);
+            req = (List<FriendRequest>) servRequest.findAllFrom(req, id);
             boolean executeAdd = true;
-            if(req.isEmpty())
-            {System.out.println("there is no request from this id. Do you want to send one?" );
+            if (req.isEmpty()) {
+                System.out.println("there is no request from this id. Do you want to send one?");
                 System.out.println("1-Yes");
                 System.out.println("2-No");
                 Long answer = Long.parseLong(scanner.nextLine());
-                if(answer == 2)
+                if (answer == 2)
                     executeAdd = false;
             }
-            if(executeAdd)
+            if (executeAdd)
                 servRequest.addFriend(this.ID, id);
+            System.out.println("Request accepted");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -218,6 +232,7 @@ public class UILogin {
 
             id = Long.parseLong(scanner.nextLine());
             servRequest.rejectRequest(this.ID, id);
+            System.out.println("Request rejected");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
