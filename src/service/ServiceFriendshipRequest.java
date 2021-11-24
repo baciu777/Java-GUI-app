@@ -23,11 +23,13 @@ public class ServiceFriendshipRequest {
      */
 
     ServiceFriendship servFriendship;
+    ServiceUser servUser;
     Repository<Tuple<Long, Long>, FriendRequest> request_repo;
     public ServiceFriendshipRequest(Repository<Tuple<Long, Long>, FriendRequest> repo_request,
-                                    ServiceFriendship servFriendship) {
+                                    ServiceFriendship servFriendship,
+                                    ServiceUser servUser) {
 
-
+        this.servUser = servUser;
         this.request_repo = repo_request;
         this.servFriendship = servFriendship;
     }
@@ -77,6 +79,8 @@ public class ServiceFriendshipRequest {
      * @throws Exception if the request does not exist
      */
     public void rejectRequest(Long id1, Long id2) throws Exception {
+        servUser.findOne(id1);
+        servUser.findOne(id2);
         List<FriendRequest> test = (List<FriendRequest>) findAllTo(findAllFrom(findWithStatus(findAll(),"PENDING"),id2),id1);
         if(test.isEmpty())
             throw new Exception("request does not exist");
@@ -97,6 +101,8 @@ public class ServiceFriendshipRequest {
      * @throws Exception if id1 and id2 are already friends
      */
     public void addFriend(Long id1, Long id2) throws Exception {
+        servUser.findOne(id1);
+        servUser.findOne(id2);
         if(servFriendship.areFriends(id1,id2))
             throw new Exception(" users are already friends");
         Tuple<Long, Long> longLongTuple =new Tuple<>();

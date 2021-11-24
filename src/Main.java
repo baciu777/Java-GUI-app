@@ -39,7 +39,7 @@ public class Main {
         ServiceUser servUser=new ServiceUser(repoDb,repoDbFr);
         ServiceFriendship servFriendship=new ServiceFriendship(repoDb,repoDbFr);
         ServiceMessage servMessage=new ServiceMessage(repoDbMs,repoDb);
-        ServiceFriendshipRequest servFriendReq = new ServiceFriendshipRequest(repoDbFrRq,servFriendship);
+        ServiceFriendshipRequest servFriendReq = new ServiceFriendshipRequest(repoDbFrRq,servFriendship,servUser);
         /*
         int i = 3;
         Long trei = new Long(3);
