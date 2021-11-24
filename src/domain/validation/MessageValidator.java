@@ -9,6 +9,7 @@ public class MessageValidator implements  Validator<Message>{
     public void validate(Message entity) throws ValidationException {
         if(entity.getTo().size()==0)
             throw new ValidationException("choose at least one user for the message");
-
+        if(entity.getMessage().isEmpty())
+            throw new ValidationException("the message can not be null");
     }
 }
