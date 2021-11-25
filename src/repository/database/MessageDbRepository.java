@@ -44,14 +44,8 @@ public class MessageDbRepository implements Repository<Long, Message> {
                 LocalDateTime date = LocalDateTime.ofInstant(resultSet.getTimestamp("datem").toInstant(), ZoneOffset.ofHours(0));
                 Long fromId =resultSet.getLong("fromm");
                 User from=findOneUser(fromId);
-                String to1=resultSet.getString("tom");
-                List<String> toId =new ArrayList<String>(Arrays.asList(to1.split(" ")));
-                toId.remove(0);// lose the first element cuz it a space there from the stream reduce:(
-
                 List<User> to=new ArrayList<>();
-                List<Long> idList=toId.stream()
-                        .map(Long::parseLong)
-                        .collect(Collectors.toList());
+                List<Long> idList=findTo(id);
                 idList.forEach(x->to.add(findOneUser(x)));
                 String message=resultSet.getString("messagem");
                 Long idreply=resultSet.getLong("replym");
@@ -85,13 +79,8 @@ public class MessageDbRepository implements Repository<Long, Message> {
                 LocalDateTime date = LocalDateTime.ofInstant(resultSet.getTimestamp("datem").toInstant(), ZoneOffset.ofHours(0));
                 Long fromId =resultSet.getLong("fromm");
                 User from=findOneUser(fromId);
-                String to1=resultSet.getString("tom");
-                List<String> toId =new ArrayList<String>(Arrays.asList(to1.split(" ")));
-                toId.remove(0);// lose the first element cuz it a space there from the stream reduce:(
                 List<User> to=new ArrayList<>();
-                List<Long> idList=toId.stream()
-                        .map(Long::parseLong)
-                        .collect(Collectors.toList());
+                List<Long> idList=findTo(id);
                 idList.forEach(x->to.add(findOneUser(x)));
                 String message=resultSet.getString("messagem");
                 Long idreply=resultSet.getLong("replym");
@@ -117,26 +106,32 @@ public class MessageDbRepository implements Repository<Long, Message> {
             throw new IllegalArgumentException("Entity must be not null");
         validator.validate(entity);
         Message message=null;
-        String sql="insert into messages (fromm,tom,messagem,replym,datem) values(?,?,?,?,'"+entity.getDate()+"')";
+        String sql="insert into messages (fromm,messagem,replym,datem) values(?,?,?,'"+entity.getDate()+"')";
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement ps = connection.prepareStatement(sql)
         ) {
-            message=this.findOne(entity.getId());
-            if(message!=null)
+            message = this.findOne(entity.getId());
+            if (message != null)
                 return message;
             ps.setLong(1, entity.getFrom().getId());
-            String ss=String.valueOf(entity.getTo()
-                    .stream()
-                    .map(x->x.getId().toString())
-                            .reduce("",(x,y)->x+" "+y));
+
+            String sqlChat = "insert into chats (id1,tom) values (?,?)";
+            PreparedStatement psChat = connection.prepareStatement(sqlChat);
+            List<User> listTo = entity.getTo();
+            for (User ur : listTo) {
+                psChat.setLong(1, entity.getId());
+                psChat.setLong(2,ur.getId());
+                psChat.executeUpdate();
+            }
 
 
-            ps.setString(2,ss);
-            ps.setString(3,entity.getMessage());
+
+
+            ps.setString(2,entity.getMessage());
             if(entity.getReply()!=null)
-            ps.setLong(4,entity.getReply().getId());
+            ps.setLong(3,entity.getReply().getId());
             else
-                ps.setLong(4,-1L);
+                ps.setLong(3,-1L);
 
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -223,6 +218,28 @@ public class MessageDbRepository implements Repository<Long, Message> {
         }
 
 
+        return null;
+    }
+    private List<Long> findTo(Long id) {
+        List<Long> toIds = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(url, username, password);
+             PreparedStatement statement = connection.prepareStatement("select tom \n" +
+                     "from chats c inner join messages m on c.id1 = m.id \n" +
+                     "where (m.id=?)")) {
+            statement.setLong(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+
+                while (resultSet.next()) {
+                    Long idNew = resultSet.getLong("tom");
+
+
+                    toIds.add(idNew);
+                }
+                return toIds;
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
         return null;
     }
 }

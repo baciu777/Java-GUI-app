@@ -154,11 +154,11 @@ public class ServiceMessage {
         User user2=repoUser.findOne(id2);
         List<Message> messages=new ArrayList<>();
         repoMessage.findAll().forEach(messages ::add);
+
         List<Message> sortedMessages=messages
                 .stream()
                 .sorted((x,y)->x.getId().compareTo(y.getId()))
                 .collect(Collectors.toList());
-
         for(Message mess:sortedMessages)
         {
             if((Objects.equals(id1, mess.getFrom().getId()) && mess.getTo().contains(user2) && mess.getTo().size()==1)

@@ -87,6 +87,7 @@ public class UILogin {
                 break;
             case "2":
                 addReply();
+                break;
             case "3":
                 addRequest();
                 break;
