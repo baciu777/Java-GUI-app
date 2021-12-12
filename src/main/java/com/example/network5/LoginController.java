@@ -13,6 +13,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import service.ServiceFriendship;
+import service.ServiceFriendshipRequest;
 import service.ServiceMessage;
 import service.ServiceUser;
 
@@ -33,14 +34,16 @@ public class LoginController {
     private ServiceUser servUser;
     private ServiceMessage serviceMessage;
     private ServiceFriendship serviceFriendship;
+    private ServiceFriendshipRequest serviceFriendRequest;
     Stage dialogStage;
     User user;
 
-    public void setService(ServiceUser service,ServiceMessage mess,ServiceFriendship fr, Stage stage) {
+    public void setService(ServiceUser service, ServiceMessage mess, ServiceFriendship fr, ServiceFriendshipRequest servFriendReq, Stage stage) {
         this.servUser = service;
         this.dialogStage = stage;
         this.serviceFriendship=fr;
         this.serviceMessage=mess;
+        this.serviceFriendRequest=servFriendReq;
 
     }
 
@@ -87,7 +90,7 @@ public class LoginController {
             dialogStage.setScene(scene);
 
             MenuController menuController = loader.getController();
-            menuController.setService(servUser,serviceMessage,serviceFriendship, dialogStage, user);
+            menuController.setService(servUser,serviceMessage,serviceFriendship,serviceFriendRequest, dialogStage, user);
 
             dialogStage.show();
 

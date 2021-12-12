@@ -1,9 +1,14 @@
 package service;
 
+import ChangeEvent.FriendshipChangeEvent;
+import ChangeEvent.FriendshipReqChangeEvent;
+import ChangeEvent.MessageChangeEvent;
 import domain.FriendRequest;
 import domain.Friendship;
 import domain.Tuple;
 import domain.User;
+import observer.Observable;
+import observer.Observer;
 import repository.Repository;
 import repository.database.FriendRequestDbRepository;
 
@@ -14,7 +19,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class ServiceFriendshipRequest {
+public class ServiceFriendshipRequest  implements Observable<FriendshipReqChangeEvent> {
     /**
      * constructor for the service
      *
@@ -186,6 +191,23 @@ public class ServiceFriendshipRequest {
         List<FriendRequest> list = Arrays.asList();
         list = result.stream().filter(x-> Objects.equals(x.getStatus(), status)).collect(Collectors.toCollection(ArrayList::new));
         return list;
+    }
+
+    private List<Observer<FriendshipReqChangeEvent>> observers=new ArrayList<>();
+
+    @Override
+    public void addObserver(Observer<FriendshipReqChangeEvent> e) {
+        observers.add(e);
+    }
+
+    @Override
+    public void removeObserver(Observer<FriendshipReqChangeEvent> e) {
+
+    }
+
+    @Override
+    public void notifyObservers(FriendshipReqChangeEvent t) {
+        observers.stream().forEach(x->x.update(t));
     }
 
 }

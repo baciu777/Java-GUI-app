@@ -41,7 +41,7 @@ public class HelloApplication extends Application {
 
         Scene scene = new Scene(fxmlLoader.load(), 600, 400);
         LoginController loginController = fxmlLoader.getController();
-        loginController.setService(servUser, servMessage, servFriendship, stage);
+        loginController.setService(servUser, servMessage, servFriendship,servFriendReq, stage);
         stage.setTitle("Social Life");
         loginController.setStage(stage);
         stage.setScene(scene);
