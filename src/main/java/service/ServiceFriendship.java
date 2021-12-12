@@ -1,20 +1,24 @@
 package service;
 
-import domain.Entity;
-import domain.Friendship;
-import domain.Tuple;
-import domain.User;
+import ChangeEvent.FriendshipChangeEvent;
+import ChangeEvent.MessageChangeEvent;
+import domain.*;
 import domain.validation.ValidationException;
+import observer.Observable;
+import observer.Observer;
 import repository.Repository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * class ServiceFriendship that manage the operations for Friendships
  * repoUser-Repository for users
  * repoFriends-Repository for friendships
  */
-public class ServiceFriendship  {
+public class ServiceFriendship implements Observable<FriendshipChangeEvent> {
     private Repository<Long, User> repoUser;
     private Repository<Tuple<Long, Long>, Friendship> repoFriends;
     /**
@@ -25,6 +29,7 @@ public class ServiceFriendship  {
     public ServiceFriendship(Repository<Long, User> repoUser, Repository<Tuple<Long, Long>, Friendship> repoFriends) {
         this.repoUser = repoUser;
         this.repoFriends = repoFriends;
+
 
     }
     /**
@@ -91,5 +96,39 @@ public class ServiceFriendship  {
     {
         Tuple t1 = new Tuple(id1, id2);
         return repoFriends.findOne(t1)!=null;
+    }
+
+    public Iterable<Friendship> findAll() {
+        return repoFriends.findAll();
+    }
+    private List<Observer<FriendshipChangeEvent>> observers=new ArrayList<>();
+
+
+    public Iterable<User> friends(User user)
+    {
+        Iterable<User> friendsList=new ArrayList<>();
+        for(Friendship fr:repoFriends.findAll())
+        {
+            if(Objects.equals(fr.getId().getLeft(), user.getId()))
+                ((ArrayList<User>) friendsList).add( repoUser.findOne(fr.getId().getRight()));
+            if(Objects.equals(fr.getId().getRight(), user.getId()))
+                ((ArrayList<User>) friendsList).add( repoUser.findOne(fr.getId().getLeft()));
+
+        }
+        return friendsList;
+    }
+    @Override
+    public void addObserver(Observer<FriendshipChangeEvent> e) {
+        observers.add(e);
+    }
+
+    @Override
+    public void removeObserver(Observer<FriendshipChangeEvent> e) {
+
+    }
+
+    @Override
+    public void notifyObservers(FriendshipChangeEvent t) {
+        observers.stream().forEach(x->x.update(t));
     }
 }
