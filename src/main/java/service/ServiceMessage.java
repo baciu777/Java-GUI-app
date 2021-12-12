@@ -1,9 +1,11 @@
 package service;
 
+import ChangeEvent.MessageChangeEvent;
 import domain.Message;
 import domain.User;
 import domain.validation.ValidationException;
-import org.w3c.dom.ls.LSOutput;
+import observer.Observable;
+import observer.Observer;
 import repository.Repository;
 
 import java.time.LocalDateTime;
@@ -17,7 +19,7 @@ import java.util.stream.Collectors;
  * repoMessage-Message Repository
  * repoUser-User Repository
  */
-public class ServiceMessage {
+public class ServiceMessage implements Observable<MessageChangeEvent> {
     private Repository<Long, Message> repoMessage;
     private Repository<Long, User> repoUser;
 
@@ -167,5 +169,47 @@ public class ServiceMessage {
 
         }
         return conversation;
+    }
+
+    public List<Message> userMessages(User user)
+    {List<Message> listOfMess=new ArrayList<>();
+        for(Message ms:repoMessage.findAll())
+        {
+            if(Objects.equals(ms.getFrom().getId(), user.getId()))
+            {
+                listOfMess.add(ms);
+            }
+            else
+                for(User ur:ms.getTo())
+                {
+                    if(Objects.equals(user.getId(), ur.getId()))
+                    {listOfMess.add(ms);
+                    break;}
+                }
+        }
+        return  listOfMess;
+    }
+
+
+    private List<Observer<MessageChangeEvent>> observers=new ArrayList<>();
+
+    @Override
+    public void addObserver(Observer<MessageChangeEvent> e) {
+        observers.add(e);
+    }
+
+    @Override
+    public void removeObserver(Observer<MessageChangeEvent> e) {
+        //observers.remove(e);
+    }
+
+    @Override
+    public void notifyObservers(MessageChangeEvent t) {
+        observers.stream().forEach(x->x.update(t));
+    }
+
+    public Iterable<Message> findAll()
+    {
+        return repoMessage.findAll();
     }
 }

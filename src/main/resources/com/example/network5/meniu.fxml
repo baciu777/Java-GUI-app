@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.network5.MenuController">
+   <children>
+      <TextField fx:id="textFieldId" layoutX="150.0" layoutY="265.0" />
+      <TableView fx:id="tableViewMessage" layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="363.0">
+        <columns>
+          <TableColumn fx:id="tableColumnTo" prefWidth="84.800048828125" text="to" />
+            <TableColumn fx:id="tableColumnDesc" prefWidth="90.39996337890625" text="message" />
+            <TableColumn fx:id="tableColumnData" prefWidth="112.79998779296875" text="data" />
+            <TableColumn fx:id="tableColumnReply" prefWidth="75.0" text="ReplyID" />
+        </columns>
+      </TableView>
+      <TableView fx:id="tableViewUsers" layoutX="377.0" layoutY="14.0" prefHeight="200.0" prefWidth="209.0">
+        <columns>
+          <TableColumn fx:id="tableColumnFirstName" prefWidth="120.79998779296875" text="FirstName" />
+          <TableColumn fx:id="tableColumnLastName" prefWidth="89.60002441406249" text="LastName" />
+        </columns>
+      </TableView>
+      <Button layoutX="534.0" layoutY="361.0" mnemonicParsing="false" onAction="#handleCancel" text="Close" />
+
+   </children>
+</AnchorPane>

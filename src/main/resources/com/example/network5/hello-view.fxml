@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
-
 <?import javafx.scene.control.Button?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.network5.HelloController">
-  <padding>
-    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-  </padding>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 
-  <Label fx:id="welcomeText"/>
-  <Button text="Hello!" onAction="#onHelloButtonClick"/>
-</VBox>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="601.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.network5.LoginController">
+   <children>
+      <Button layoutX="269.0" layoutY="293.0" mnemonicParsing="false" onAction="#handleLogin" text="LOGIN" />
+      <TextField fx:id="textFieldId" layoutX="220.0" layoutY="210.0" promptText="id" />
+      <TextField fx:id="textFieldPassword" layoutX="220.0" layoutY="254.0" promptText="password" />
+      <ImageView fitHeight="206.0" fitWidth="206.0" layoutX="192.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="202.0">
+         <image>
+            <Image url="@images/646c34ca39924101aade505beb3c89e6.png" />
+         </image>
+         <effect>
+            <InnerShadow />
+         </effect>
+      </ImageView>
+   </children>
+</AnchorPane>

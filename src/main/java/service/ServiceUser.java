@@ -123,7 +123,7 @@ public class ServiceUser {
     }
 
     /**
-     *  returns list of friendships for an user
+     *  returns list of friendships for a user
      * @param id id of the user
      * @return List<Friendship></Friendship>
      */
