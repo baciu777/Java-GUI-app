@@ -3,6 +3,7 @@ package com.example.network5;
 import ObserverController.ObserverFriendship;
 import ObserverController.ObserverMessage;
 import domain.DtoMessage;
+import domain.DtoUser;
 import domain.Message;
 import domain.User;
 import javafx.collections.FXCollections;
@@ -56,6 +57,7 @@ public class MenuController  {
     ObserverFriendship observerFriendship=new ObserverFriendship();
     ObserverMessage observerMessage=new ObserverMessage();
     ObservableList<User> modelFr = FXCollections.observableArrayList();
+    ObservableList<DtoUser> modelU = FXCollections.observableArrayList();
     ObservableList<DtoMessage> modelMs = FXCollections.observableArrayList();
 
 
@@ -70,7 +72,7 @@ public class MenuController  {
             setFields(user);
             textFieldId.setEditable(false);
         }
-        observerFriendship.setServiceModelFriendship(serviceFriendship,modelFr,userLogin);
+        observerFriendship.setServiceModelFriendship(serviceFriendship,servUser,serviceFriendRequest,modelFr,modelU,userLogin);
         observerMessage.setServiceModelMessage(serviceMessage,modelMs,userLogin);
 
 
@@ -130,7 +132,7 @@ public class MenuController  {
             dialogStage.setScene(scene);
 
             FriendshipsReqController controller = loader.getController();
-            controller.setService(servUser,serviceFriendRequest, dialogStage, user);
+            controller.setService(servUser,serviceFriendship,serviceFriendRequest, dialogStage, user);
 
             dialogStage.show();
 

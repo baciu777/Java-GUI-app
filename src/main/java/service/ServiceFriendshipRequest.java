@@ -1,5 +1,6 @@
 package service;
 
+import ChangeEvent.ChangeEventType;
 import ChangeEvent.FriendshipChangeEvent;
 import ChangeEvent.FriendshipReqChangeEvent;
 import ChangeEvent.MessageChangeEvent;
@@ -58,6 +59,7 @@ public class ServiceFriendshipRequest  implements Observable<FriendshipReqChange
         f.setDate(LocalDateTime.now());
         request_repo.update(f);
         servFriendship.addFriend(id1,id2);
+        notifyObservers(new FriendshipReqChangeEvent(ChangeEventType.UPDATE,f));
     }
 
     /**
@@ -75,6 +77,7 @@ public class ServiceFriendshipRequest  implements Observable<FriendshipReqChange
         f.setId(longLongTuple);
         f.setStatus("PENDING");
         request_repo.save(f);
+        notifyObservers(new FriendshipReqChangeEvent(ChangeEventType.ADD,f));
     }
 
     /**
@@ -97,6 +100,7 @@ public class ServiceFriendshipRequest  implements Observable<FriendshipReqChange
         f.setStatus("REJECTED");
         f.setDate(LocalDateTime.now());
         request_repo.update(f);
+        notifyObservers(new FriendshipReqChangeEvent(ChangeEventType.UPDATE,f));
     }
 
     /**
@@ -193,6 +197,38 @@ public class ServiceFriendshipRequest  implements Observable<FriendshipReqChange
         return list;
     }
 
+    /***
+     * sees the status of between to users
+     * @param me id of first person
+     * @param him id of second person
+     * @return string: "requested" - first sent the request
+     *                  "respond" - second person sent the request
+     *                  "rejected" - second person rejected the request
+     */
+    public String get_request_status(Long me, Long him)
+    {
+        List<FriendRequest> aux1 = (List<FriendRequest>)findWithStatus(request_repo.findAll(), "PENDING");
+        List<FriendRequest> aux2 =(List<FriendRequest>)findAllTo(aux1,him);
+        List<FriendRequest> aux3 =(List<FriendRequest>)findAllFrom(aux2,me);
+        if(aux3.size()!=0)
+        {
+            return "requested";
+        }
+        aux2 = (List<FriendRequest>)findAllTo(aux1,me);
+        aux3 = (List<FriendRequest>)findAllFrom(aux2,him);
+        if(aux3.size()!=0)
+        {
+            return "respond";
+        }
+        aux1 = (List<FriendRequest>)findWithStatus(request_repo.findAll(), "REJECTED");
+        aux2 = (List<FriendRequest>)findAllTo(aux1,him);
+        aux3 = (List<FriendRequest>)findAllFrom(aux2,me);
+        if(aux3.size()!=0)
+        {
+            return "rejected";
+        }
+        return null;
+    }
     private List<Observer<FriendshipReqChangeEvent>> observers=new ArrayList<>();
 
     @Override

@@ -1,5 +1,6 @@
 package service;
 
+import ChangeEvent.ChangeEventType;
 import ChangeEvent.MessageChangeEvent;
 import domain.Message;
 import domain.User;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 public class ServiceMessage implements Observable<MessageChangeEvent> {
     private Repository<Long, Message> repoMessage;
     private Repository<Long, User> repoUser;
-
+    private List<Observer<MessageChangeEvent>> observers=new ArrayList<>();
     /**
      * constructor
      * @param repoMessage Repository Messages
@@ -59,7 +60,7 @@ public class ServiceMessage implements Observable<MessageChangeEvent> {
         if (save != null)
             throw new ValidationException("id already used");
 
-
+        notifyObservers(new MessageChangeEvent(ChangeEventType.ADD,save));
     }
 
     /**
@@ -191,7 +192,7 @@ public class ServiceMessage implements Observable<MessageChangeEvent> {
     }
 
 
-    private List<Observer<MessageChangeEvent>> observers=new ArrayList<>();
+
 
     @Override
     public void addObserver(Observer<MessageChangeEvent> e) {
