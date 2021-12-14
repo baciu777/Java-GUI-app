@@ -21,7 +21,9 @@ public class FriendshipsReqController {
     @FXML
     TableView<DtoFriendReq> tableViewFriendReq;
     @FXML
-    TableColumn<DtoFriendReq, String> tableColumnName;
+    TableColumn<DtoFriendReq, String> tableColumnFrom;
+    @FXML
+    TableColumn<DtoFriendReq, String> tableColumnTo;
     @FXML
     TableColumn<DtoFriendReq, String> tableColumnDate;
     @FXML
@@ -34,20 +36,24 @@ public class FriendshipsReqController {
     this.user=user;
     this.servUser=servUser;
         observerFriendshipReq.setServiceModelFriendshipReq(servUser,serviceFriendRequest,modelFrR,user);
-
     }
     @FXML
     public void initialize() {
         // TODO
 
 
-        tableColumnName.setCellValueFactory(new PropertyValueFactory<DtoFriendReq, String>("name"));
+        tableColumnFrom.setCellValueFactory(new PropertyValueFactory<DtoFriendReq, String>("from"));
+        tableColumnTo.setCellValueFactory(new PropertyValueFactory<DtoFriendReq, String>("to"));
         tableColumnDate.setCellValueFactory(new PropertyValueFactory<DtoFriendReq, String>("date"));
         tableColumnStatus.setCellValueFactory(new PropertyValueFactory<DtoFriendReq, String>("status"));
-
         tableViewFriendReq.setItems(modelFrR);
 
     }
+    @FXML
+    public void handleCancel(){
+        dialogStage.close();
+    }
+
 
 
 

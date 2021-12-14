@@ -3,22 +3,33 @@ package domain;
 import java.time.LocalDateTime;
 
 public class DtoFriendReq {
-    String name;
+    String from;
+    String to;
     LocalDateTime date;
     String status;
 
-    public DtoFriendReq(String name, LocalDateTime date, String status) {
-        this.name = name;
+    public DtoFriendReq(String from,String to, LocalDateTime date, String status) {
+        this.from=from;
+        this.to=to;
         this.date = date;
         this.status = status;
     }
 
-    public String getName() {
-        return name;
+
+    public String getFrom() {
+        return from;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFrom(String from) {
+        this.from = from;
+    }
+
+    public String getTo() {
+        return to;
+    }
+
+    public void setTo(String to) {
+        this.to = to;
     }
 
     public LocalDateTime getDate() {
