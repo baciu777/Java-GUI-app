@@ -1,7 +1,8 @@
 package service;
 
 import ChangeEvent.ChangeEventType;
-import ChangeEvent.UserChangeEvent;
+import ChangeEvent.Event;
+
 import domain.Entity;
 import domain.Friendship;
 import domain.Tuple;
@@ -20,10 +21,10 @@ import java.util.stream.Collectors;
  * repoUser-Repository for users
  * repoFriends-Repository for friendships
  */
-public class ServiceUser implements Observable<UserChangeEvent> {
+public class ServiceUser implements Observable<Event> {
     private Repository<Long, User> repoUser;
     private Repository<Tuple<Long, Long>, Friendship> repoFriends;
-    private List<Observer<UserChangeEvent>> observers=new ArrayList<>();
+    private List<Observer<Event>> observers=new ArrayList<>();
     /**
      * constructor for the service
      *
@@ -59,7 +60,7 @@ public class ServiceUser implements Observable<UserChangeEvent> {
         if (save != null)
             throw new ValidationException("id already used");
 
-        notifyObservers(new UserChangeEvent(ChangeEventType.ADD,save));
+        notifyObservers(new Event(ChangeEventType.ADD,save));
     }
 
     /**
@@ -79,7 +80,7 @@ public class ServiceUser implements Observable<UserChangeEvent> {
         User save = repoUser.update(user);
         if (save != null)
             throw new ValidationException("this id does not exit");
-    notifyObservers(new UserChangeEvent(ChangeEventType.UPDATE,save));
+    notifyObservers(new Event(ChangeEventType.UPDATE,save));
 
     }
 
@@ -98,7 +99,7 @@ public class ServiceUser implements Observable<UserChangeEvent> {
         if (deleted == null)
             throw new ValidationException("id invalid");
 
-    notifyObservers(new UserChangeEvent(ChangeEventType.DELETE,deleted));
+    notifyObservers(new Event(ChangeEventType.DELETE,deleted));
         return deleted;
 
     }
@@ -232,18 +233,20 @@ public class ServiceUser implements Observable<UserChangeEvent> {
         return l.get(0);
     }
 
+
+
     @Override
-    public void addObserver(observer.Observer<UserChangeEvent> e) {
+    public void addObserver(Observer<Event> e) {
         observers.add(e);
     }
 
     @Override
-    public void removeObserver(observer.Observer<UserChangeEvent> e) {
+    public void removeObserver(Observer<Event> e) {
 
     }
 
     @Override
-    public void notifyObservers(UserChangeEvent t) {
-
+    public void notifyObservers(Event t) {
+        observers.stream().forEach(x->x.update(t));
     }
 }

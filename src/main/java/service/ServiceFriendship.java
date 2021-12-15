@@ -1,8 +1,7 @@
 package service;
 
 import ChangeEvent.ChangeEventType;
-import ChangeEvent.FriendshipChangeEvent;
-import ChangeEvent.MessageChangeEvent;
+
 import domain.*;
 import domain.validation.ValidationException;
 import observer.Observable;
@@ -19,10 +18,10 @@ import ChangeEvent.*;
  * repoUser-Repository for users
  * repoFriends-Repository for friendships
  */
-public class ServiceFriendship implements Observable<FriendshipChangeEvent> {
+public class ServiceFriendship implements Observable<Event> {
     private Repository<Long, User> repoUser;
     private Repository<Tuple<Long, Long>, Friendship> repoFriends;
-    private List<Observer<FriendshipChangeEvent>> observers=new ArrayList<>();
+    private List<Observer<Event>> observers=new ArrayList<>();
     /**
      * constructor for the service
      * @param repoUser UserRepository
@@ -65,7 +64,7 @@ public class ServiceFriendship implements Observable<FriendshipChangeEvent> {
         if (save != null)
             throw new ValidationException("ids are already used");
 
-        notifyObservers(new FriendshipChangeEvent(ChangeEventType.ADD,save));
+        notifyObservers(new Event(ChangeEventType.ADD,save));
     }
 
     /**
@@ -86,7 +85,7 @@ public class ServiceFriendship implements Observable<FriendshipChangeEvent> {
         if (del == null)
             throw new ValidationException("ids are not used in a friendship");
 
-        notifyObservers(new FriendshipChangeEvent(ChangeEventType.DELETE,del));
+        notifyObservers(new Event(ChangeEventType.DELETE,del));
     }
     /**
      * @return all the friendships
@@ -121,18 +120,17 @@ public class ServiceFriendship implements Observable<FriendshipChangeEvent> {
     }
 
     @Override
-    public void addObserver(Observer<FriendshipChangeEvent> e) {
+    public void addObserver(Observer<Event> e) {
         observers.add(e);
     }
 
-
     @Override
-    public void removeObserver(Observer<FriendshipChangeEvent> e) {
+    public void removeObserver(Observer<Event> e) {
 
     }
 
     @Override
-    public void notifyObservers(FriendshipChangeEvent t) {
+    public void notifyObservers(Event t) {
         observers.stream().forEach(x->x.update(t));
     }
 }

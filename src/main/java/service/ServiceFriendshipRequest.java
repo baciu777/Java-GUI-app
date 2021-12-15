@@ -1,9 +1,6 @@
 package service;
 
-import ChangeEvent.ChangeEventType;
-import ChangeEvent.FriendshipChangeEvent;
-import ChangeEvent.FriendshipReqChangeEvent;
-import ChangeEvent.MessageChangeEvent;
+import ChangeEvent.*;
 import domain.FriendRequest;
 import domain.Friendship;
 import domain.Tuple;
@@ -20,7 +17,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class ServiceFriendshipRequest  implements Observable<FriendshipReqChangeEvent> {
+public class ServiceFriendshipRequest  implements Observable<Event> {
     /**
      * constructor for the service
      *
@@ -31,6 +28,7 @@ public class ServiceFriendshipRequest  implements Observable<FriendshipReqChange
     ServiceFriendship servFriendship;
     ServiceUser servUser;
     Repository<Tuple<Long, Long>, FriendRequest> request_repo;
+    private List<Observer<Event>> observers=new ArrayList<>();
     public ServiceFriendshipRequest(Repository<Tuple<Long, Long>, FriendRequest> repo_request,
                                     ServiceFriendship servFriendship,
                                     ServiceUser servUser) {
@@ -59,7 +57,7 @@ public class ServiceFriendshipRequest  implements Observable<FriendshipReqChange
         f.setDate(LocalDateTime.now());
         request_repo.update(f);
         servFriendship.addFriend(id1,id2);
-        notifyObservers(new FriendshipReqChangeEvent(ChangeEventType.UPDATE,f));
+        notifyObservers(new Event(ChangeEventType.UPDATE,f));
     }
 
     /**
@@ -77,7 +75,7 @@ public class ServiceFriendshipRequest  implements Observable<FriendshipReqChange
         f.setId(longLongTuple);
         f.setStatus("PENDING");
         request_repo.save(f);
-        notifyObservers(new FriendshipReqChangeEvent(ChangeEventType.ADD,f));
+        notifyObservers(new Event(ChangeEventType.ADD,f));
     }
 
     /**
@@ -100,7 +98,7 @@ public class ServiceFriendshipRequest  implements Observable<FriendshipReqChange
         f.setStatus("REJECTED");
         f.setDate(LocalDateTime.now());
         request_repo.update(f);
-        notifyObservers(new FriendshipReqChangeEvent(ChangeEventType.UPDATE,f));
+        notifyObservers(new Event(ChangeEventType.UPDATE,f));
     }
 
     /**
@@ -229,21 +227,19 @@ public class ServiceFriendshipRequest  implements Observable<FriendshipReqChange
         }
         return null;
     }
-    private List<Observer<FriendshipReqChangeEvent>> observers=new ArrayList<>();
 
     @Override
-    public void addObserver(Observer<FriendshipReqChangeEvent> e) {
+    public void addObserver(Observer<Event> e) {
         observers.add(e);
     }
 
     @Override
-    public void removeObserver(Observer<FriendshipReqChangeEvent> e) {
+    public void removeObserver(Observer<Event> e) {
 
     }
 
     @Override
-    public void notifyObservers(FriendshipReqChangeEvent t) {
+    public void notifyObservers(Event t) {
         observers.stream().forEach(x->x.update(t));
     }
-
 }
