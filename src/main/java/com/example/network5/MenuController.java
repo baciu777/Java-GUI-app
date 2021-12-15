@@ -1,10 +1,8 @@
 package com.example.network5;
 
-import ObserverController.ObserverFriendship;
-import ObserverController.ObserverMessage;
-import domain.DtoMessage;
-import domain.Message;
-import domain.User;
+import ObserverController.GenericObserver;
+
+import domain.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -26,7 +24,7 @@ import service.ServiceUser;
 
 import java.io.IOException;
 
-public class MenuController  {
+public class MenuController  extends GenericObserver{
     @FXML
     private TextField textFieldId;
 
@@ -47,33 +45,23 @@ public class MenuController  {
     @FXML
     TableColumn<DtoMessage,String> tableColumnData;
 
-    private ServiceUser servUser;
-    private ServiceMessage serviceMessage;
-    private ServiceFriendship serviceFriendship;
-    private ServiceFriendshipRequest serviceFriendRequest;
+
     Stage dialogStage;
     User userLogin;
-    ObserverFriendship observerFriendship=new ObserverFriendship();
-    ObserverMessage observerMessage=new ObserverMessage();
-    ObservableList<User> modelFr = FXCollections.observableArrayList();
-    ObservableList<DtoMessage> modelMs = FXCollections.observableArrayList();
 
 
-    public void setService(ServiceUser service, ServiceMessage mess,ServiceFriendship serviceFriendshipNew,ServiceFriendshipRequest serviceFriendRequest,Stage stage,User user) {
-        this.servUser = service;
-        this.serviceMessage=mess;
-        this.serviceFriendship=serviceFriendshipNew;
+    public void setService(ServiceUser service, ServiceMessage mess,ServiceFriendship serviceFriendshipNew,ServiceFriendshipRequest serviceFriendRequestt,Stage stage,User user) {
+        super.setService(service,mess,serviceFriendshipNew,serviceFriendRequestt,user);
         this.dialogStage = stage;
         this.userLogin=user;
-        this.serviceFriendRequest=serviceFriendRequest;
         if (null != user) {
             setFields(user);
             textFieldId.setEditable(false);
         }
-        observerFriendship.setServiceModelFriendship(serviceFriendship,modelFr,userLogin);
-        observerMessage.setServiceModelMessage(serviceMessage,modelMs,userLogin);
-
-
+        initModelFriendship();
+        initModelFriendshipReq();
+        initModelMessage();
+        initModelUser();
 
     }
     @FXML
@@ -85,12 +73,12 @@ public class MenuController  {
         tableColumnTo.setCellValueFactory(new PropertyValueFactory<DtoMessage, String>("name"));
         tableColumnData.setCellValueFactory(new PropertyValueFactory<DtoMessage, String>("date"));
 
-        tableViewMessage.setItems(modelMs);
+        tableViewMessage.setItems(modelMessage);
 
         tableColumnFirstName.setCellValueFactory(new PropertyValueFactory<User, String>("FirstName"));
         tableColumnLastName.setCellValueFactory(new PropertyValueFactory<User, String>("LastName"));
 
-        tableViewUsers.setItems(modelFr);
+        tableViewUsers.setItems(modelFriendship);
 
     }
 
@@ -99,7 +87,7 @@ public class MenuController  {
     private void setFields(User s)
     {
 
-        textFieldId.setText(s.getId().toString());
+        textFieldId.setText(s.getId()+" "+s.getFirstName()+" "+s.getLastName());
 
     }
     @FXML
@@ -130,7 +118,7 @@ public class MenuController  {
             dialogStage.setScene(scene);
 
             FriendshipsReqController controller = loader.getController();
-            controller.setService(servUser,serviceFriendRequest, dialogStage, user);
+            controller.setService(serviceUser,serviceMessage,serviceF,serviceFr,dialogStage, user);
 
             dialogStage.show();
 

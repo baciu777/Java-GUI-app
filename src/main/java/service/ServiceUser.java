@@ -1,13 +1,16 @@
 package service;
 
+import ChangeEvent.ChangeEventType;
+import ChangeEvent.Event;
+
 import domain.Entity;
 import domain.Friendship;
 import domain.Tuple;
 import domain.User;
 import domain.validation.ValidationException;
-import org.w3c.dom.ls.LSOutput;
+import observer.Observer;
 import repository.Repository;
-
+import observer.Observable;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Predicate;
@@ -18,10 +21,10 @@ import java.util.stream.Collectors;
  * repoUser-Repository for users
  * repoFriends-Repository for friendships
  */
-public class ServiceUser {
+public class ServiceUser implements Observable<Event> {
     private Repository<Long, User> repoUser;
     private Repository<Tuple<Long, Long>, Friendship> repoFriends;
-
+    private List<Observer<Event>> observers=new ArrayList<>();
     /**
      * constructor for the service
      *
@@ -57,7 +60,7 @@ public class ServiceUser {
         if (save != null)
             throw new ValidationException("id already used");
 
-
+        notifyObservers(new Event(ChangeEventType.ADD,save));
     }
 
     /**
@@ -77,7 +80,7 @@ public class ServiceUser {
         User save = repoUser.update(user);
         if (save != null)
             throw new ValidationException("this id does not exit");
-
+    notifyObservers(new Event(ChangeEventType.UPDATE,save));
 
     }
 
@@ -90,13 +93,13 @@ public class ServiceUser {
      */
     public Entity delete(Long id) {
 
-        Entity deleted = repoUser.delete(id);
+        User deleted = repoUser.delete(id);
 
 
         if (deleted == null)
             throw new ValidationException("id invalid");
 
-
+    notifyObservers(new Event(ChangeEventType.DELETE,deleted));
         return deleted;
 
     }
@@ -210,5 +213,41 @@ public class ServiceUser {
             throw new ValidationException(" id invalid");
     }
 
+    public List<User> findbyName(String name)
+    {
+        String[] splited = name.split(" ",2);
+        Iterable<User> aux = repoUser.findAll();
+        List<User> result = new ArrayList<>();
+        aux.forEach(result::add);
+        return result.stream().filter(x->{
+                    if(Objects.equals(x.getFirstName(), splited[0]) && Objects.equals(x.getLastName(), splited[1]))
+                        return true;
+                    return false;
+                }
 
+        ).collect(Collectors.toCollection(ArrayList::new));
+    }
+    public User findbyNameFirst(String name) throws Exception {
+        List<User> l = findbyName(name);
+        if(l.size()==0)
+            throw new Exception("User not found");
+        return l.get(0);
+    }
+
+
+
+    @Override
+    public void addObserver(Observer<Event> e) {
+        observers.add(e);
+    }
+
+    @Override
+    public void removeObserver(Observer<Event> e) {
+
+    }
+
+    @Override
+    public void notifyObservers(Event t) {
+        observers.stream().forEach(x->x.update(t));
+    }
 }

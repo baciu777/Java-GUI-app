@@ -1,6 +1,8 @@
 package service;
 
-import ChangeEvent.MessageChangeEvent;
+import ChangeEvent.ChangeEventType;
+import ChangeEvent.Event;
+
 import domain.Message;
 import domain.User;
 import domain.validation.ValidationException;
@@ -19,10 +21,10 @@ import java.util.stream.Collectors;
  * repoMessage-Message Repository
  * repoUser-User Repository
  */
-public class ServiceMessage implements Observable<MessageChangeEvent> {
+public class ServiceMessage implements Observable<Event> {
     private Repository<Long, Message> repoMessage;
     private Repository<Long, User> repoUser;
-
+    private List<Observer<Event>> observers=new ArrayList<>();
     /**
      * constructor
      * @param repoMessage Repository Messages
@@ -59,7 +61,7 @@ public class ServiceMessage implements Observable<MessageChangeEvent> {
         if (save != null)
             throw new ValidationException("id already used");
 
-
+        notifyObservers(new Event(ChangeEventType.ADD,save));
     }
 
     /**
@@ -191,25 +193,26 @@ public class ServiceMessage implements Observable<MessageChangeEvent> {
     }
 
 
-    private List<Observer<MessageChangeEvent>> observers=new ArrayList<>();
 
-    @Override
-    public void addObserver(Observer<MessageChangeEvent> e) {
-        observers.add(e);
-    }
 
-    @Override
-    public void removeObserver(Observer<MessageChangeEvent> e) {
-        //observers.remove(e);
-    }
-
-    @Override
-    public void notifyObservers(MessageChangeEvent t) {
-        observers.stream().forEach(x->x.update(t));
-    }
 
     public Iterable<Message> findAll()
     {
         return repoMessage.findAll();
+    }
+
+    @Override
+    public void addObserver(Observer<Event> e) {
+        observers.add(e);
+    }
+
+    @Override
+    public void removeObserver(Observer<Event> e) {
+
+    }
+
+    @Override
+    public void notifyObservers(Event t) {
+        observers.stream().forEach(x->x.update(t));
     }
 }
