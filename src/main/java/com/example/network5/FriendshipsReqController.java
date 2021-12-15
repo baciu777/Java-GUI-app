@@ -1,9 +1,11 @@
 package com.example.network5;
 
-import ObserverController.ObserverFriendReq;
+import ObserverController.GenericObserver;
+
 import domain.DtoFriendReq;
 import domain.DtoUser;
 import domain.User;
+import domain.validation.ValidationException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -12,14 +14,16 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import observer.Observer;
 import service.ServiceFriendship;
 import service.ServiceFriendshipRequest;
+import service.ServiceMessage;
 import service.ServiceUser;
 
-public class FriendshipsReqController {
-    private ServiceFriendshipRequest serviceFriendRequest;
-    private ServiceUser servUser;
-    private ServiceFriendship servFriend;
+import java.util.Objects;
+
+public class FriendshipsReqController extends GenericObserver {
+
     Stage dialogStage;
     User user;
 
@@ -42,19 +46,17 @@ public class FriendshipsReqController {
     TableColumn<DtoFriendReq, String> tableColumnDate;
     @FXML
     TableColumn<DtoFriendReq, String> tableColumnStatus;
-    ObservableList<DtoFriendReq> modelFrR = FXCollections.observableArrayList();
-    ObservableList<DtoUser> modelUser = FXCollections.observableArrayList();
-    ObserverFriendReq observerFriendshipReq=new ObserverFriendReq();
 
 
-    public void setService(ServiceUser servUser,ServiceFriendship servFriend, ServiceFriendshipRequest serviceFriendRequest, Stage dialogStage, User user) {
-    this.serviceFriendRequest=serviceFriendRequest;
+
+
+    public void setService(ServiceUser servUser, ServiceMessage serviceM, ServiceFriendship servFriend, ServiceFriendshipRequest serviceFriendRequest, Stage dialogStage, User user) {
+    super.setService(servUser,serviceM,servFriend,serviceFriendRequest,user);
     this.dialogStage=dialogStage;
     this.user=user;
-    this.servUser=servUser;
-    this.servFriend = servFriend;
-    observerFriendshipReq.setServiceModelFriendshipReq(servUser,servFriend,serviceFriendRequest,modelFrR,modelUser,user);
-
+    initModelFriendship();
+    initModelFriendshipReq();
+    initModelUser();
     //observerUserFriend.setServiceModelUser(servUser,servFriend, serviceFriendRequest,modelUserFriends,user);
     }
     @FXML
@@ -66,7 +68,7 @@ public class FriendshipsReqController {
         tableColumnDate.setCellValueFactory(new PropertyValueFactory<DtoFriendReq, String>("date"));
         tableColumnStatus.setCellValueFactory(new PropertyValueFactory<DtoFriendReq, String>("status"));
 
-        tableViewFriendReq.setItems(modelFrR);
+        tableViewFriendReq.setItems(modelFriendshipReq);
         populateUsers();
     }
     @FXML
@@ -82,34 +84,58 @@ public class FriendshipsReqController {
 
 
     @FXML
-    public void handleSendRequest() throws Exception {
-        String fullName = SearchingName.getText();
-        User found = servUser.findbyNameFirst(fullName);
-        serviceFriendRequest.addFriend(user.getId(), found.getId());
+    public void handleSendRequest() {
+        try {
+            String fullName = SearchingName.getText();
+            User found = serviceUser.findbyNameFirst(fullName);
+            if(Objects.equals(found.getId(), user.getId()))
+                throw new Exception("This is you");
+            serviceFr.addFriend(user.getId(), found.getId());
+        }
+        catch (Exception e) {
+        MessageAlert.showErrorMessage(null,e.getMessage());
+    }
 
     }
     @FXML
-    public void handleRejectRequest() throws Exception {
-        String fullName = SearchingName.getText();
-        User found = servUser.findbyNameFirst(fullName);
-        serviceFriendRequest.rejectRequest(user.getId(), found.getId());
-
+    public void handleRejectRequest()  {
+       try {
+           String fullName = SearchingName.getText();
+           User found = serviceUser.findbyNameFirst(fullName);
+           if(Objects.equals(found.getId(), user.getId()))
+               throw new Exception("This is you");
+           serviceFr.rejectRequest(user.getId(), found.getId());
+       }catch (Exception e) {
+           MessageAlert.showErrorMessage(null,e.getMessage());
+       }
     }
 
     @FXML
-    public void handleAcceptRequest() throws Exception {
-        String fullName = SearchingName.getText();
-        User found = servUser.findbyNameFirst(fullName);
-        serviceFriendRequest.addFriend(user.getId(), found.getId());
+    public void handleAcceptRequest()  {
+        try {
+            String fullName = SearchingName.getText();
+            User found = serviceUser.findbyNameFirst(fullName);
+            if(Objects.equals(found.getId(), user.getId()))
+                throw new Exception("This is you");
+            serviceFr.addFriend(user.getId(), found.getId());
+        }catch (Exception e) {
+                MessageAlert.showErrorMessage(null,e.getMessage());
+            }
 
     }
 
     @FXML
     public void handleDeleteFriend()
     {
+        try{
         String fullName = SearchingName.getText();
-        User found = servUser.findbyNameFirst(fullName);
-        servFriend.deleteFriend(user.getId(), found.getId());
-
+        User found = serviceUser.findbyNameFirst(fullName);
+        if(Objects.equals(found.getId(), user.getId()))
+            throw new Exception("This is you");
+        serviceF.deleteFriend(user.getId(), found.getId());
+        }
+        catch (Exception e) {
+            MessageAlert.showErrorMessage(null,e.getMessage());
+        }
     }
 }
