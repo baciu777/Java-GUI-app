@@ -22,6 +22,7 @@ public class ServiceFriendship implements Observable<Event> {
     private Repository<Long, User> repoUser;
     private Repository<Tuple<Long, Long>, Friendship> repoFriends;
     private List<Observer<Event>> observers=new ArrayList<>();
+
     /**
      * constructor for the service
      * @param repoUser UserRepository
@@ -83,7 +84,7 @@ public class ServiceFriendship implements Observable<Event> {
             throw new ValidationException("second id does not exist");
         Friendship del = repoFriends.delete(t);
         if (del == null)
-            throw new ValidationException("ids are not used in a friendship");
+            throw new ValidationException("you are not in a friendship");
 
         notifyObservers(new Event(ChangeEventType.DELETE,del));
     }

@@ -227,9 +227,10 @@ public class ServiceUser implements Observable<Event> {
 
         ).collect(Collectors.toCollection(ArrayList::new));
     }
-    public User findbyNameFirst(String name)
-    {
+    public User findbyNameFirst(String name) throws Exception {
         List<User> l = findbyName(name);
+        if(l.size()==0)
+            throw new Exception("User not found");
         return l.get(0);
     }
 

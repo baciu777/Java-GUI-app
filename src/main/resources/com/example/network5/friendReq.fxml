@@ -6,28 +6,38 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="500.0" prefWidth="702.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.network5.FriendshipsReqController">
+<AnchorPane prefHeight="500.0" prefWidth="702.0" style="-fx-background-color: rgb(174, 199, 227);" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.network5.FriendshipsReqController">
    <children>
-      <TableView fx:id="tableViewFriendReq" layoutX="363.0" layoutY="197.0" prefHeight="277.0" prefWidth="319.0">
+      <TableView fx:id="tableViewFriendReq" layoutX="364.0" layoutY="215.0" prefHeight="260.0" prefWidth="311.0">
         <columns>
           <TableColumn fx:id="tableColumnReqName" prefWidth="75.0" text="Name" />
           <TableColumn fx:id="tableColumnStatus" prefWidth="75.0" text="Status" />
             <TableColumn fx:id="tableColumnDate" prefWidth="132.79998779296875" text="Date" />
         </columns>
       </TableView>
-      <TableView fx:id="tableViewUser" layoutX="54.0" layoutY="111.0" prefHeight="363.0" prefWidth="284.0">
+      <TableView fx:id="tableViewUser" layoutX="17.0" layoutY="112.0" prefHeight="362.0" prefWidth="321.0">
         <columns>
           <TableColumn fx:id="tableColumnUserName" prefWidth="156.79995346069336" text="Name" />
-            <TableColumn fx:id="tableColumnRelation" prefWidth="115.99997863769534" text="Relation" />
+            <TableColumn fx:id="tableColumnRelation" prefWidth="153.5999786376953" text="Relation" />
         </columns>
       </TableView>
-      <Label layoutX="374.0" layoutY="89.0" prefHeight="44.0" prefWidth="58.0" text="Name" />
-      <TextField fx:id="SearchingName" layoutX="422.0" layoutY="98.0" />
-      <Button fx:id="SendRequestButton" layoutX="590.0" layoutY="73.0" mnemonicParsing="false" onAction="#handleSendRequest" text="Send Request" />
-      <Button layoutX="590.0" layoutY="111.0" mnemonicParsing="false" onAction="#handleRejectRequest" text="Reject Request" />
-      <Button layoutX="460.0" layoutY="134.0" mnemonicParsing="false" text="Search" />
-      <Button layoutX="590.0" layoutY="46.0" mnemonicParsing="false" onAction="#handleDeleteFriend" text="Delete Friend" />
-      <Button layoutX="590.0" layoutY="147.0" mnemonicParsing="false" onAction="#handleAcceptRequest" text="Accept Request" />
+      <Label layoutX="346.0" layoutY="18.0" prefHeight="57.0" prefWidth="62.0" text="Name" />
+      <TextField fx:id="SearchingName" layoutX="392.0" layoutY="28.0" prefHeight="44.0" prefWidth="284.0" />
+      <Button fx:id="SendRequestButton" layoutX="392.0" layoutY="85.0" mnemonicParsing="false" onAction="#handleSendRequest" prefHeight="34.0" prefWidth="134.0" text="Send Request" />
+      <Button layoutX="541.0" layoutY="132.0" mnemonicParsing="false" onAction="#handleRejectRequest" prefHeight="34.0" prefWidth="134.0" text="Reject Request" />
+      <Button layoutX="541.0" layoutY="85.0" mnemonicParsing="false" onAction="#handleDeleteFriend" prefHeight="34.0" prefWidth="134.0" text="Delete Friend" />
+      <Button layoutX="392.0" layoutY="132.0" mnemonicParsing="false" onAction="#handleAcceptRequest" prefHeight="34.0" prefWidth="134.0" text="Accept Request" />
+      <Label layoutX="114.0" layoutY="43.0" prefHeight="58.0" prefWidth="150.0" text="All Users">
+         <font>
+            <Font size="29.0" />
+         </font>
+      </Label>
+      <Label layoutX="465.0" layoutY="149.0" prefHeight="84.0" prefWidth="187.0" text="Requests">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

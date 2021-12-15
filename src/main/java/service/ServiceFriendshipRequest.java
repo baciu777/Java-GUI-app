@@ -65,6 +65,7 @@ public class ServiceFriendshipRequest  implements Observable<Event> {
      * @param id1 long
      * @param id2 long
      */
+
     private void sendRequest(Long id1, Long id2)
     {
         FriendRequest f = new FriendRequest();
@@ -89,7 +90,15 @@ public class ServiceFriendshipRequest  implements Observable<Event> {
         servUser.findOne(id2);
         List<FriendRequest> test = (List<FriendRequest>) findAllTo(findAllFrom(findWithStatus(findAll(),"PENDING"),id2),id1);
         if(test.isEmpty())
-            throw new Exception("request does not exist");
+        {
+            test = (List<FriendRequest>) findAllTo(findAllFrom(findWithStatus(findAll(),"PENDING"),id1),id2);
+            if(test.isEmpty())
+                throw new Exception("request does not exist");
+            else{
+                deleteRequest(id1,id2);
+                deleteRequest(id2,id1);
+            }
+        }
         FriendRequest f = new FriendRequest();
         Tuple<Long, Long> longLongTuple =new Tuple<>();
         longLongTuple.setLeft(id2);
@@ -136,7 +145,15 @@ public class ServiceFriendshipRequest  implements Observable<Event> {
         longLongTuple.setRight(id1);
         request_repo.delete(longLongTuple);
     }
-
+    public void check_update_deletes()
+    {
+        for(FriendRequest fr: request_repo.findAll())
+        {
+            if(!servFriendship.areFriends(fr.getId().getLeft(),fr.getId().getRight()) && Objects.equals(fr.getStatus(), "APPROVED")) {
+                deleteRequest(fr.getId().getLeft(), fr.getId().getRight());
+                deleteRequest(fr.getId().getRight(), fr.getId().getLeft());
+            }}
+    }
     /**
      *
      * @return all the requests
@@ -178,6 +195,8 @@ public class ServiceFriendshipRequest  implements Observable<Event> {
         list = result.stream().filter(x-> Objects.equals(x.getId().getRight(), id)).collect(Collectors.toCollection(ArrayList::new));
         return list;
     }
+
+
     /**
      *  finds all the request with a given status
      * @param all iterable

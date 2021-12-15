@@ -31,10 +31,12 @@ public class GenericObserver implements Observer<Event>{
 
     @Override
     public void update(Event event) {
+        serviceFr.check_update_deletes();
         initModelFriendship();
         initModelFriendshipReq();
         initModelMessage();
         initModelUser();
+
     }
 
 
@@ -103,13 +105,15 @@ public class GenericObserver implements Observer<Event>{
         List<DtoUser> usersList = StreamSupport.stream(users.spliterator(), false)
                 .map(x->
                 {
-                    String fullName = x.getFirstName() + x.getLastName();
+                    String fullName = x.getFirstName() +" "+ x.getLastName();
                     DtoUser us = new DtoUser(fullName, " not friends");
                     if(serviceF.areFriends(user.getId(), x.getId()))
                         us.setRelation("friend");
                     String reqStatus = serviceFr.get_request_status(user.getId(), x.getId());
                     if(reqStatus!=null)
                         us.setRelation(reqStatus);
+                    if(Objects.equals(x.getId(), user.getId()))
+                        us.setRelation("you");
                     return us;
                 })
                 .collect(Collectors.toList());
