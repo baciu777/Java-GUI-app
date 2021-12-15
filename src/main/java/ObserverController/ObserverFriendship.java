@@ -28,6 +28,7 @@ public class ObserverFriendship implements Observer<FriendshipChangeEvent> {
         user=userLogin;
         modelFriendship=model;
         serviceFr.addObserver(this);
+
         initModelFriendship();
 
     }
