@@ -1,7 +1,7 @@
 package service;
 
-import ChangeEvent.FriendshipChangeEvent;
-import ChangeEvent.MessageChangeEvent;
+import ChangeEvent.ChangeEventType;
+
 import domain.*;
 import domain.validation.ValidationException;
 import observer.Observable;
@@ -12,15 +12,17 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
+import ChangeEvent.*;
 /**
  * class ServiceFriendship that manage the operations for Friendships
  * repoUser-Repository for users
  * repoFriends-Repository for friendships
  */
-public class ServiceFriendship implements Observable<FriendshipChangeEvent> {
+public class ServiceFriendship implements Observable<Event> {
     private Repository<Long, User> repoUser;
     private Repository<Tuple<Long, Long>, Friendship> repoFriends;
+    private List<Observer<Event>> observers=new ArrayList<>();
+
     /**
      * constructor for the service
      * @param repoUser UserRepository
@@ -59,11 +61,11 @@ public class ServiceFriendship implements Observable<FriendshipChangeEvent> {
             throw new ValidationException("first id does not exist");
         if (repoUser.findOne(id2) == null)
             throw new ValidationException("second id does not exist");
-        Entity save = repoFriends.save(fr);
+        Friendship save = repoFriends.save(fr);
         if (save != null)
             throw new ValidationException("ids are already used");
 
-
+        notifyObservers(new Event(ChangeEventType.ADD,save));
     }
 
     /**
@@ -80,11 +82,11 @@ public class ServiceFriendship implements Observable<FriendshipChangeEvent> {
             throw new ValidationException("first id does not exist");
         if (repoUser.findOne(id2) == null)
             throw new ValidationException("second id does not exist");
-        Entity del = repoFriends.delete(t);
+        Friendship del = repoFriends.delete(t);
         if (del == null)
-            throw new ValidationException("ids are not used in a friendship");
+            throw new ValidationException("you are not in a friendship");
 
-
+        notifyObservers(new Event(ChangeEventType.DELETE,del));
     }
     /**
      * @return all the friendships
@@ -101,7 +103,7 @@ public class ServiceFriendship implements Observable<FriendshipChangeEvent> {
     public Iterable<Friendship> findAll() {
         return repoFriends.findAll();
     }
-    private List<Observer<FriendshipChangeEvent>> observers=new ArrayList<>();
+
 
 
     public Iterable<User> friends(User user)
@@ -117,18 +119,19 @@ public class ServiceFriendship implements Observable<FriendshipChangeEvent> {
         }
         return friendsList;
     }
+
     @Override
-    public void addObserver(Observer<FriendshipChangeEvent> e) {
+    public void addObserver(Observer<Event> e) {
         observers.add(e);
     }
 
     @Override
-    public void removeObserver(Observer<FriendshipChangeEvent> e) {
+    public void removeObserver(Observer<Event> e) {
 
     }
 
     @Override
-    public void notifyObservers(FriendshipChangeEvent t) {
+    public void notifyObservers(Event t) {
         observers.stream().forEach(x->x.update(t));
     }
 }
