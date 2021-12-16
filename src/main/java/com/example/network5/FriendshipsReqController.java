@@ -1,5 +1,6 @@
 package com.example.network5;
 
+import ChangeEvent.Event;
 import ObserverController.GenericObserver;
 
 import domain.DtoFriendReq;
@@ -58,7 +59,7 @@ public class FriendshipsReqController extends GenericObserver {
     this.dialogStage=dialogStage;
     this.user=user;
 
-    initModelFriendship();
+    //initModelFriendship();
     initModelFriendshipReq();
     initModelUser();
 
@@ -149,5 +150,13 @@ public class FriendshipsReqController extends GenericObserver {
         catch (Exception e) {
             MessageAlert.showErrorMessage(null,e.getMessage());
         }
+    }
+
+    @Override
+    public void update(Event event) {
+        serviceFr.check_update_deletes();
+        initModelFriendshipReq();
+        initModelUser();
+
     }
 }
