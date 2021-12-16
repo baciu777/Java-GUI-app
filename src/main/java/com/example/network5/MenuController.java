@@ -1,5 +1,6 @@
 package com.example.network5;
 
+import ChangeEvent.Event;
 import ObserverController.GenericObserver;
 
 import domain.*;
@@ -59,9 +60,9 @@ public class MenuController  extends GenericObserver{
             textFieldId.setEditable(false);
         }
         initModelFriendship();
-        initModelFriendshipReq();
+        //initModelFriendshipReq();
         initModelMessage();
-        initModelUser();
+        //initModelUser();
 
     }
     @FXML
@@ -127,7 +128,13 @@ public class MenuController  extends GenericObserver{
         }
     }
 
+    @Override
+    public void update(Event event) {
 
+        initModelFriendship();
+        initModelMessage();
+
+    }
 
 
 

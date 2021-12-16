@@ -17,7 +17,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public class GenericObserver implements Observer<Event>{
+public abstract class GenericObserver implements Observer<Event>{
 
     public ObservableList<DtoUser> modelUser = FXCollections.observableArrayList();
     public ObservableList<User> modelFriendship = FXCollections.observableArrayList();
@@ -30,15 +30,7 @@ public class GenericObserver implements Observer<Event>{
     User user;
 
 
-    @Override
-    public void update(Event event) {
-        serviceFr.check_update_deletes();
-        initModelFriendship();
-        initModelFriendshipReq();
-        initModelMessage();
-        initModelUser();
 
-    }
 
 
     public void setService(ServiceUser service, ServiceMessage mess, ServiceFriendship serviceFriendshipNew, ServiceFriendshipRequest serviceFriendRequestt, User user) {
@@ -51,10 +43,10 @@ public class GenericObserver implements Observer<Event>{
         this.serviceF.addObserver(this);
         this.serviceMessage.addObserver(this);
         this.serviceUser.addObserver(this);
-        initModelFriendship();
-        initModelFriendshipReq();
-        initModelMessage();
-        initModelUser();
+        //initModelFriendship();
+        //initModelFriendshipReq();
+        //initModelMessage();
+        //initModelUser();
 
     }
 
@@ -123,5 +115,6 @@ public class GenericObserver implements Observer<Event>{
         modelUser.setAll(usersList);
 
     }
+
 
 }
