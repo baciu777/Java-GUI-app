@@ -61,7 +61,7 @@ public class ServiceMessage implements Observable<Event> {
         if (save != null)
             throw new ValidationException("id already used");
 
-        notifyObservers(new Event(ChangeEventType.ADD,save));
+        notifyObservers(new Event(ChangeEventType.ADD,mess));
     }
 
     /**
@@ -175,7 +175,7 @@ public class ServiceMessage implements Observable<Event> {
 
     public List<Message> userMessages(User user)
     {List<Message> listOfMess=new ArrayList<>();
-        for(Message ms:repoMessage.findAll())
+        for(Message ms:this.findAll())
         {
             if(Objects.equals(ms.getFrom().getId(), user.getId()))
             {

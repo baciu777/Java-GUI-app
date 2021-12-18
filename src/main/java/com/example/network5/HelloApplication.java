@@ -39,7 +39,7 @@ public class HelloApplication extends Application {
 
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
 
-        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+        Scene scene = new Scene(fxmlLoader.load(), 600, 500);
         LoginController loginController = fxmlLoader.getController();
         loginController.setService(servUser, servMessage, servFriendship,servFriendReq, stage);
         stage.setTitle("Social Life");

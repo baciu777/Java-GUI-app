@@ -43,10 +43,7 @@ public abstract class GenericObserver implements Observer<Event>{
         this.serviceF.addObserver(this);
         this.serviceMessage.addObserver(this);
         this.serviceUser.addObserver(this);
-        //initModelFriendship();
-        //initModelFriendshipReq();
-        //initModelMessage();
-        //initModelUser();
+
 
     }
 

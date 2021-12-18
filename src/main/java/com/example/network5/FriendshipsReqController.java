@@ -59,7 +59,7 @@ public class FriendshipsReqController extends GenericObserver {
     this.dialogStage=dialogStage;
     this.user=user;
 
-    //initModelFriendship();
+    initModelFriendship();
     initModelFriendshipReq();
     initModelUser();
 
@@ -104,9 +104,11 @@ public class FriendshipsReqController extends GenericObserver {
             if(Objects.equals(found.getId(), user.getId()))
                 throw new Exception("This is you");
             serviceFr.addFriend(user.getId(), found.getId());
+            //initModelFriendshipReq();
         }
         catch (Exception e) {
         MessageAlert.showErrorMessage(null,e.getMessage());
+
     }
 
     }
@@ -154,9 +156,9 @@ public class FriendshipsReqController extends GenericObserver {
 
     @Override
     public void update(Event event) {
-        serviceFr.check_update_deletes();
-        initModelFriendshipReq();
-        initModelUser();
+        //serviceFr.check_update_deletes();
+        //initModelFriendshipReq();
+        //initModelUser();
 
     }
 }

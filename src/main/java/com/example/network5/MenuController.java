@@ -18,6 +18,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.controlsfx.glyphfont.FontAwesome;
 import service.ServiceFriendship;
 import service.ServiceFriendshipRequest;
 import service.ServiceMessage;
@@ -60,9 +61,8 @@ public class MenuController  extends GenericObserver{
             textFieldId.setEditable(false);
         }
         initModelFriendship();
-        //initModelFriendshipReq();
-        initModelMessage();
-        //initModelUser();
+        // initModelMessage();
+
 
     }
     @FXML
@@ -131,8 +131,8 @@ public class MenuController  extends GenericObserver{
     @Override
     public void update(Event event) {
 
-        initModelFriendship();
-        initModelMessage();
+        //initModelFriendship();
+        //initModelMessage();
 
     }
 

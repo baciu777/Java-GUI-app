@@ -9,8 +9,11 @@ import domain.validation.Validator;
 import repository.Repository;
 
 import java.sql.*;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -172,8 +175,10 @@ public class MessageDbRepository implements Repository<Long, Message> {
             if (resultSet.next()) {
                 String firstName = resultSet.getString("first_name");
                 String lastName = resultSet.getString("last_name");
-
-                user = new User(firstName, lastName);
+                String usernameU = resultSet.getString("username");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+                LocalDate birth = LocalDate.parse(resultSet.getString("birth"),formatter);
+                user = new User(firstName, lastName,username,birth);
                 user.setId(aLong);
                 user.setFriends(this.findFr(aLong));
                 return user;
@@ -205,8 +210,10 @@ public class MessageDbRepository implements Repository<Long, Message> {
                     Long idnew = resultSet.getLong("id");
                     String firstName = resultSet.getString("first_name");
                     String lastName = resultSet.getString("last_name");
-
-                    User utilizator = new User(firstName, lastName);
+                    String usernameU = resultSet.getString("username");
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+                    LocalDate birth = LocalDate.parse(resultSet.getString("birth"),formatter);
+                    User utilizator = new User(firstName, lastName,usernameU,birth);
                     utilizator.setId(idnew);
 
 

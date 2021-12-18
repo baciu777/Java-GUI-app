@@ -1,6 +1,8 @@
 package domain;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,6 +17,8 @@ public class User extends Entity<Long> {
      * First and last name of a user
      */
     private String firstName, lastName;
+    private String username,password;
+    private LocalDate birth;
     /**
      * list of all user friends
      */
@@ -23,11 +27,40 @@ public class User extends Entity<Long> {
      * constructor
      * @param firstName oof the user
      * @param lastName of the user
+     * @param birth
      */
-    public User(String firstName, String lastName) {
+    public User(String firstName, String lastName, String username, LocalDate birth) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.username = username;
+
+        this.birth = birth;
     }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public LocalDate getBirth() {
+        return birth;
+    }
+
+    public void setBirth(LocalDate birth) {
+        this.birth = birth;
+    }
+
     /**
      * getter function
      * @return the first name of the user
@@ -106,16 +139,17 @@ public class User extends Entity<Long> {
                  lastName + " ";
         return s;
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(friends, user.friends);
+        return username.equals(user.username);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, lastName, friends);
+        return Objects.hash(username);
     }
 }
