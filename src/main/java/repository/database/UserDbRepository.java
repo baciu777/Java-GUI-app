@@ -114,7 +114,7 @@ public class UserDbRepository implements Repository<Long, User> {
     private List<User> findFr(Long id) {
         List<User> users = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(url, username, password);
-             PreparedStatement statement = connection.prepareStatement("select id, first_name, last_name, date\n" +
+             PreparedStatement statement = connection.prepareStatement("select id, first_name, last_name,usernameu, birth\n" +
                      "from users u inner join friendships f on u.id = f.id1 or u.id=f.id2\n" +
                      "where (f.id1= ? or f.id2 = ? )and u.id!= ?"))
         {statement.setLong(1, id);

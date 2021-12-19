@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  * repoUser-Repository for users
  * repoFriends-Repository for friendships
  */
-public class ServiceUser implements Observable<Event> {
+public class ServiceUser  {
     private Repository<Long, User> repoUser;
     private Repository<Tuple<Long, Long>, Friendship> repoFriends;
     private List<Observer<Event>> observers = new ArrayList<>();
@@ -65,7 +65,7 @@ public class ServiceUser implements Observable<Event> {
         if (save != null)
             throw new ValidationException("id already used");
 
-        notifyObservers(new Event(ChangeEventType.ADD, save));
+
     }
 
     /**
@@ -85,7 +85,7 @@ public class ServiceUser implements Observable<Event> {
         User save = repoUser.update(user);
         if (save != null)
             throw new ValidationException("this id does not exit");
-        notifyObservers(new Event(ChangeEventType.UPDATE, save));
+
 
     }
 
@@ -104,7 +104,7 @@ public class ServiceUser implements Observable<Event> {
         if (deleted == null)
             throw new ValidationException("id invalid");
 
-        notifyObservers(new Event(ChangeEventType.DELETE, deleted));
+
         return deleted;
 
     }
@@ -250,27 +250,18 @@ public class ServiceUser implements Observable<Event> {
        throw new ValidationException("this username doesn't exist");
     }
 
-    public User verifyUsername(String username) {
-        User rez = findByUsername(username);
-        if (rez != null)
-            throw new ValidationException("Username already exists");
-        return rez;
-    }
+    public boolean verifyUsername(String username) {
+        Iterable<User> l = repoUser.findAll();
+        for (User ur : l) {
+            if (Objects.equals(ur.getUsername(), username))
+                throw new ValidationException("Username already exists");
 
-    @Override
-    public void addObserver(Observer<Event> e) {
-        observers.add(e);
-    }
+        }
+        return true;
 
-    @Override
-    public void removeObserver(Observer<Event> e) {
 
     }
 
-    @Override
-    public void notifyObservers(Event t) {
-        observers.stream().forEach(x -> x.update(t));
-    }
 
     public void verifyPassword(String password, String passwordRepeat) {
         if(!Objects.equals(password, passwordRepeat))

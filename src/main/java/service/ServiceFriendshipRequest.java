@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class ServiceFriendshipRequest  implements Observable<Event> {
+public class ServiceFriendshipRequest   {
     /**
      * constructor for the service
      *
@@ -28,7 +28,7 @@ public class ServiceFriendshipRequest  implements Observable<Event> {
     ServiceFriendship servFriendship;
     ServiceUser servUser;
     Repository<Tuple<Long, Long>, FriendRequest> request_repo;
-    private List<Observer<Event>> observers=new ArrayList<>();
+
     public ServiceFriendshipRequest(Repository<Tuple<Long, Long>, FriendRequest> repo_request,
                                     ServiceFriendship servFriendship,
                                     ServiceUser servUser) {
@@ -57,7 +57,7 @@ public class ServiceFriendshipRequest  implements Observable<Event> {
         f.setDate(LocalDateTime.now());
         request_repo.update(f);
         servFriendship.addFriend(id1,id2);
-        notifyObservers(new Event(ChangeEventType.UPDATE,f));
+
     }
 
     /**
@@ -76,7 +76,7 @@ public class ServiceFriendshipRequest  implements Observable<Event> {
         f.setId(longLongTuple);
         f.setStatus("PENDING");
         request_repo.save(f);
-        notifyObservers(new Event(ChangeEventType.ADD,f));
+
     }
 
     /**
@@ -107,7 +107,7 @@ public class ServiceFriendshipRequest  implements Observable<Event> {
         f.setStatus("REJECTED");
         f.setDate(LocalDateTime.now());
         request_repo.update(f);
-        notifyObservers(new Event(ChangeEventType.UPDATE,f));
+
     }
 
     /**
@@ -224,7 +224,8 @@ public class ServiceFriendshipRequest  implements Observable<Event> {
      */
     public String get_request_status(Long me, Long him)
     {
-        List<FriendRequest> aux1 = (List<FriendRequest>)findWithStatus(request_repo.findAll(), "PENDING");
+        Iterable<FriendRequest> findAll=request_repo.findAll();
+        List<FriendRequest> aux1 = (List<FriendRequest>)findWithStatus(findAll, "PENDING");
         List<FriendRequest> aux2 =(List<FriendRequest>)findAllTo(aux1,him);
         List<FriendRequest> aux3 =(List<FriendRequest>)findAllFrom(aux2,me);
         if(aux3.size()!=0)
@@ -237,7 +238,7 @@ public class ServiceFriendshipRequest  implements Observable<Event> {
         {
             return "respond";
         }
-        aux1 = (List<FriendRequest>)findWithStatus(request_repo.findAll(), "REJECTED");
+        aux1 = (List<FriendRequest>)findWithStatus(findAll, "REJECTED");
         aux2 = (List<FriendRequest>)findAllTo(aux1,him);
         aux3 = (List<FriendRequest>)findAllFrom(aux2,me);
         if(aux3.size()!=0)
@@ -247,18 +248,5 @@ public class ServiceFriendshipRequest  implements Observable<Event> {
         return null;
     }
 
-    @Override
-    public void addObserver(Observer<Event> e) {
-        observers.add(e);
-    }
 
-    @Override
-    public void removeObserver(Observer<Event> e) {
-
-    }
-
-    @Override
-    public void notifyObservers(Event t) {
-        observers.stream().forEach(x->x.update(t));
-    }
 }

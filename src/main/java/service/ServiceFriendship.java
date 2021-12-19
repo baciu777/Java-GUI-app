@@ -18,10 +18,10 @@ import ChangeEvent.*;
  * repoUser-Repository for users
  * repoFriends-Repository for friendships
  */
-public class ServiceFriendship implements Observable<Event> {
+public class ServiceFriendship {
     private Repository<Long, User> repoUser;
     private Repository<Tuple<Long, Long>, Friendship> repoFriends;
-    private List<Observer<Event>> observers=new ArrayList<>();
+
 
     /**
      * constructor for the service
@@ -65,7 +65,6 @@ public class ServiceFriendship implements Observable<Event> {
         if (save != null)
             throw new ValidationException("ids are already used");
 
-        notifyObservers(new Event(ChangeEventType.ADD,save));
     }
 
     /**
@@ -86,7 +85,6 @@ public class ServiceFriendship implements Observable<Event> {
         if (del == null)
             throw new ValidationException("you are not in a friendship");
 
-        notifyObservers(new Event(ChangeEventType.DELETE,del));
     }
     /**
      * @return all the friendships
@@ -98,6 +96,7 @@ public class ServiceFriendship implements Observable<Event> {
     {
         Tuple t1 = new Tuple(id1, id2);
         return repoFriends.findOne(t1)!=null;
+
     }
 
     public Iterable<Friendship> findAll() {
@@ -120,18 +119,5 @@ public class ServiceFriendship implements Observable<Event> {
         return friendsList;
     }
 
-    @Override
-    public void addObserver(Observer<Event> e) {
-        observers.add(e);
-    }
 
-    @Override
-    public void removeObserver(Observer<Event> e) {
-
-    }
-
-    @Override
-    public void notifyObservers(Event t) {
-        observers.stream().forEach(x->x.update(t));
-    }
 }

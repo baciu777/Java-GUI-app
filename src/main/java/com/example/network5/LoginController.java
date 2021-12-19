@@ -90,11 +90,8 @@ public class LoginController {
 
             AnchorPane root = (AnchorPane) loader.load();
 
-            // Create the dialog Stage.
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Menu");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            //dialogStage.initOwner(primaryStage);
+
+
             Scene scene = new Scene(root);
             dialogStage.setScene(scene);
 
@@ -118,11 +115,7 @@ public class LoginController {
 
             AnchorPane root = (AnchorPane) loader.load();
 
-            // Create the dialog Stage.
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Menu");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            //dialogStage.initOwner(primaryStage);
+
             Scene scene = new Scene(root);
             dialogStage.setScene(scene);
 
