@@ -12,6 +12,7 @@ import repository.Repository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -21,10 +22,10 @@ import java.util.stream.Collectors;
  * repoMessage-Message Repository
  * repoUser-User Repository
  */
-public class ServiceMessage implements Observable<Event> {
+public class ServiceMessage {
     private Repository<Long, Message> repoMessage;
     private Repository<Long, User> repoUser;
-    private List<Observer<Event>> observers=new ArrayList<>();
+
     /**
      * constructor
      * @param repoMessage Repository Messages
@@ -61,7 +62,6 @@ public class ServiceMessage implements Observable<Event> {
         if (save != null)
             throw new ValidationException("id already used");
 
-        notifyObservers(new Event(ChangeEventType.ADD,save));
     }
 
     /**
@@ -173,10 +173,25 @@ public class ServiceMessage implements Observable<Event> {
         return conversation;
     }
 
+    public List<Message> groupChat(List<Long> ids)
+    {
+        List<Message> mess=new ArrayList<>();
+        repoMessage.findAll().forEach(mess::add);
+        List<Message> result=mess.stream()
+            .filter(m-> (ids.contains(m.getFrom().getId())))
+            .filter(m-> m.getTo().size()==ids.size()-1)
+            .filter(m-> (m.getTo().stream().allMatch(x->ids.contains(x.getId()))))
+                .sorted(Comparator.comparing(Message::getDate))
+                .collect(Collectors.toList());
+        return result;
+
+
+    }
     public List<Message> userMessages(User user)
     {List<Message> listOfMess=new ArrayList<>();
-        for(Message ms:repoMessage.findAll())
+        for(Message ms:this.findAll())
         {
+            System.out.println(ms.getFrom());
             if(Objects.equals(ms.getFrom().getId(), user.getId()))
             {
                 listOfMess.add(ms);
@@ -201,18 +216,5 @@ public class ServiceMessage implements Observable<Event> {
         return repoMessage.findAll();
     }
 
-    @Override
-    public void addObserver(Observer<Event> e) {
-        observers.add(e);
-    }
 
-    @Override
-    public void removeObserver(Observer<Event> e) {
-
-    }
-
-    @Override
-    public void notifyObservers(Event t) {
-        observers.stream().forEach(x->x.update(t));
-    }
 }

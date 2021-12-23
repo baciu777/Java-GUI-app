@@ -1,16 +1,13 @@
 package com.example.network5;
 
 import ChangeEvent.Event;
-import ObserverController.GenericObserver;
 
 import domain.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -24,82 +21,78 @@ import service.ServiceMessage;
 import service.ServiceUser;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
-public class MenuController  extends GenericObserver{
-    @FXML
-    private TextField textFieldId;
-
-    @FXML
-    TableView<User> tableViewUsers;
-    @FXML
-    TableColumn<User, String> tableColumnFirstName;
-    @FXML
-    TableColumn<User, String> tableColumnLastName;
-    @FXML
-    TableView<DtoMessage> tableViewMessage;
-    @FXML
-    TableColumn<DtoMessage,String> tableColumnDesc;
-    @FXML
-    TableColumn<DtoMessage,String> tableColumnReply;
-    @FXML
-    TableColumn<DtoMessage,String> tableColumnTo;
-    @FXML
-    TableColumn<DtoMessage,String> tableColumnData;
+public class MenuController  {
 
 
+
+
+    protected ServiceFriendship serviceF;
+    protected ServiceFriendshipRequest serviceFr;
+    protected ServiceUser serviceUser;
+    protected ServiceMessage serviceMessage;
     Stage dialogStage;
     User userLogin;
 
-
     public void setService(ServiceUser service, ServiceMessage mess,ServiceFriendship serviceFriendshipNew,ServiceFriendshipRequest serviceFriendRequestt,Stage stage,User user) {
-        super.setService(service,mess,serviceFriendshipNew,serviceFriendRequestt,user);
+
+        this.serviceUser = service;
+        this.serviceMessage=mess;
+        this.serviceF=serviceFriendshipNew;
+
+        this.serviceFr=serviceFriendRequestt;
         this.dialogStage = stage;
         this.userLogin=user;
-        if (null != user) {
-            setFields(user);
-            textFieldId.setEditable(false);
-        }
-        initModelFriendship();
-        //initModelFriendshipReq();
-        initModelMessage();
-        //initModelUser();
+
+
+
+
 
     }
     @FXML
     public void initialize() {
         // TODO
-        tableColumnDesc.setCellValueFactory(new PropertyValueFactory<DtoMessage, String>("message"));
-        tableColumnReply.setCellValueFactory(new PropertyValueFactory<DtoMessage, String>("replyIdMess"));
 
-        tableColumnTo.setCellValueFactory(new PropertyValueFactory<DtoMessage, String>("name"));
-        tableColumnData.setCellValueFactory(new PropertyValueFactory<DtoMessage, String>("date"));
 
-        tableViewMessage.setItems(modelMessage);
 
-        tableColumnFirstName.setCellValueFactory(new PropertyValueFactory<User, String>("FirstName"));
-        tableColumnLastName.setCellValueFactory(new PropertyValueFactory<User, String>("LastName"));
-
-        tableViewUsers.setItems(modelFriendship);
 
     }
 
 
 
-    private void setFields(User s)
-    {
 
-        textFieldId.setText(s.getId()+" "+s.getFirstName()+" "+s.getLastName());
-
-    }
     @FXML
     public void handleCancel(){
-        dialogStage.close();
+        showLoginEditDialog();
     }
 
     @FXML
     public void handleFriendRequests()
     {
     showFriendReqEditDialog(userLogin);
+    }
+    @FXML
+    public void handleFriends()
+    {
+        showFriendsDialog(userLogin);
+    }
+    @FXML
+    public void handleUser()
+    {
+        showUserEditDialog(userLogin);
+    }
+    @FXML
+    public void handlePeople()
+    {
+        showPeopleDialog(userLogin);
+    }
+    @FXML
+    public void handleChats()
+    {
+        showChatsEditDialog(userLogin);
     }
 
     public void showFriendReqEditDialog(User user) {
@@ -110,16 +103,12 @@ public class MenuController  extends GenericObserver{
 
             AnchorPane root = (AnchorPane) loader.load();
 
-            // Create the dialog Stage.
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Menu");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            //dialogStage.initOwner(primaryStage);
+
             Scene scene = new Scene(root);
             dialogStage.setScene(scene);
 
             FriendshipsReqController controller = loader.getController();
-            controller.setService(serviceUser,serviceMessage,serviceF,serviceFr,dialogStage, user);
+            controller.set(serviceUser,serviceMessage,serviceF,serviceFr,dialogStage,userLogin);
 
             dialogStage.show();
 
@@ -128,16 +117,113 @@ public class MenuController  extends GenericObserver{
         }
     }
 
-    @Override
-    public void update(Event event) {
+    public void showChatsEditDialog(User user) {
+        try {
+            // create a new stage for the popup dialog.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("chats.fxml"));
 
-        initModelFriendship();
-        initModelMessage();
+            AnchorPane root = (AnchorPane) loader.load();
 
+
+            Scene scene = new Scene(root);
+            dialogStage.setScene(scene);
+
+            ChatsController controller = loader.getController();
+            controller.set(serviceUser,serviceMessage,serviceF,serviceFr,dialogStage,userLogin);
+
+            dialogStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
+    public void showUserEditDialog(User user) {
+        try {
+            // create a new stage for the popup dialog.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("user.fxml"));
+
+            AnchorPane root = (AnchorPane) loader.load();
 
 
+            Scene scene = new Scene(root);
+            dialogStage.setScene(scene);
 
+            UserController controller = loader.getController();
+            controller.set(serviceUser,serviceMessage,serviceF,serviceFr,dialogStage,userLogin);
+
+            dialogStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showPeopleDialog(User user) {
+        try {
+            // create a new stage for the popup dialog.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("people.fxml"));
+
+            AnchorPane root = (AnchorPane) loader.load();
+
+
+            Scene scene = new Scene(root);
+            dialogStage.setScene(scene);
+
+            PeopleController controller = loader.getController();
+            controller.set(serviceUser,serviceMessage,serviceF,serviceFr,dialogStage,userLogin);
+
+
+            dialogStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void showFriendsDialog(User user) {
+        try {
+            // create a new stage for the popup dialog.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("friends.fxml"));
+
+            AnchorPane root = (AnchorPane) loader.load();
+
+
+            Scene scene = new Scene(root);
+            dialogStage.setScene(scene);
+
+            FriendsController controller = loader.getController();
+            controller.set(serviceUser,serviceMessage,serviceF,serviceFr,dialogStage,userLogin);
+
+            dialogStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void showLoginEditDialog() {
+        try {
+            // create a new stage for the popup dialog.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("hello-view.fxml"));
+
+            AnchorPane root = (AnchorPane) loader.load();
+
+
+            Scene scene = new Scene(root);
+            dialogStage.setScene(scene);
+
+            LoginController controller = loader.getController();
+            controller.setService(serviceUser,serviceMessage,serviceF,serviceFr,dialogStage);
+
+            dialogStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

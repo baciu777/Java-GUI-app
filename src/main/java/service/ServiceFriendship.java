@@ -18,10 +18,10 @@ import ChangeEvent.*;
  * repoUser-Repository for users
  * repoFriends-Repository for friendships
  */
-public class ServiceFriendship implements Observable<Event> {
+public class ServiceFriendship {
     private Repository<Long, User> repoUser;
     private Repository<Tuple<Long, Long>, Friendship> repoFriends;
-    private List<Observer<Event>> observers=new ArrayList<>();
+
 
     /**
      * constructor for the service
@@ -65,7 +65,6 @@ public class ServiceFriendship implements Observable<Event> {
         if (save != null)
             throw new ValidationException("ids are already used");
 
-        notifyObservers(new Event(ChangeEventType.ADD,save));
     }
 
     /**
@@ -86,7 +85,6 @@ public class ServiceFriendship implements Observable<Event> {
         if (del == null)
             throw new ValidationException("you are not in a friendship");
 
-        notifyObservers(new Event(ChangeEventType.DELETE,del));
     }
     /**
      * @return all the friendships
@@ -94,10 +92,17 @@ public class ServiceFriendship implements Observable<Event> {
     public Iterable<Friendship> printFr() {
         return repoFriends.findAll();
     }
-    public boolean areFriends(Long id1, Long id2)
+    public boolean areFriends(User user1, User user2)
     {
-        Tuple t1 = new Tuple(id1, id2);
-        return repoFriends.findOne(t1)!=null;
+        for(User ur:user2.getFriends())
+        {
+
+            if(Objects.equals(ur.getId(), user1.getId()))
+                return true;
+
+        }
+        return false;
+
     }
 
     public Iterable<Friendship> findAll() {
@@ -106,32 +111,18 @@ public class ServiceFriendship implements Observable<Event> {
 
 
 
-    public Iterable<User> friends(User user)
+    public Iterable<User> friends(Long id)
     {
         Iterable<User> friendsList=new ArrayList<>();
-        for(Friendship fr:repoFriends.findAll())
+        User user=repoUser.findOne(id);
+        for(User ur:user.getFriends())
         {
-            if(Objects.equals(fr.getId().getLeft(), user.getId()))
-                ((ArrayList<User>) friendsList).add( repoUser.findOne(fr.getId().getRight()));
-            if(Objects.equals(fr.getId().getRight(), user.getId()))
-                ((ArrayList<User>) friendsList).add( repoUser.findOne(fr.getId().getLeft()));
+
+                ((ArrayList<User>) friendsList).add( ur);
 
         }
         return friendsList;
     }
 
-    @Override
-    public void addObserver(Observer<Event> e) {
-        observers.add(e);
-    }
 
-    @Override
-    public void removeObserver(Observer<Event> e) {
-
-    }
-
-    @Override
-    public void notifyObservers(Event t) {
-        observers.stream().forEach(x->x.update(t));
-    }
 }

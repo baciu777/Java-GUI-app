@@ -5,16 +5,19 @@ import domain.validation.Validator;
 import repository.Repository;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 public class UserDbRepository implements Repository<Long, User> {
     private String url;
     private String username;
     private String password;
     private Validator<User> validator;
+
 
     public UserDbRepository(String url, String username, String password, Validator<User> validator) {
         this.url = url;
@@ -38,10 +41,16 @@ public class UserDbRepository implements Repository<Long, User> {
             if (resultSet.next()) {
                 String firstName = resultSet.getString("first_name");
                 String lastName = resultSet.getString("last_name");
+                String usernameU = resultSet.getString("usernameu");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+                LocalDate birth = LocalDate.parse(resultSet.getString("birth"),formatter);
 
-                user = new User(firstName, lastName);
+                user = new User(firstName, lastName,usernameU,birth );
                 user.setId(aLong);
-                user.setFriends(this.findFr(aLong));
+                user.setFriends(this.findFr(aLong,connection));
+                String passwordU = findtPass(usernameU,connection);
+                user.setPassword(passwordU);
+
                 return user;
             }
 
@@ -62,10 +71,15 @@ public class UserDbRepository implements Repository<Long, User> {
                 Long id = resultSet.getLong("id");
                 String firstName = resultSet.getString("first_name");
                 String lastName = resultSet.getString("last_name");
-
-                User utilizator = new User(firstName, lastName);
+                String usernameU=resultSet.getString("usernameu" );
+                String passwordU = findtPass(usernameU,connection);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+                LocalDate birth = LocalDate.parse(resultSet.getString("birth"),formatter);
+                User utilizator = new User(firstName, lastName,usernameU,birth);
                 utilizator.setId(id);
-                utilizator.setFriends(this.findFr(id));
+
+                utilizator.setFriends(this.findFr(id,connection));
+                utilizator.setPassword(passwordU);
 
                 users.add(utilizator);
             }
@@ -76,10 +90,31 @@ public class UserDbRepository implements Repository<Long, User> {
         return users;
     }
 
-    private List<User> findFr(Long id) {
+    private String findtPass(String usern,Connection connection) {
+        String passwordu = null;
+
+        try (  PreparedStatement statement = connection.prepareStatement("select * \n" +
+                     "from passwords p \n" +
+                     "where (p.usernameu=?)")) {
+            statement.setString(1, usern);
+            try (ResultSet resultSet = statement.executeQuery()) {
+
+                if (resultSet.next()) {
+
+                    passwordu=resultSet.getString("passwordu");
+                }
+                return passwordu;
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
+
+    }
+
+    private List<User> findFr(Long id,Connection connection) {
         List<User> users = new ArrayList<>();
-        try (Connection connection = DriverManager.getConnection(url, username, password);
-             PreparedStatement statement = connection.prepareStatement("select id, first_name, last_name, date\n" +
+        try ( PreparedStatement statement = connection.prepareStatement("select id, first_name, last_name,usernameu, birth\n" +
                      "from users u inner join friendships f on u.id = f.id1 or u.id=f.id2\n" +
                      "where (f.id1= ? or f.id2 = ? )and u.id!= ?"))
         {statement.setLong(1, id);
@@ -91,8 +126,13 @@ public class UserDbRepository implements Repository<Long, User> {
                     Long idnew = resultSet.getLong("id");
                     String firstName = resultSet.getString("first_name");
                     String lastName = resultSet.getString("last_name");
+                    String usernameU=resultSet.getString("usernameu" );
+                    String passwordU = findtPass(usernameU,connection);
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+                    LocalDate birth = LocalDate.parse(resultSet.getString("birth"),formatter);
+                    User utilizator = new User(firstName, lastName,usernameU,birth);
+                    //pui set la password baciu???
 
-                    User utilizator = new User(firstName, lastName);
                     utilizator.setId(idnew);
 
 
@@ -112,7 +152,7 @@ public class UserDbRepository implements Repository<Long, User> {
         if (entity == null)
             throw new IllegalArgumentException("Entity must be not null");
         validator.validate(entity);
-        String sql = "insert into users (first_name, last_name ) values (?, ?)";
+        String sql = "insert into users (first_name, last_name,usernameu,birth) values (?, ?,?,?)";
 
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement ps = connection.prepareStatement(sql)
@@ -120,8 +160,24 @@ public class UserDbRepository implements Repository<Long, User> {
 
             ps.setString(1, entity.getFirstName());
             ps.setString(2, entity.getLastName());
+            ps.setString(3, entity.getUsername());
+            DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d/MM/yyyy");
+            String text = entity.getBirth().format(formatters);
+            ps.setString(4,  text);
+
+            String sqlChat = "insert into passwords (usernameu,passwordu) values (?,?)";
+ //
+
 
             ps.executeUpdate();
+            PreparedStatement psPass= connection.prepareStatement(sqlChat);
+
+
+            psPass.setString(1, entity.getUsername());
+            psPass.setString(2,entity.getPassword());
+            psPass.executeUpdate();
+
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -152,7 +208,7 @@ public class UserDbRepository implements Repository<Long, User> {
 
         return user;
     }
-
+//UPDATE UL NU A FOST MODIFICAT
     @Override
     public User update(User entity) {
         if (entity == null)

@@ -2,6 +2,8 @@ package com.example.network5;
 
 import domain.User;
 import domain.validation.ValidationException;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,6 +24,7 @@ import java.time.LocalDateTime;
 
 public class LoginController {
 
+    @FXML private AnchorPane content;
     @FXML
     private TextField textFieldId;
 
@@ -37,6 +40,7 @@ public class LoginController {
     private ServiceFriendshipRequest serviceFriendRequest;
     Stage dialogStage;
     User user;
+    //ObservableList<NotaDto> modelGrade = FXCollections.observableArrayList();
 
     public void setService(ServiceUser service, ServiceMessage mess, ServiceFriendship fr, ServiceFriendshipRequest servFriendReq, Stage stage) {
         this.servUser = service;
@@ -54,13 +58,13 @@ public class LoginController {
 
 
     public void handleLogin(ActionEvent actionEvent) {
-        String id = textFieldId.getText();
+        String username = textFieldId.getText();
         String password = textFieldPassword.getText();
 
         try {
-            long idd = Long.parseLong(id);
 
-            User user=servUser.findOne(idd);
+            User user=servUser.findByUsername(username);
+            servUser.verifyPasswordUser(password,user);
             showMessageTaskEditDialog(user);
 
         }
@@ -73,6 +77,36 @@ public class LoginController {
         }
 
     }
+    public void handleCreateAccount(ActionEvent actionEvent) {
+
+        try {
+            // create a new stage for the popup dialog.
+
+             //AnchorPane content2 =FXMLLoader.load(getClass().getResource("createAccount.fxml"));
+
+            //content.getChildren().setAll(content2);
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("createAccount.fxml"));
+
+            AnchorPane root = (AnchorPane) loader.load();
+
+
+
+            Scene scene = new Scene(root);
+            dialogStage.setScene(scene);
+
+            CreateAccountController menuController = loader.getController();
+            menuController.setService(servUser,serviceMessage,serviceFriendship,serviceFriendRequest, dialogStage, user);
+
+            dialogStage.show();
+
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
     public void showMessageTaskEditDialog(User user) {
         try {
             // create a new stage for the popup dialog.
@@ -81,11 +115,7 @@ public class LoginController {
 
             AnchorPane root = (AnchorPane) loader.load();
 
-            // Create the dialog Stage.
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Menu");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            //dialogStage.initOwner(primaryStage);
+
             Scene scene = new Scene(root);
             dialogStage.setScene(scene);
 

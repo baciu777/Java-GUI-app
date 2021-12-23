@@ -11,6 +11,9 @@ import domain.validation.ValidationException;
 import observer.Observer;
 import repository.Repository;
 import observer.Observable;
+
+import java.text.DateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Predicate;
@@ -21,10 +24,11 @@ import java.util.stream.Collectors;
  * repoUser-Repository for users
  * repoFriends-Repository for friendships
  */
-public class ServiceUser implements Observable<Event> {
+public class ServiceUser  {
     private Repository<Long, User> repoUser;
     private Repository<Tuple<Long, Long>, Friendship> repoFriends;
-    private List<Observer<Event>> observers=new ArrayList<>();
+    private List<Observer<Event>> observers = new ArrayList<>();
+
     /**
      * constructor for the service
      *
@@ -45,8 +49,8 @@ public class ServiceUser implements Observable<Event> {
      * @param firstname-String
      * @param lastname-String
      */
-    public void save(String firstname, String lastname) {
-        User user = new User(firstname, lastname);
+    public void save(String firstname, String lastname, String username, String password, LocalDate birth) {
+        User user = new User(firstname, lastname, username, birth);
         long id = 0L;
         for (User ur : repoUser.findAll()) {
             if (ur.getId() > id)
@@ -56,11 +60,12 @@ public class ServiceUser implements Observable<Event> {
         id++;
 
         user.setId(id);
+        user.setPassword(password);
         User save = repoUser.save(user);
         if (save != null)
             throw new ValidationException("id already used");
 
-        notifyObservers(new Event(ChangeEventType.ADD,save));
+
     }
 
     /**
@@ -71,16 +76,16 @@ public class ServiceUser implements Observable<Event> {
      * @param firstname-String
      * @param lastname-String
      */
-    public void update(Long id, String firstname, String lastname) {
-        User user = new User(firstname, lastname);
+    public void update(Long id, String firstname, String lastname, String username, String password, LocalDate birth) {
+        User user = new User(firstname, lastname, username, birth);
 
         user.setId(id);
 
-
+        user.setPassword(password);
         User save = repoUser.update(user);
         if (save != null)
             throw new ValidationException("this id does not exit");
-    notifyObservers(new Event(ChangeEventType.UPDATE,save));
+
 
     }
 
@@ -99,7 +104,7 @@ public class ServiceUser implements Observable<Event> {
         if (deleted == null)
             throw new ValidationException("id invalid");
 
-    notifyObservers(new Event(ChangeEventType.DELETE,deleted));
+
         return deleted;
 
     }
@@ -126,12 +131,12 @@ public class ServiceUser implements Observable<Event> {
     }
 
     /**
-     *  returns list of friendships for a user
+     * returns list of friendships for a user
+     *
      * @param id id of the user
      * @return List<Friendship></Friendship>
      */
-    private List<Friendship> getFriendsAsFriendships(Long id)
-    {
+    private List<Friendship> getFriendsAsFriendships(Long id) {
         User resp = repoUser.findOne(id);
         if (resp == null)
             throw new ValidationException("id invalid");
@@ -213,41 +218,60 @@ public class ServiceUser implements Observable<Event> {
             throw new ValidationException(" id invalid");
     }
 
-    public List<User> findbyName(String name)
-    {
-        String[] splited = name.split(" ",2);
+    public List<User> findbyName(String name) {
+        String[] splited = name.split(" ", 2);
         Iterable<User> aux = repoUser.findAll();
         List<User> result = new ArrayList<>();
         aux.forEach(result::add);
-        return result.stream().filter(x->{
-                    if(Objects.equals(x.getFirstName(), splited[0]) && Objects.equals(x.getLastName(), splited[1]))
+        return result.stream().filter(x -> {
+                    if (Objects.equals(x.getFirstName(), splited[0]) && Objects.equals(x.getLastName(), splited[1]))
                         return true;
                     return false;
                 }
 
         ).collect(Collectors.toCollection(ArrayList::new));
     }
+
     public User findbyNameFirst(String name) throws Exception {
         List<User> l = findbyName(name);
-        if(l.size()==0)
+        if (l.size() == 0)
             throw new Exception("User not found");
         return l.get(0);
     }
 
 
+    public User findByUsername(String username) {
+        Iterable<User> l = repoUser.findAll();
+        for (User ur : l) {
+            if (Objects.equals(ur.getUsername(), username))
+                return ur;
 
-    @Override
-    public void addObserver(Observer<Event> e) {
-        observers.add(e);
+        }
+       throw new ValidationException("this username doesn't exist");
     }
 
-    @Override
-    public void removeObserver(Observer<Event> e) {
+    public boolean verifyUsername(String username) {
+        Iterable<User> l = repoUser.findAll();
+        for (User ur : l) {
+            if (Objects.equals(ur.getUsername(), username))
+                throw new ValidationException("Username already exists");
+
+        }
+        return true;
+
 
     }
 
-    @Override
-    public void notifyObservers(Event t) {
-        observers.stream().forEach(x->x.update(t));
+
+    public void verifyPassword(String password, String passwordRepeat) {
+        if(!Objects.equals(password, passwordRepeat))
+            throw new ValidationException("Confirmation password incorrect");
+
+    }
+    public void verifyPasswordUser(String passwordUser,User user) {
+        System.out.println(user.getPassword());
+        if(!Objects.equals(passwordUser, user.getPassword()))
+            throw new ValidationException("Password incorrect");
+
     }
 }

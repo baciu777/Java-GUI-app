@@ -1,10 +1,7 @@
 package service;
 
 import ChangeEvent.*;
-import domain.FriendRequest;
-import domain.Friendship;
-import domain.Tuple;
-import domain.User;
+import domain.*;
 import observer.Observable;
 import observer.Observer;
 import repository.Repository;
@@ -15,9 +12,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
-public class ServiceFriendshipRequest  implements Observable<Event> {
+public class ServiceFriendshipRequest   {
     /**
      * constructor for the service
      *
@@ -28,7 +27,7 @@ public class ServiceFriendshipRequest  implements Observable<Event> {
     ServiceFriendship servFriendship;
     ServiceUser servUser;
     Repository<Tuple<Long, Long>, FriendRequest> request_repo;
-    private List<Observer<Event>> observers=new ArrayList<>();
+
     public ServiceFriendshipRequest(Repository<Tuple<Long, Long>, FriendRequest> repo_request,
                                     ServiceFriendship servFriendship,
                                     ServiceUser servUser) {
@@ -57,7 +56,7 @@ public class ServiceFriendshipRequest  implements Observable<Event> {
         f.setDate(LocalDateTime.now());
         request_repo.update(f);
         servFriendship.addFriend(id1,id2);
-        notifyObservers(new Event(ChangeEventType.UPDATE,f));
+
     }
 
     /**
@@ -76,7 +75,7 @@ public class ServiceFriendshipRequest  implements Observable<Event> {
         f.setId(longLongTuple);
         f.setStatus("PENDING");
         request_repo.save(f);
-        notifyObservers(new Event(ChangeEventType.ADD,f));
+
     }
 
     /**
@@ -107,7 +106,7 @@ public class ServiceFriendshipRequest  implements Observable<Event> {
         f.setStatus("REJECTED");
         f.setDate(LocalDateTime.now());
         request_repo.update(f);
-        notifyObservers(new Event(ChangeEventType.UPDATE,f));
+
     }
 
     /**
@@ -117,9 +116,9 @@ public class ServiceFriendshipRequest  implements Observable<Event> {
      * @throws Exception if id1 and id2 are already friends
      */
     public void addFriend(Long id1, Long id2) throws Exception {
-        servUser.findOne(id1);
-        servUser.findOne(id2);
-        if(servFriendship.areFriends(id1,id2))
+        User u1=servUser.findOne(id1);
+        User u2=servUser.findOne(id2);
+        if(servFriendship.areFriends(u1,u2))
             throw new Exception(" users are already friends");
         Tuple<Long, Long> longLongTuple =new Tuple<>();
         longLongTuple.setLeft(id2);
@@ -145,14 +144,14 @@ public class ServiceFriendshipRequest  implements Observable<Event> {
         longLongTuple.setRight(id1);
         request_repo.delete(longLongTuple);
     }
-    public void check_update_deletes()
+    public void check_update_deletes(User u1,User u2)
     {
-        for(FriendRequest fr: request_repo.findAll())
-        {
-            if(!servFriendship.areFriends(fr.getId().getLeft(),fr.getId().getRight()) && Objects.equals(fr.getStatus(), "APPROVED")) {
-                deleteRequest(fr.getId().getLeft(), fr.getId().getRight());
-                deleteRequest(fr.getId().getRight(), fr.getId().getLeft());
-            }}
+
+        if(servFriendship.areFriends(u1,u2)) {
+            deleteRequest(u1.getId(), u2.getId());
+            deleteRequest(u2.getId(),u1.getId());
+        }
+
     }
     /**
      *
@@ -161,6 +160,19 @@ public class ServiceFriendshipRequest  implements Observable<Event> {
     public Iterable<FriendRequest> findAll()
     {
         return request_repo.findAll();
+    }
+
+    public Iterable<FriendRequest> findAllRenew()
+    {
+        Predicate<FriendRequest> certainFilter1 = x -> x.getStatus().equals("PENDING");
+
+
+
+
+        List<FriendRequest> friendshipsReqList = StreamSupport.stream(this.findAll().spliterator(), false)
+                .filter(certainFilter1)
+                .collect(Collectors.toList());
+    return friendshipsReqList;
     }
 
     /**
@@ -224,7 +236,8 @@ public class ServiceFriendshipRequest  implements Observable<Event> {
      */
     public String get_request_status(Long me, Long him)
     {
-        List<FriendRequest> aux1 = (List<FriendRequest>)findWithStatus(request_repo.findAll(), "PENDING");
+        Iterable<FriendRequest> findAll=request_repo.findAll();
+        List<FriendRequest> aux1 = (List<FriendRequest>)findWithStatus(findAll, "PENDING");
         List<FriendRequest> aux2 =(List<FriendRequest>)findAllTo(aux1,him);
         List<FriendRequest> aux3 =(List<FriendRequest>)findAllFrom(aux2,me);
         if(aux3.size()!=0)
@@ -237,7 +250,7 @@ public class ServiceFriendshipRequest  implements Observable<Event> {
         {
             return "respond";
         }
-        aux1 = (List<FriendRequest>)findWithStatus(request_repo.findAll(), "REJECTED");
+        aux1 = (List<FriendRequest>)findWithStatus(findAll, "REJECTED");
         aux2 = (List<FriendRequest>)findAllTo(aux1,him);
         aux3 = (List<FriendRequest>)findAllFrom(aux2,me);
         if(aux3.size()!=0)
@@ -247,18 +260,7 @@ public class ServiceFriendshipRequest  implements Observable<Event> {
         return null;
     }
 
-    @Override
-    public void addObserver(Observer<Event> e) {
-        observers.add(e);
-    }
-
-    @Override
-    public void removeObserver(Observer<Event> e) {
-
-    }
-
-    @Override
-    public void notifyObservers(Event t) {
-        observers.stream().forEach(x->x.update(t));
+    public FriendRequest findOne(Tuple<Long,Long> id) {
+        return request_repo.findOne(id);
     }
 }

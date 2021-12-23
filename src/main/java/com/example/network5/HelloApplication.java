@@ -7,6 +7,8 @@ import domain.validation.UserValidator;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import repository.Repository;
@@ -25,6 +27,7 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
+
         Repository<Long, User> repoDb = new UserDbRepository("jdbc:postgresql://localhost:5432/network", "postgres", "ioana", new UserValidator());
         repoDb.findAll().forEach(System.out::println);
         Repository<Tuple<Long, Long>, Friendship> repoDbFr = new FriendshipDbRepository("jdbc:postgresql://localhost:5432/network", "postgres", "ioana", new FriendshipValidator());
@@ -39,7 +42,7 @@ public class HelloApplication extends Application {
 
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
 
-        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+        Scene scene = new Scene(fxmlLoader.load(), 700, 600);
         LoginController loginController = fxmlLoader.getController();
         loginController.setService(servUser, servMessage, servFriendship,servFriendReq, stage);
         stage.setTitle("Social Life");
