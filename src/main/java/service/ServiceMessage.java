@@ -12,6 +12,7 @@ import repository.Repository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -172,10 +173,25 @@ public class ServiceMessage {
         return conversation;
     }
 
+    public List<Message> groupChat(List<Long> ids)
+    {
+        List<Message> mess=new ArrayList<>();
+        repoMessage.findAll().forEach(mess::add);
+        List<Message> result=mess.stream()
+            .filter(m-> (ids.contains(m.getFrom().getId())))
+            .filter(m-> m.getTo().size()==ids.size()-1)
+            .filter(m-> (m.getTo().stream().allMatch(x->ids.contains(x.getId()))))
+                .sorted(Comparator.comparing(Message::getDate))
+                .collect(Collectors.toList());
+        return result;
+
+
+    }
     public List<Message> userMessages(User user)
     {List<Message> listOfMess=new ArrayList<>();
         for(Message ms:this.findAll())
         {
+            System.out.println(ms.getFrom());
             if(Objects.equals(ms.getFrom().getId(), user.getId()))
             {
                 listOfMess.add(ms);

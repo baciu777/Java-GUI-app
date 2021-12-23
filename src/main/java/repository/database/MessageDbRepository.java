@@ -46,13 +46,13 @@ public class MessageDbRepository implements Repository<Long, Message> {
                 Long id = resultSet.getLong("id");
                 LocalDateTime date = LocalDateTime.ofInstant(resultSet.getTimestamp("datem").toInstant(), ZoneOffset.ofHours(0));
                 Long fromId =resultSet.getLong("fromm");
-                User from=findOneUser(fromId);
+                User from=findOneUser(fromId,connection);
                 List<User> to=new ArrayList<>();
                 List<Long> idList=findTo(id);
-                idList.forEach(x->to.add(findOneUser(x)));
+                idList.forEach(x->to.add(findOneUser(x,connection)));
                 String message=resultSet.getString("messagem");
                 Long idreply=resultSet.getLong("replym");
-                Message reply=this.findOne(idreply);
+                Message reply=this.findOneConn(idreply,connection);
                 mess=new Message(from,to,message);
                 mess.setId(id);
                 mess.setDate(date);
@@ -68,7 +68,42 @@ public class MessageDbRepository implements Repository<Long, Message> {
         return null;
 
     }
+    private Message findOneConn(Long aLong,Connection connection) {
+        if (aLong == null)
+            throw new IllegalArgumentException("Id must be not null");
 
+        String sql = "SELECT * from messages where messages.id = ?";
+        Message mess;
+        try (   PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, Math.toIntExact(aLong));
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                Long id = resultSet.getLong("id");
+                LocalDateTime date = LocalDateTime.ofInstant(resultSet.getTimestamp("datem").toInstant(), ZoneOffset.ofHours(0));
+                Long fromId =resultSet.getLong("fromm");
+                User from=findOneUser(fromId,connection);
+                List<User> to=new ArrayList<>();
+                List<Long> idList=findTo(id);
+                idList.forEach(x->to.add(findOneUser(x,connection)));
+                String message=resultSet.getString("messagem");
+                Long idreply=resultSet.getLong("replym");
+                Message reply=this.findOneConn(idreply,connection);
+                mess=new Message(from,to,message);
+                mess.setId(id);
+                mess.setDate(date);
+                mess.setReply(reply);
+                return mess;
+
+            }
+
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
+
+    }
     @Override
     public Iterable<Message> findAll() {
         Set<Message> messages = new HashSet<>();
@@ -81,13 +116,13 @@ public class MessageDbRepository implements Repository<Long, Message> {
                 Long id = resultSet.getLong("id");
                 LocalDateTime date = LocalDateTime.ofInstant(resultSet.getTimestamp("datem").toInstant(), ZoneOffset.ofHours(0));
                 Long fromId =resultSet.getLong("fromm");
-                User from=findOneUser(fromId);
+                User from=findOneUser(fromId,connection);
                 List<User> to=new ArrayList<>();
                 List<Long> idList=findTo(id);
-                idList.forEach(x->to.add(findOneUser(x)));
+                idList.forEach(x->to.add(findOneUser(x,connection)));
                 String message=resultSet.getString("messagem");
                 Long idreply=resultSet.getLong("replym");
-                Message reply=this.findOne(idreply);
+                Message reply=this.findOneConn(idreply,connection);
                 mess=new Message(from,to,message);
                 mess.setId(id);
                 mess.setDate(date);
@@ -113,7 +148,7 @@ public class MessageDbRepository implements Repository<Long, Message> {
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement ps = connection.prepareStatement(sql)
         ) {
-            message = this.findOne(entity.getId());
+            message = this.findOneConn(entity.getId(),connection);
             if (message != null)
                 return message;
             ps.setLong(1, entity.getFrom().getId());
@@ -161,26 +196,25 @@ public class MessageDbRepository implements Repository<Long, Message> {
      * @return one user
      * otherwise, throw exception
      */
-    private User findOneUser(Long aLong) {
+    private User findOneUser(Long aLong,Connection connection) {
         if (aLong == null)
             throw new IllegalArgumentException("Id must be not null");
 
         String sql = "SELECT * from users where users.id = ?";
         User user;
 
-        try (Connection connection = DriverManager.getConnection(url, username, password);
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (   PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, Math.toIntExact(aLong));
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 String firstName = resultSet.getString("first_name");
                 String lastName = resultSet.getString("last_name");
-                String usernameU = resultSet.getString("username");
+                String usernameU = resultSet.getString("usernameu");
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
                 LocalDate birth = LocalDate.parse(resultSet.getString("birth"),formatter);
-                user = new User(firstName, lastName,username,birth);
+                user = new User(firstName, lastName,usernameU,birth);
                 user.setId(aLong);
-                user.setFriends(this.findFr(aLong));
+                user.setFriends(this.findFr(aLong,connection));
                 return user;
             }
 
@@ -195,10 +229,10 @@ public class MessageDbRepository implements Repository<Long, Message> {
      * @param id-user id
      * @return list of users
      */
-    private List<User> findFr(Long id) {
+    private List<User> findFr(Long id,Connection connection) {
         List<User> users = new ArrayList<>();
-        try (Connection connection = DriverManager.getConnection(url, username, password);
-             PreparedStatement statement = connection.prepareStatement("select id, first_name, last_name, date\n" +
+
+        try (  PreparedStatement statement = connection.prepareStatement("select id, first_name, last_name, usernameu,birth\n" +
                      "from users u inner join friendships f on u.id = f.id1 or u.id=f.id2\n" +
                      "where (f.id1= ? or f.id2 = ? )and u.id!= ?"))
         {statement.setLong(1, id);
@@ -210,7 +244,7 @@ public class MessageDbRepository implements Repository<Long, Message> {
                     Long idnew = resultSet.getLong("id");
                     String firstName = resultSet.getString("first_name");
                     String lastName = resultSet.getString("last_name");
-                    String usernameU = resultSet.getString("username");
+                    String usernameU = resultSet.getString("usernameu");
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
                     LocalDate birth = LocalDate.parse(resultSet.getString("birth"),formatter);
                     User utilizator = new User(firstName, lastName,usernameU,birth);

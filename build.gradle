@@ -11,6 +11,7 @@ repositories {
   mavenCentral()
 }
 
+
 ext {
   junitVersion = '5.7.1'
 }

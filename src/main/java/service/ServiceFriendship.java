@@ -92,10 +92,16 @@ public class ServiceFriendship {
     public Iterable<Friendship> printFr() {
         return repoFriends.findAll();
     }
-    public boolean areFriends(Long id1, Long id2)
+    public boolean areFriends(User user1, User user2)
     {
-        Tuple t1 = new Tuple(id1, id2);
-        return repoFriends.findOne(t1)!=null;
+        for(User ur:user2.getFriends())
+        {
+
+            if(Objects.equals(ur.getId(), user1.getId()))
+                return true;
+
+        }
+        return false;
 
     }
 
@@ -105,15 +111,14 @@ public class ServiceFriendship {
 
 
 
-    public Iterable<User> friends(User user)
+    public Iterable<User> friends(Long id)
     {
         Iterable<User> friendsList=new ArrayList<>();
-        for(Friendship fr:repoFriends.findAll())
+        User user=repoUser.findOne(id);
+        for(User ur:user.getFriends())
         {
-            if(Objects.equals(fr.getId().getLeft(), user.getId()))
-                ((ArrayList<User>) friendsList).add( repoUser.findOne(fr.getId().getRight()));
-            if(Objects.equals(fr.getId().getRight(), user.getId()))
-                ((ArrayList<User>) friendsList).add( repoUser.findOne(fr.getId().getLeft()));
+
+                ((ArrayList<User>) friendsList).add( ur);
 
         }
         return friendsList;

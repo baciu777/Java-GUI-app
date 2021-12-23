@@ -66,7 +66,7 @@ public class MenuController  {
 
     @FXML
     public void handleCancel(){
-        dialogStage.close();
+        showLoginEditDialog();
     }
 
     @FXML
@@ -204,6 +204,26 @@ public class MenuController  {
             e.printStackTrace();
         }
     }
+    public void showLoginEditDialog() {
+        try {
+            // create a new stage for the popup dialog.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("hello-view.fxml"));
 
+            AnchorPane root = (AnchorPane) loader.load();
+
+
+            Scene scene = new Scene(root);
+            dialogStage.setScene(scene);
+
+            LoginController controller = loader.getController();
+            controller.setService(serviceUser,serviceMessage,serviceF,serviceFr,dialogStage);
+
+            dialogStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

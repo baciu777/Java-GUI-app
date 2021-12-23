@@ -18,6 +18,7 @@ public class UserDbRepository implements Repository<Long, User> {
     private String password;
     private Validator<User> validator;
 
+
     public UserDbRepository(String url, String username, String password, Validator<User> validator) {
         this.url = url;
         this.username = username;
@@ -46,8 +47,8 @@ public class UserDbRepository implements Repository<Long, User> {
 
                 user = new User(firstName, lastName,usernameU,birth );
                 user.setId(aLong);
-                user.setFriends(this.findFr(aLong));
-                String passwordU = findtPass(aLong);
+                user.setFriends(this.findFr(aLong,connection));
+                String passwordU = findtPass(usernameU,connection);
                 user.setPassword(passwordU);
 
                 return user;
@@ -71,12 +72,13 @@ public class UserDbRepository implements Repository<Long, User> {
                 String firstName = resultSet.getString("first_name");
                 String lastName = resultSet.getString("last_name");
                 String usernameU=resultSet.getString("usernameu" );
-                String passwordU = findtPass(id);
+                String passwordU = findtPass(usernameU,connection);
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
                 LocalDate birth = LocalDate.parse(resultSet.getString("birth"),formatter);
                 User utilizator = new User(firstName, lastName,usernameU,birth);
                 utilizator.setId(id);
-                utilizator.setFriends(this.findFr(id));
+
+                utilizator.setFriends(this.findFr(id,connection));
                 utilizator.setPassword(passwordU);
 
                 users.add(utilizator);
@@ -88,14 +90,13 @@ public class UserDbRepository implements Repository<Long, User> {
         return users;
     }
 
-    private String findtPass(Long id) {
+    private String findtPass(String usern,Connection connection) {
         String passwordu = null;
 
-        try (Connection connection = DriverManager.getConnection(url, username, password);
-             PreparedStatement statement = connection.prepareStatement("select * \n" +
-                     "from passwords p inner join users u on p.usernameu = u.usernameu \n" +
-                     "where (u.id=?)")) {
-            statement.setLong(1, id);
+        try (  PreparedStatement statement = connection.prepareStatement("select * \n" +
+                     "from passwords p \n" +
+                     "where (p.usernameu=?)")) {
+            statement.setString(1, usern);
             try (ResultSet resultSet = statement.executeQuery()) {
 
                 if (resultSet.next()) {
@@ -111,10 +112,9 @@ public class UserDbRepository implements Repository<Long, User> {
 
     }
 
-    private List<User> findFr(Long id) {
+    private List<User> findFr(Long id,Connection connection) {
         List<User> users = new ArrayList<>();
-        try (Connection connection = DriverManager.getConnection(url, username, password);
-             PreparedStatement statement = connection.prepareStatement("select id, first_name, last_name,usernameu, birth\n" +
+        try ( PreparedStatement statement = connection.prepareStatement("select id, first_name, last_name,usernameu, birth\n" +
                      "from users u inner join friendships f on u.id = f.id1 or u.id=f.id2\n" +
                      "where (f.id1= ? or f.id2 = ? )and u.id!= ?"))
         {statement.setLong(1, id);
@@ -127,7 +127,7 @@ public class UserDbRepository implements Repository<Long, User> {
                     String firstName = resultSet.getString("first_name");
                     String lastName = resultSet.getString("last_name");
                     String usernameU=resultSet.getString("usernameu" );
-                    String passwordU = findtPass(id);
+                    String passwordU = findtPass(usernameU,connection);
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
                     LocalDate birth = LocalDate.parse(resultSet.getString("birth"),formatter);
                     User utilizator = new User(firstName, lastName,usernameU,birth);

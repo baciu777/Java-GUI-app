@@ -96,7 +96,7 @@ public class LoginController {
             dialogStage.setScene(scene);
 
             CreateAccountController menuController = loader.getController();
-            menuController.setService(servUser, dialogStage);
+            menuController.setService(servUser,serviceMessage,serviceFriendship,serviceFriendRequest, dialogStage, user);
 
             dialogStage.show();
 

@@ -1,5 +1,14 @@
 package domain;
 
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import org.w3c.dom.events.MouseEvent;
+
 import java.time.LocalDateTime;
 
 public class DtoFriendReq {
@@ -7,14 +16,35 @@ public class DtoFriendReq {
     String to;
     LocalDateTime date;
     String status;
+    ImageView imageAcc;
+    ImageView imageDec;
 
     public DtoFriendReq(String from,String to, LocalDateTime date, String status) {
         this.from=from;
         this.to=to;
         this.date = date;
         this.status = status;
+
+
+
+
     }
 
+    public ImageView getImageAcc() {
+        return imageAcc;
+    }
+
+    public void setImageAcc(ImageView imageAcc) {
+        this.imageAcc = imageAcc;
+    }
+
+    public ImageView getImageDec() {
+        return imageDec;
+    }
+
+    public void setImageDec(ImageView imageDec) {
+        this.imageDec = imageDec;
+    }
 
     public String getFrom() {
         return from;
@@ -47,4 +77,6 @@ public class DtoFriendReq {
     public void setStatus(String status) {
         this.status = status;
     }
+
+
 }

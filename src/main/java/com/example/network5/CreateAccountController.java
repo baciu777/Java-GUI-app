@@ -3,18 +3,24 @@ package com.example.network5;
 import domain.User;
 import domain.validation.ValidationException;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import service.ServiceFriendship;
+import service.ServiceFriendshipRequest;
+import service.ServiceMessage;
 import service.ServiceUser;
 
+import java.io.IOException;
 import java.time.LocalDate;
 
-public class CreateAccountController {
+public class CreateAccountController extends MenuController{
 
-    Stage dialogStage;
-    User user;
-    ServiceUser servUser;
+
+
 
     @FXML
     private TextField textFieldFirstName;
@@ -30,11 +36,20 @@ public class CreateAccountController {
     private DatePicker textFieldBirth;
 
 
-    public void setService(ServiceUser servUserr, Stage dialogStage) {
 
-        this.dialogStage=dialogStage;
 
-        servUser=servUserr;
+    public void setService(ServiceUser service, ServiceMessage mess,ServiceFriendship serviceFriendshipNew,ServiceFriendshipRequest serviceFriendRequestt,Stage stage) {
+
+        this.serviceUser = service;
+        this.serviceMessage=mess;
+        this.serviceF=serviceFriendshipNew;
+
+        this.serviceFr=serviceFriendRequestt;
+        this.dialogStage = stage;
+
+
+
+
 
 
     }
@@ -55,9 +70,9 @@ public class CreateAccountController {
             //User user=new User(firstName,lastName,username,birth);
 
             //user.setPassword(password);
-            servUser.verifyUsername(username);
-            servUser.verifyPassword(password,passwordRepeat);
-            servUser.save(firstName,lastName,username,password,birth);
+            serviceUser.verifyUsername(username);
+            serviceUser.verifyPassword(password,passwordRepeat);
+            serviceUser.save(firstName,lastName,username,password,birth);
 
         }
         catch (ValidationException e) {
@@ -73,7 +88,10 @@ public class CreateAccountController {
 
     @FXML
     public void handleCancel(){
-        dialogStage.close();
+
+     showLoginEditDialog();
     }
+
+
 
 }

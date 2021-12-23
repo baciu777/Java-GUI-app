@@ -7,6 +7,8 @@ import domain.validation.UserValidator;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import repository.Repository;
@@ -24,6 +26,7 @@ import java.io.IOException;
 public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
+
 
         Repository<Long, User> repoDb = new UserDbRepository("jdbc:postgresql://localhost:5432/network", "postgres", "ioana", new UserValidator());
         repoDb.findAll().forEach(System.out::println);

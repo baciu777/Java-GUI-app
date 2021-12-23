@@ -1,22 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
 <AnchorPane prefHeight="600.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.network5.ChatsController">
    <children>
-      <TableView fx:id="tableViewMessage" layoutX="101.0" layoutY="124.0" prefHeight="200.0" prefWidth="363.0">
-         <columns>
-            <TableColumn fx:id="tableColumnTo" prefWidth="84.800048828125" text="to" />
-            <TableColumn fx:id="tableColumnDesc" prefWidth="90.39996337890625" text="message" />
-            <TableColumn fx:id="tableColumnData" prefWidth="112.79998779296875" text="data" />
-            <TableColumn fx:id="tableColumnReply" prefWidth="75.0" text="ReplyID" />
-         </columns>
-      </TableView>
-      <Button layoutX="422.0" layoutY="469.0" mnemonicParsing="false" onAction="#handleCancel" prefHeight="26.0" prefWidth="164.0" text="Close" />
       <HBox layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="790.0">
          <children>
             <Button mnemonicParsing="false" onAction="#handleFriendRequests" prefHeight="62.0" prefWidth="117.0" style="-fx-background-color: rgb(174, 199, 227); -fx-border-color: blue;" text="Friend Requests" />
@@ -26,5 +19,13 @@
             <Button mnemonicParsing="false" onAction="#handleFriends" prefHeight="62.0" prefWidth="121.0" style="-fx-background-color: rgb(174, 199, 227); -fx-border-color: blue;" text="Friends" />
          </children>
       </HBox>
+      <ListView fx:id="lvChatWindow" layoutX="350.0" layoutY="106.0" prefHeight="200.0" prefWidth="200.0" />
+      <TableView fx:id="tableViewChat" layoutX="42.0" layoutY="106.0" onMouseClicked="#initializeChat" prefHeight="200.0" prefWidth="200.0">
+        <columns>
+          <TableColumn fx:id="tableColumnNameChat" prefWidth="199.20001220703125" text="Conversations" />
+        </columns>
+      </TableView>
+      <TextField fx:id="newMessage" layoutX="350.0" layoutY="306.0" />
+      <Button fx:id="sendMessage" layoutX="500.0" layoutY="305.0" mnemonicParsing="false" onAction="#handleUser1SubmitMessage" prefHeight="26.0" prefWidth="50.0" text="Send" />
    </children>
 </AnchorPane>

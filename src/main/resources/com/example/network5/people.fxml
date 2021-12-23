@@ -4,13 +4,14 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="600.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.network5.PeopleController">
    <children>
-      <TableView fx:id="tableViewUser" layoutX="27.0" layoutY="122.0" prefHeight="362.0" prefWidth="264.0">
+      <TableView fx:id="tableViewUser" layoutX="27.0" layoutY="122.0" onMouseClicked="#handleSend" prefHeight="362.0" prefWidth="264.0">
          <columns>
             <TableColumn fx:id="tableColumnUserName" prefWidth="125.59994125366211" text="Name" />
             <TableColumn fx:id="tableColumnRelation" prefWidth="137.59999084472656" text="Relation" />
@@ -21,7 +22,6 @@
             <Font size="29.0" />
          </font>
       </Label>
-      <Button layoutX="453.0" layoutY="415.0" mnemonicParsing="false" onAction="#handleCancel" prefHeight="26.0" prefWidth="164.0" text="Close" />
       <HBox layoutX="14.0" layoutY="14.0" prefHeight="91.0" prefWidth="796.0">
          <children>
             <Button mnemonicParsing="false" onAction="#handleFriendRequests" prefHeight="62.0" prefWidth="117.0" style="-fx-background-color: rgb(174, 199, 227); -fx-border-color: blue;" text="Friend Requests" />
@@ -31,5 +31,7 @@
             <Button mnemonicParsing="false" onAction="#handleFriends" prefHeight="62.0" prefWidth="121.0" style="-fx-background-color: rgb(174, 199, 227); -fx-border-color: blue;" text="Friends" />
          </children>
       </HBox>
+      <TextField fx:id="textFieldSearch" layoutX="323.0" layoutY="219.0" onAction="#handleFilter" prefHeight="26.0" prefWidth="198.0" />
+      <Button fx:id="buttonSend" layoutX="323.0" layoutY="300.0" mnemonicParsing="false" onAction="#handleSendRequest" prefHeight="34.0" prefWidth="155.0" text="Send Request" />
    </children>
 </AnchorPane>
