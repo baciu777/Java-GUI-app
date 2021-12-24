@@ -40,15 +40,18 @@ public class HelloApplication extends Application {
         ServiceMessage servMessage = new ServiceMessage(repoDbMs, repoDb);
         ServiceFriendshipRequest servFriendReq = new ServiceFriendshipRequest(repoDbFrRq, servFriendship, servUser);
 
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
 
-        Scene scene = new Scene(fxmlLoader.load(), 700, 600);
-        LoginController loginController = fxmlLoader.getController();
-        loginController.setService(servUser, servMessage, servFriendship,servFriendReq, stage);
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("welcomePage.fxml"));
+
+        Scene scene = new Scene(fxmlLoader.load(), 709, 549);
+        WelcomeController welcomeController = fxmlLoader.getController();
+        welcomeController.setService(servUser, servMessage, servFriendship,servFriendReq, stage);
         stage.setTitle("Social Life");
-        loginController.setStage(stage);
+        welcomeController.setStage(stage);
         stage.setScene(scene);
         stage.show();
+
+
     }
 
     private void initView(Stage stage) throws IOException {
