@@ -5,11 +5,10 @@ import domain.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.TilePane;
 import javafx.stage.Stage;
 import service.ServiceFriendship;
 import service.ServiceFriendshipRequest;
@@ -33,7 +32,8 @@ public class FriendsController extends MenuController{
     TableColumn<User, String> tableColumnFirstName;
     @FXML
     TableColumn<User, String> tableColumnLastName;
-
+    @FXML
+    TilePane test;
 
 
     ObservableList<User> modelFriendship = FXCollections.observableArrayList();
@@ -70,7 +70,20 @@ public class FriendsController extends MenuController{
         List<User> friendshipsList = StreamSupport.stream(users.spliterator(), false)
                 .collect(Collectors.toList());
         modelFriendship.setAll(friendshipsList);
-
+        setTile();
+    }
+    private void setTile()
+    {
+        Iterable<User> users = serviceF.friends(userLogin.getId());
+        for(User u: users)
+        {
+            HBox box = new HBox();
+            Label x = new Label(u.toString2());
+            Button but = new Button("Delete");
+            box.getChildren().add(x);
+            box.getChildren().add(but);
+            test.getChildren().add(box);
+        }
     }
     public void handleFilter()
     {
