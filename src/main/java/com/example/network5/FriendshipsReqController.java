@@ -74,7 +74,7 @@ public class FriendshipsReqController extends MenuController {
 //        initModelFriendship();
         initModelFriendshipReq();
         initModelFriendshipReq2();
-
+        setLabelName();
 
     }
 

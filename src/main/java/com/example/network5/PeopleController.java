@@ -50,7 +50,7 @@ public class PeopleController extends MenuController{
         this.userLogin = user;
 
         initModelUser();
-
+        setLabelName();
 
     }
 

@@ -1,19 +1,11 @@
 package com.example.network5;
 
-import ChangeEvent.Event;
-
 import domain.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import service.ServiceFriendship;
 import service.ServiceFriendshipRequest;
@@ -21,9 +13,6 @@ import service.ServiceMessage;
 import service.ServiceUser;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 public class MenuController  {
 
@@ -34,6 +23,9 @@ public class MenuController  {
     protected ServiceFriendshipRequest serviceFr;
     protected ServiceUser serviceUser;
     protected ServiceMessage serviceMessage;
+    @FXML
+    protected Label idName;
+
     Stage dialogStage;
     User userLogin;
 
@@ -47,7 +39,7 @@ public class MenuController  {
         this.dialogStage = stage;
         this.userLogin=user;
 
-
+        setLabelName();
 
 
 
@@ -66,7 +58,7 @@ public class MenuController  {
 
     @FXML
     public void handleCancel(){
-        showLoginEditDialog();
+        showWelcomeEditDialog();
     }
 
     @FXML
@@ -204,11 +196,11 @@ public class MenuController  {
             e.printStackTrace();
         }
     }
-    public void showLoginEditDialog() {
+    public void showWelcomeEditDialog() {
         try {
             // create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("hello-view.fxml"));
+            loader.setLocation(getClass().getResource("welcomePage.fxml"));
 
             AnchorPane root = (AnchorPane) loader.load();
 
@@ -216,7 +208,7 @@ public class MenuController  {
             Scene scene = new Scene(root);
             dialogStage.setScene(scene);
 
-            LoginController controller = loader.getController();
+            WelcomeController controller = loader.getController();
             controller.setService(serviceUser,serviceMessage,serviceF,serviceFr,dialogStage);
 
             dialogStage.show();
@@ -224,6 +216,10 @@ public class MenuController  {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    protected void setLabelName()
+    {
+        idName.setText(userLogin.toString3());
     }
 
 }

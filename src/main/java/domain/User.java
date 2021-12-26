@@ -139,6 +139,11 @@ public class User extends Entity<Long> {
                  lastName + " ";
         return s;
     }
+    public String toString3()
+    {
+        return this.getId() +" " + this.getFirstName() +" "+ this.getLastName();
+
+    }
 
     @Override
     public boolean equals(Object o) {
