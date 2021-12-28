@@ -58,5 +58,6 @@
             <Font name="Century Gothic" size="29.0" />
          </font>
       </Label>
+      <Button layoutX="275.0" layoutY="424.0" mnemonicParsing="false" onAction="#showNewChatEditDialog" text="create new Chat" />
    </children>
 </AnchorPane>

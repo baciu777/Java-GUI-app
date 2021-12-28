@@ -1,6 +1,7 @@
 package com.example.network5;
 
 import domain.*;
+import domain.validation.EventValidator;
 import domain.validation.FriendshipValidator;
 import domain.validation.MessageValidator;
 import domain.validation.UserValidator;
@@ -12,14 +13,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import repository.Repository;
-import repository.database.FriendRequestDbRepository;
-import repository.database.FriendshipDbRepository;
-import repository.database.MessageDbRepository;
-import repository.database.UserDbRepository;
-import service.ServiceFriendship;
-import service.ServiceFriendshipRequest;
-import service.ServiceMessage;
-import service.ServiceUser;
+import repository.database.*;
+import service.*;
 
 import java.io.IOException;
 
@@ -34,18 +29,21 @@ public class HelloApplication extends Application {
         repoDbFr.findAll().forEach(System.out::println);
         Repository<Long, Message> repoDbMs = new MessageDbRepository("jdbc:postgresql://localhost:5432/network", "postgres", "ioana", new MessageValidator());
         Repository<Tuple<Long, Long>, FriendRequest> repoDbFrRq = new FriendRequestDbRepository("jdbc:postgresql://localhost:5432/network", "postgres", "ioana");
+        Repository<Long, Event> repoDbEv = new EventDbRepository("jdbc:postgresql://localhost:5432/network", "postgres", "ioana", new EventValidator());
+        Repository<Long, Notification> repoDbNf = new NotificationsDbRepository("jdbc:postgresql://localhost:5432/network", "postgres", "ioana", new EventValidator());
 
         ServiceUser servUser = new ServiceUser(repoDb, repoDbFr);
         ServiceFriendship servFriendship = new ServiceFriendship(repoDb, repoDbFr);
         ServiceMessage servMessage = new ServiceMessage(repoDbMs, repoDb);
         ServiceFriendshipRequest servFriendReq = new ServiceFriendshipRequest(repoDbFrRq, servFriendship, servUser);
+        ServiceEvent serviceEvent = new ServiceEvent(repoDbEv,repoDbNf);
 
 
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("welcomePage.fxml"));
 
         Scene scene = new Scene(fxmlLoader.load(), 709, 549);
         WelcomeController welcomeController = fxmlLoader.getController();
-        welcomeController.setService(servUser, servMessage, servFriendship,servFriendReq, stage);
+        welcomeController.setService(servUser, servMessage, servFriendship,servFriendReq,serviceEvent, stage);
         stage.setTitle("Social Life");
         welcomeController.setStage(stage);
         stage.setScene(scene);

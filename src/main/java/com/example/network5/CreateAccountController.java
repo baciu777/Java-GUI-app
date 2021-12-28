@@ -1,5 +1,6 @@
 package com.example.network5;
 
+import domain.Page;
 import domain.User;
 import domain.validation.ValidationException;
 import javafx.fxml.FXML;
@@ -86,7 +87,7 @@ public class CreateAccountController extends MenuController{
             MessageAlert.showErrorMessage(null,"id null");
         }
     }
-    private void GoToMenu(User user)
+    private void GoToMenu(Page user)
     {
         try {
             // create a new stage for the popup dialog.
@@ -100,7 +101,7 @@ public class CreateAccountController extends MenuController{
             dialogStage.setScene(scene);
 
             MenuController menuController = loader.getController();
-            menuController.setService(serviceUser,serviceMessage,serviceF,serviceFr, dialogStage, user);
+            menuController.setService(serviceUser,serviceMessage,serviceF,serviceFr,serviceEvent, dialogStage, user);
 
             dialogStage.show();
 

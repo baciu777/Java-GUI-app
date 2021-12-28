@@ -45,6 +45,8 @@
             <Font name="Century Gothic" size="29.0" />
          </font>
       </Label>
+      <Button layoutX="393.0" layoutY="196.0" mnemonicParsing="false" onAction="#handleEvents" prefHeight="157.0" prefWidth="252.0" text="Events" />
+      <Button layoutX="56.0" layoutY="540.0" mnemonicParsing="false" onAction="#handleNotifications" text="Notification image" />
 
    </children>
 </AnchorPane>

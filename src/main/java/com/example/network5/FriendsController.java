@@ -1,6 +1,7 @@
 package com.example.network5;
 
 import domain.DtoMessage;
+import domain.Page;
 import domain.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -40,7 +41,7 @@ public class FriendsController extends MenuController{
 
     ObservableList<User> modelFriendship = FXCollections.observableArrayList();
 
-    public void set(ServiceUser service, ServiceMessage mess,ServiceFriendship serviceFriendshipNew,ServiceFriendshipRequest serviceFriendRequestt,Stage stage,User user) {
+    public void set(ServiceUser service, ServiceMessage mess, ServiceFriendship serviceFriendshipNew, ServiceFriendshipRequest serviceFriendRequestt, Stage stage, Page user) {
 
         this.serviceUser = service;
         this.serviceMessage = mess;
@@ -68,9 +69,7 @@ public class FriendsController extends MenuController{
     }
 
     protected void initModelFriendship() {
-        Iterable<User> users = serviceF.friends(userLogin.getId());
-        List<User> friendshipsList = StreamSupport.stream(users.spliterator(), false)
-                .collect(Collectors.toList());
+        List<User> friendshipsList=userLogin.getFriends();
         modelFriendship.setAll(friendshipsList);
 
     }
@@ -88,9 +87,10 @@ public class FriendsController extends MenuController{
     public void handleDel()
     {
 
-        //User selected = (User) tableViewUsers.getSelectionModel().getSelectedItem();
+        User selected = (User) tableViewUsers.getSelectionModel().getSelectedItem();
 
-
+        if(selected==null)
+            return;
         buttonDel.setVisible(true);
 
     }

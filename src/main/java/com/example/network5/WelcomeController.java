@@ -14,10 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import service.ServiceFriendship;
-import service.ServiceFriendshipRequest;
-import service.ServiceMessage;
-import service.ServiceUser;
+import service.*;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -38,16 +35,18 @@ public class WelcomeController {
     private ServiceMessage serviceMessage;
     private ServiceFriendship serviceFriendship;
     private ServiceFriendshipRequest serviceFriendRequest;
+    private ServiceEvent serviceEvent;
     Stage dialogStage;
     User user;
     //ObservableList<NotaDto> modelGrade = FXCollections.observableArrayList();
 
-    public void setService(ServiceUser service, ServiceMessage mess, ServiceFriendship fr, ServiceFriendshipRequest servFriendReq, Stage stage) {
+    public void setService(ServiceUser service, ServiceMessage mess, ServiceFriendship fr, ServiceFriendshipRequest servFriendReq,ServiceEvent servEvent, Stage stage) {
         this.servUser = service;
         this.dialogStage = stage;
         this.serviceFriendship=fr;
         this.serviceMessage=mess;
         this.serviceFriendRequest=servFriendReq;
+        this.serviceEvent=servEvent;
 
     }
     @FXML
@@ -69,7 +68,7 @@ public class WelcomeController {
             dialogStage.setScene(scene);
 
             LoginController lController = loader.getController();
-            lController.setService(servUser,serviceMessage,serviceFriendship,serviceFriendRequest, dialogStage);
+            lController.setService(servUser,serviceMessage,serviceFriendship,serviceFriendRequest,serviceEvent, dialogStage);
 
             dialogStage.show();
 
