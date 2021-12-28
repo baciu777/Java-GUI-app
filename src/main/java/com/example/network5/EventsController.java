@@ -82,7 +82,9 @@ public class EventsController extends MenuController {
         Event ev=new Event(name,dateNew,ids);
         try {
             serviceEvent.save(name, dateNew, ids);
+
             modelEvents.add(ev);//get 1st user's text from his/her textfield and add message to observablelist
+            initModelEvents();
             newName.setText("");//clear 1st user's textfield
             date.getEditor().clear();
         }catch (ValidationException e) {
@@ -103,6 +105,8 @@ public class EventsController extends MenuController {
     {
 
         Event selected = tableViewEvents.getSelectionModel().getSelectedItem();
+        //System.out.println(selected.getId());
+
         if(  selected!=null && !selected.getIds().containsKey(userLogin.getId()) )
         {buttonGoingNotOnOff.setText("Going");
             buttonGoingNotOnOff.setVisible(true);}

@@ -80,13 +80,8 @@ public class OneUserFriendController {
         serv.deleteFriend(userfriend.getId(),userLogged.getId());
        // userLogged.deleteFriend(userfriend);
         List<User> newFR=new ArrayList<>();
-        for(User ur:userLogged.getFriends())
-        {
-            if(ur.getId()!=userfriend.getId())
-            {
-                newFR.add(ur);
-            }
-        }
+        //stergem si din prietenii userului logat(page)
+        userLogged.removeFriend(userfriend);
         userLogged.setFriends(newFR);
         control.initModelFriendship();
     }
