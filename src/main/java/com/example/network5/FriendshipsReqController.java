@@ -67,7 +67,7 @@ public class FriendshipsReqController extends MenuController {
         this.serviceFr = serviceFriendRequestt;
         this.dialogStage = stage;
         this.userLogin = user;
-        this.serviceEvent=servEvent;
+        this.serviceEvent = servEvent;
 
 //        initModelFriendship();
         initModelFriendshipReq();
@@ -99,12 +99,12 @@ public class FriendshipsReqController extends MenuController {
 
     }
 
-
+    /*
     @FXML
     public void handleCancel() {
         dialogStage.close();
     }
-
+    */
 
     @FXML
     public void handleRejectRequest() {
@@ -118,6 +118,7 @@ public class FriendshipsReqController extends MenuController {
             if (Objects.equals(found.getId(), userLogin.getId()))
                 throw new Exception("This is you");
             serviceFr.rejectRequest(userLogin.getId(), found.getId());
+
             //serviceFr.check_update_deletes();
             //initModelFriendshipReqUpdate(userLogin, found);
             initModelFriendshipReq();
@@ -144,6 +145,11 @@ public class FriendshipsReqController extends MenuController {
             //aici putem scoate de tot approved din baza de date!!!!!!!!!!!
             serviceFr.check_update_deletes(found, userLoginNew);//ar trebui sa se stearga approved requests
             //initModelFriendshipReqUpdate(userLogin, found);
+//ii okkkk
+            userLogin.removeFrRequestRec(selected);
+            List<User> friends = userLogin.getFriends();
+            friends.add(found);
+            userLogin.setFriends(friends);
             initModelFriendshipReq();
         } catch (Exception e) {
             MessageAlert.showErrorMessage(null, e.getMessage());

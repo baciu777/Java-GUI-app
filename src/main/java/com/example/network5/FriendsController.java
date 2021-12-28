@@ -36,7 +36,8 @@ public class FriendsController extends MenuController{
     TableColumn<User, String> tableColumnFirstName;
     @FXML
     TableColumn<User, String> tableColumnLastName;
-
+    @FXML
+    TilePane friendsTile;
 
 
     ObservableList<User> modelFriendship = FXCollections.observableArrayList();
@@ -54,8 +55,14 @@ public class FriendsController extends MenuController{
         initModelFriendship();
         textFieldSearch.textProperty().addListener(o -> handleFilter());
         setLabelName();
+        setStylePane();
     }
-
+    private void setStylePane()
+    {
+        friendsTile.setHgap(30);
+        friendsTile.setVgap(20);
+        friendsTile.setPrefColumns(2);
+    }
     @FXML
     public void initialize() {
 
@@ -68,10 +75,21 @@ public class FriendsController extends MenuController{
 
     }
 
-    protected void initModelFriendship() {
-        List<User> friendshipsList=userLogin.getFriends();
-        modelFriendship.setAll(friendshipsList);
 
+    public void initModelFriendship() {
+
+
+        List<User> friendshipsList=userLogin.getFriends();
+
+        modelFriendship.setAll(friendshipsList);
+        friendsTile.getChildren().clear();
+        for(User u:friendshipsList)
+        {
+           OneUserFriendController oneUser = new OneUserFriendController();
+           oneUser.set(u,userLogin,serviceF,this);
+
+           friendsTile.getChildren().add(oneUser.getBox());
+        }
     }
 
     public void handleFilter()
@@ -82,6 +100,13 @@ public class FriendsController extends MenuController{
                 .filter(p1)
                 .collect(Collectors.toList());
         modelFriendship.setAll(friendshipsList);
+        friendsTile.getChildren().clear();
+        for(User u:friendshipsList)
+        {
+            OneUserFriendController oneUser = new OneUserFriendController();
+            oneUser.set(u,userLogin,serviceF,this);
+            friendsTile.getChildren().add(oneUser.getBox());
+        }
     }
 
     public void handleDel()

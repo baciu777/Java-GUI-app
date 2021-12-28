@@ -11,7 +11,7 @@
 
 <AnchorPane prefHeight="600.0" prefWidth="700.0" style="-fx-background-color: linear-gradient(#474352, #41243C);" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.network5.MenuController">
    <children>
-      <Button layoutX="589.0" layoutY="559.0" mnemonicParsing="false" onAction="#handleCancel" prefHeight="26.0" prefWidth="164.0" text="Close" />
+
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#2d2d31" height="600.0" stroke="#2d2d31" strokeType="INSIDE" width="228.0" />
       <Line endX="250.4000244140625" endY="112.89289855957031" startX="764.0" startY="112.89289855957031" stroke="#e9e3d1" />
       <Button layoutX="337.0" layoutY="69.0" mnemonicParsing="false" onAction="#handleFriends" style="-fx-background-color: transparent;" text="Friends" textFill="#e9e3d1">
@@ -42,11 +42,23 @@
       </ImageView>
       <Label fx:id="idName" layoutX="34.0" layoutY="266.0" prefHeight="43.0" prefWidth="164.0" text="Label" textFill="#e9e3d1">
          <font>
-            <Font name="Century Gothic" size="29.0" />
+            <Font name="Century Gothic" size="24.0" />
          </font>
       </Label>
+
+      <Button layoutX="14.0" layoutY="529.0" mnemonicParsing="false" onAction="#handleCancel" prefHeight="60.0" prefWidth="65.0" style="-fx-background-color: transparent;">
+         <graphic>
+            <ImageView fitHeight="52.0" fitWidth="53.0" layoutX="27.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/logout.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+
       <Button layoutX="393.0" layoutY="196.0" mnemonicParsing="false" onAction="#handleEvents" prefHeight="157.0" prefWidth="252.0" text="Events" />
       <Button layoutX="56.0" layoutY="540.0" mnemonicParsing="false" onAction="#handleNotifications" text="Notification image" />
+
 
    </children>
 </AnchorPane>

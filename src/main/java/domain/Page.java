@@ -45,11 +45,20 @@ public class Page extends User{
     public void setFriendRequestsSent(List<DtoFriendReq> friendRequestsSent) {
         this.friendRequestsSent = friendRequestsSent;
     }
+    public void removeFrRequestRec(DtoFriendReq fr)
+    {
+        this.friendRequestsReceived.remove(fr);
+    }
+    public void removeFrRequestSent(DtoFriendReq fr)
+    {
+        this.friendRequestsSent.remove(fr);
+    }
 
     @Override
     public List<User> getFriends() {
         return friends;
     }
+
 
     @Override
     public void setFriends(List<User> friends) {

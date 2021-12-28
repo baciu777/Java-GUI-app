@@ -26,11 +26,15 @@
             <Font size="19.0" />
          </font>
       </TextField>
+        <Button onAction="#handleCancel" style="-fx-background-color: transparent;">
+            <graphic>
       <ImageView fitHeight="52.0" fitWidth="53.0" layoutX="27.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@images/backbutton.png" />
          </image>
       </ImageView>
+            </graphic>
+        </Button>
       <Hyperlink alignment="CENTER" layoutX="64.0" layoutY="436.0" prefHeight="52.0" prefWidth="240.0" text="Did you forget your password?" textFill="#e9e3d1">
          <font>
             <Font size="16.0" />

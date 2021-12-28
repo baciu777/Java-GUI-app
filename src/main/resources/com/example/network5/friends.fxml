@@ -8,13 +8,14 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="600.0" prefWidth="700.0" style="-fx-background-color: linear-gradient(#474352, #41243C);" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.network5.FriendsController">
     <children>
-        <Button layoutX="589.0" layoutY="559.0" mnemonicParsing="false" onAction="#handleCancel" prefHeight="26.0" prefWidth="164.0" text="Close" />
+
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#2d2d31" height="600.0" stroke="#2d2d31" strokeType="INSIDE" width="228.0" />
         <Line endX="250.4000244140625" endY="112.89289855957031" startX="764.0" startY="112.89289855957031" stroke="#e9e3d1" />
         <Button layoutX="337.0" layoutY="69.0" mnemonicParsing="false" onAction="#handleFriends" style="-fx-background-color: transparent;" text="Friends" textFill="#e9e3d1">
@@ -43,7 +44,7 @@
                 <Image url="@images/anonimUser2.jpg" />
             </image>
         </ImageView>
-        <TableView fx:id="tableViewUsers" layoutX="245.0" layoutY="192.0" onMouseClicked="#handleDel" prefHeight="288.0" prefWidth="328.0">
+        <TableView fx:id="tableViewUsers" layoutX="14.0" layoutY="310.0" onMouseClicked="#handleDel" prefHeight="218.0" prefWidth="222.0">
             <columns>
                 <TableColumn fx:id="tableColumnFirstName" prefWidth="120.79998779296875" text="FirstName" />
                 <TableColumn fx:id="tableColumnLastName" prefWidth="89.60002441406249" text="LastName" />
@@ -51,12 +52,23 @@
         </TableView>
 
 
-        <TextField fx:id="textFieldSearch" layoutX="323.0" layoutY="141.0" onAction="#handleFilter" prefHeight="10.0" prefWidth="88.0" />
-        <Button fx:id="buttonDel" layoutX="589.0" layoutY="216.0" mnemonicParsing="false" onAction="#handleDeleteFriend" prefHeight="26.0" prefWidth="135.0" text="Delete Friend" />
+        <TextField fx:id="textFieldSearch" layoutX="340.0" layoutY="128.0" onAction="#handleFilter" prefHeight="26.0" prefWidth="176.0" />
+        <Button fx:id="buttonDel" layoutX="416.0" layoutY="27.0" mnemonicParsing="false" onAction="#handleDeleteFriend" prefHeight="26.0" prefWidth="135.0" text="Delete Friend" />
         <Label fx:id="idName" layoutX="34.0" layoutY="266.0" prefHeight="43.0" prefWidth="164.0" text="Label" textFill="#e9e3d1">
             <font>
-                <Font name="Century Gothic" size="29.0" />
+                <Font name="Century Gothic" size="24.0" />
             </font>
         </Label>
+        <Button layoutX="14.0" layoutY="529.0" mnemonicParsing="false" onAction="#handleCancel" prefHeight="60.0" prefWidth="65.0" style="-fx-background-color: transparent;">
+            <graphic>
+                <ImageView fitHeight="52.0" fitWidth="53.0" layoutX="27.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@images/logout.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+      <TilePane fx:id="friendsTile" layoutX="271.0" layoutY="171.0" prefHeight="404.0" prefWidth="472.0" />
+      <Label layoutX="284.0" layoutY="128.0" prefHeight="26.0" prefWidth="56.0" text="Search" textFill="#e9e3d1" />
     </children>
 </AnchorPane>

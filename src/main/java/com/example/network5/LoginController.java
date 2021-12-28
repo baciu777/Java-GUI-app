@@ -45,7 +45,14 @@ public class LoginController {
     Page user;
     //ObservableList<NotaDto> modelGrade = FXCollections.observableArrayList();
 
+    @FXML
+    public void handleCancel(){
+        showWelcomeEditDialog();
+    }
+
+
     public void setService(ServiceUser service, ServiceMessage mess, ServiceFriendship fr, ServiceFriendshipRequest servFriendReq,ServiceEvent servEvent, Stage stage) {
+
         this.servUser = service;
         this.dialogStage = stage;
         this.serviceFriendship=fr;
@@ -191,5 +198,26 @@ public class LoginController {
     public void setStage(Stage stage)
     {
         //dialogStage=stage;
+    }
+    public void showWelcomeEditDialog() {
+        try {
+            // create a new stage for the popup dialog.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("welcomePage.fxml"));
+
+            AnchorPane root = (AnchorPane) loader.load();
+
+
+            Scene scene = new Scene(root);
+            dialogStage.setScene(scene);
+
+            WelcomeController controller = loader.getController();
+            controller.setService(servUser,serviceMessage,serviceFriendship,serviceFriendRequest,serviceEvent,dialogStage);
+
+            dialogStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
