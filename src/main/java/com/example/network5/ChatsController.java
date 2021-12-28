@@ -83,6 +83,7 @@ public class ChatsController extends MenuController {
 
     public void initModelChat() {
         Iterable<Message> mess = userLogin.getMessages();
+
         List<Chat> chats = new ArrayList<>();
         for (Message ms : mess) {
             List<Long> messageInvolved = new ArrayList<>();
@@ -190,10 +191,12 @@ public class ChatsController extends MenuController {
     private void handleUser1SubmitMessage(ActionEvent event) {
         Chat selected = (Chat) tableViewChat.getSelectionModel().getSelectedItem();
         try {
-            serviceMessage.save(userLogin.getId(), takeToWithoutUserLoginIds(selected.getPeople()), newMessage.getText());
-            Message newMess = new Message(userLogin, takeToWithoutUserLoginUsers(selected.getPeople()), newMessage.getText());
+            Long Id=serviceMessage.save(userLogin.getId(), takeToWithoutUserLoginIds(selected.getPeople()), newMessage.getText());
+            Message newMess = serviceMessage.findOne(Id);
+                    userLogin.addMessage(newMess);
 
             chatMessages.add(newMess);//get 1st user's text from his/her textfield and add message to observablelist
+            initializeChat();
             newMessage.setText("");//clear 1st user's textfield
         } catch (ValidationException e) {
             MessageAlert.showErrorMessage(null, e.getMessage());

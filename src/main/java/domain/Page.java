@@ -74,4 +74,10 @@ public class Page extends User{
     {
         friendRequestsSent.add(frRSent);
     }
+    public void addMessage(Message mess)
+    {
+        messages.add(mess);
+    }
+    //DACA FACEAM OBSERVER IN PAGE NU ERA LA FEL DE EFICIENT, DEOARECE RELUAM TOT DIN BAZA DE DATE CAND SE
+    //SCHIMBA CEVA, ASA DOAR ADAUG CATE UN PRIETEN/REQUEST/MESAJ
 }
