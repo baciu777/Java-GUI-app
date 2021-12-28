@@ -92,7 +92,7 @@ public class PeopleController extends MenuController{
         {
 
             OneUserPeopleController oneUser = new OneUserPeopleController();
-            oneUser.set(userLogin,u,serviceFr,serviceF,this);
+            oneUser.set(userLogin,u,serviceFr,serviceF,serviceUser,this);
             peopleTile.getChildren().add(oneUser.getBox());
 
         }
@@ -125,7 +125,7 @@ public class PeopleController extends MenuController{
         for(User u:userForTile)
         {
             OneUserPeopleController oneUser = new OneUserPeopleController();
-            oneUser.set(userLogin,u,serviceFr,serviceF,this);
+            oneUser.set(userLogin,u,serviceFr,serviceF,serviceUser,this);
             peopleTile.getChildren().add(oneUser.getBox());
         }
     }

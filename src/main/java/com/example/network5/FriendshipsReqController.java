@@ -119,8 +119,9 @@ public class FriendshipsReqController extends MenuController {
                 throw new Exception("This is you");
             serviceFr.rejectRequest(userLogin.getId(), found.getId());
 
-            //serviceFr.check_update_deletes();
-            //initModelFriendshipReqUpdate(userLogin, found);
+            //neaparat astaaaaa
+            userLogin.removeFrRequestRec(selected);
+
             initModelFriendshipReq();
         } catch (Exception e) {
             MessageAlert.showErrorMessage(null, e.getMessage());

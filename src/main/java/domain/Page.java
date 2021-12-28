@@ -2,6 +2,7 @@ package domain;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 public class Page extends User{
 
@@ -59,9 +60,18 @@ public class Page extends User{
         return friends;
     }
 
-
     @Override
     public void setFriends(List<User> friends) {
         this.friends = friends;
+    }
+
+
+    public void removeFriend(User fr)
+    {
+        this.friends.removeIf(frr -> Objects.equals(frr.getId(), fr.getId()));
+    }
+    public void addRequestSent(DtoFriendReq frRSent)
+    {
+        friendRequestsSent.add(frRSent);
     }
 }
