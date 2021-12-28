@@ -101,12 +101,12 @@ public class FriendshipsReqController extends MenuController {
 
     }
 
-
+    /*
     @FXML
     public void handleCancel() {
         dialogStage.close();
     }
-
+    */
 
     @FXML
     public void handleRejectRequest() {

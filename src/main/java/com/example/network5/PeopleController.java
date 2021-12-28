@@ -7,11 +7,9 @@ import domain.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.TilePane;
 import javafx.stage.Stage;
 import service.ServiceFriendship;
 import service.ServiceFriendshipRequest;
@@ -35,7 +33,8 @@ public class PeopleController extends MenuController{
     TableColumn<DtoUser, String> tableColumnUserName;
     @FXML
     TableColumn<DtoUser, String> tableColumnRelation;
-
+    @FXML
+    TilePane peopleTile;
     ObservableList<DtoUser> modelUser = FXCollections.observableArrayList();
 
 
@@ -68,10 +67,11 @@ public class PeopleController extends MenuController{
         tableColumnRelation.setCellValueFactory(new PropertyValueFactory<DtoUser, String>("relation"));
 
         tableViewUser.setItems(modelUser);
+
     }
 
 
-    protected void initModelUser() {
+    public void initModelUser() {
         Iterable<User> users = serviceUser.printUs();
         List<DtoUser> usersList = StreamSupport.stream(users.spliterator(), false)
                 .map(x ->
@@ -89,11 +89,20 @@ public class PeopleController extends MenuController{
                 })
                 .collect(Collectors.toList());
         modelUser.setAll(usersList);
+        peopleTile.getChildren().clear();
+        peopleTile.getChildren().add(new Label("test"));
+        for(User u:users)
+        {
 
+            OneUserPeopleController oneUser = new OneUserPeopleController();
+            oneUser.set(userLogin,u,serviceFr,serviceF,this);
+            peopleTile.getChildren().add(oneUser.getBox());
+
+        }
     }
     public void handleFilter()
     {
-        Predicate<User> p1 = n -> n.getFirstName().startsWith(textFieldSearch.getText());
+        Predicate<User> p1 = n -> n.getFirstName().startsWith(textFieldSearch.getText()) || n.getLastName().startsWith(textFieldSearch.getText());
         Iterable<User> users = serviceUser.printUs();
         List<DtoUser> usersList = StreamSupport.stream(users.spliterator(), false)
                 .filter(p1)
@@ -111,7 +120,17 @@ public class PeopleController extends MenuController{
                     return us;
                 })
                 .collect(Collectors.toList());
+        List<User> userForTile = StreamSupport.stream(users.spliterator(), false)
+                .filter(p1).collect(Collectors.toList());
         modelUser.setAll(usersList);
+        peopleTile.getChildren().clear();
+        peopleTile.getChildren().add(new Label("filter"));
+        for(User u:userForTile)
+        {
+            OneUserPeopleController oneUser = new OneUserPeopleController();
+            oneUser.set(userLogin,u,serviceFr,serviceF,this);
+            peopleTile.getChildren().add(oneUser.getBox());
+        }
     }
 
     public void handleSend()

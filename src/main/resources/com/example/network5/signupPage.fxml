@@ -37,11 +37,15 @@
          </font>
       </TextField>
       <DatePicker fx:id="textFieldBirth" layoutX="88.0" layoutY="361.0" prefHeight="38.0" prefWidth="190.0" promptText="birth date" />
-      <ImageView fitHeight="59.0" fitWidth="55.0" layoutX="27.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+        <Button onAction="#handleCancel" style="-fx-background-color: transparent;">
+        <graphic>
+        <ImageView fitHeight="59.0" fitWidth="55.0" layoutX="27.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@images/backbutton.png" />
          </image>
       </ImageView>
+        </graphic>
+        </Button>
       <PasswordField fx:id="textFieldPassword" layoutX="87.0" layoutY="255.0" prefHeight="38.0" prefWidth="190.0" promptText="password">
          <font>
             <Font name="Century Gothic" size="18.0" />
