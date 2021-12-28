@@ -1,9 +1,6 @@
 package com.example.network5;
 
-import domain.DtoFriendReq;
-import domain.DtoMessage;
-import domain.DtoUser;
-import domain.User;
+import domain.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -40,7 +37,7 @@ public class PeopleController extends MenuController{
 
 
 
-    public void set(ServiceUser service, ServiceMessage mess,ServiceFriendship serviceFriendshipNew,ServiceFriendshipRequest serviceFriendRequestt,Stage stage,User user) {
+    public void set(ServiceUser service, ServiceMessage mess, ServiceFriendship serviceFriendshipNew, ServiceFriendshipRequest serviceFriendRequestt, Stage stage, Page user) {
         this.serviceUser = service;
         this.serviceMessage = mess;
         this.serviceF = serviceFriendshipNew;
@@ -50,7 +47,7 @@ public class PeopleController extends MenuController{
         this.userLogin = user;
 
         initModelUser();
-
+        setLabelName();
 
     }
 

@@ -4,6 +4,7 @@ import ChangeEvent.ChangeEventType;
 import ChangeEvent.Event;
 
 import domain.Message;
+import domain.Page;
 import domain.User;
 import domain.validation.ValidationException;
 import observer.Observable;
@@ -173,11 +174,10 @@ public class ServiceMessage {
         return conversation;
     }
 
-    public List<Message> groupChat(List<Long> ids)
+    public List<Message> groupChat(List<Message> messagesUser,List<Long> ids)
     {
-        List<Message> mess=new ArrayList<>();
-        repoMessage.findAll().forEach(mess::add);
-        List<Message> result=mess.stream()
+
+        List<Message> result=messagesUser.stream()
             .filter(m-> (ids.contains(m.getFrom().getId())))
             .filter(m-> m.getTo().size()==ids.size()-1)
             .filter(m-> (m.getTo().stream().allMatch(x->ids.contains(x.getId()))))
@@ -187,7 +187,7 @@ public class ServiceMessage {
 
 
     }
-    public List<Message> userMessages(User user)
+    public List<Message> userMessages(Page user)
     {List<Message> listOfMess=new ArrayList<>();
         for(Message ms:this.findAll())
         {

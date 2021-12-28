@@ -18,7 +18,7 @@ public class User extends Entity<Long> {
      */
     private String firstName, lastName;
     private String username,password;
-    private LocalDate birth;
+    private LocalDate birth=null;
     /**
      * list of all user friends
      */
@@ -138,6 +138,11 @@ public class User extends Entity<Long> {
                  firstName + " " +
                  lastName + " ";
         return s;
+    }
+    public String toString3()
+    {
+        return this.getId() +" " + this.getFirstName() +" "+ this.getLastName();
+
     }
 
     @Override

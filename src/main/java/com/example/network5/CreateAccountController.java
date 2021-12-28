@@ -1,5 +1,6 @@
 package com.example.network5;
 
+import domain.Page;
 import domain.User;
 import domain.validation.ValidationException;
 import javafx.fxml.FXML;
@@ -73,7 +74,8 @@ public class CreateAccountController extends MenuController{
             serviceUser.verifyUsername(username);
             serviceUser.verifyPassword(password,passwordRepeat);
             serviceUser.save(firstName,lastName,username,password,birth);
-
+            userLogin = serviceUser.findByUsername(username);
+            GoToMenu(userLogin);
         }
         catch (ValidationException e) {
             MessageAlert.showErrorMessage(null,e.getMessage());
@@ -85,11 +87,32 @@ public class CreateAccountController extends MenuController{
             MessageAlert.showErrorMessage(null,"id null");
         }
     }
+    private void GoToMenu(Page user)
+    {
+        try {
+            // create a new stage for the popup dialog.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("meniu.fxml"));
 
+            AnchorPane root = (AnchorPane) loader.load();
+
+
+            Scene scene = new Scene(root);
+            dialogStage.setScene(scene);
+
+            MenuController menuController = loader.getController();
+            menuController.setService(serviceUser,serviceMessage,serviceF,serviceFr,serviceEvent, dialogStage, user);
+
+            dialogStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     @FXML
     public void handleCancel(){
 
-     showLoginEditDialog();
+     showWelcomeEditDialog();
     }
 
 

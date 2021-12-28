@@ -4,6 +4,8 @@ import domain.User;
 import domain.validation.Validator;
 import repository.Repository;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.sql.Date;
 import java.text.DateFormat;
@@ -102,6 +104,7 @@ public class UserDbRepository implements Repository<Long, User> {
                 if (resultSet.next()) {
 
                     passwordu=resultSet.getString("passwordu");
+
                 }
                 return passwordu;
             }
@@ -169,16 +172,20 @@ public class UserDbRepository implements Repository<Long, User> {
  //
 
 
+
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+            messageDigest.update(entity.getPassword().getBytes());
+            String stringHash = new String(messageDigest.digest());
             ps.executeUpdate();
             PreparedStatement psPass= connection.prepareStatement(sqlChat);
 
 
             psPass.setString(1, entity.getUsername());
-            psPass.setString(2,entity.getPassword());
+            psPass.setString(2,stringHash);
             psPass.executeUpdate();
 
 
-        } catch (SQLException e) {
+        } catch (SQLException | NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
         return null;

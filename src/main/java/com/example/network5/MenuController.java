@@ -1,29 +1,15 @@
 package com.example.network5;
 
-import ChangeEvent.Event;
-
 import domain.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import service.ServiceFriendship;
-import service.ServiceFriendshipRequest;
-import service.ServiceMessage;
-import service.ServiceUser;
+import service.*;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 public class MenuController  {
 
@@ -34,10 +20,14 @@ public class MenuController  {
     protected ServiceFriendshipRequest serviceFr;
     protected ServiceUser serviceUser;
     protected ServiceMessage serviceMessage;
-    Stage dialogStage;
-    User userLogin;
+    protected ServiceEvent serviceEvent;
+    @FXML
+    protected Label idName;
 
-    public void setService(ServiceUser service, ServiceMessage mess,ServiceFriendship serviceFriendshipNew,ServiceFriendshipRequest serviceFriendRequestt,Stage stage,User user) {
+    Stage dialogStage;
+    Page userLogin;
+
+    public void setService(ServiceUser service, ServiceMessage mess,ServiceFriendship serviceFriendshipNew,ServiceFriendshipRequest serviceFriendRequestt,ServiceEvent servEvent,Stage stage,Page user) {
 
         this.serviceUser = service;
         this.serviceMessage=mess;
@@ -46,8 +36,8 @@ public class MenuController  {
         this.serviceFr=serviceFriendRequestt;
         this.dialogStage = stage;
         this.userLogin=user;
-
-
+        this.serviceEvent=servEvent;
+        setLabelName();
 
 
 
@@ -66,36 +56,86 @@ public class MenuController  {
 
     @FXML
     public void handleCancel(){
-        showLoginEditDialog();
+        showWelcomeEditDialog();
     }
 
     @FXML
     public void handleFriendRequests()
     {
-    showFriendReqEditDialog(userLogin);
+    showFriendReqEditDialog();
     }
     @FXML
     public void handleFriends()
     {
-        showFriendsDialog(userLogin);
+        showFriendsDialog();
     }
-    @FXML
-    public void handleUser()
-    {
-        showUserEditDialog(userLogin);
-    }
+
     @FXML
     public void handlePeople()
     {
-        showPeopleDialog(userLogin);
+        showPeopleDialog();
     }
     @FXML
     public void handleChats()
     {
-        showChatsEditDialog(userLogin);
+        showChatsEditDialog();
+    }
+    @FXML
+    public void handleEvents()
+    {
+        showEventsEditDialog();
+    }
+    @FXML
+    public void handleNotifications()
+    {
+        showNotifEditDialog();
     }
 
-    public void showFriendReqEditDialog(User user) {
+    private void showNotifEditDialog() {
+        try {
+            // create a new stage for the popup dialog.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("notifications.fxml"));
+
+            AnchorPane root = (AnchorPane) loader.load();
+
+
+            Scene scene = new Scene(root);
+            dialogStage.setScene(scene);
+
+            NotificationsController controller = loader.getController();
+            controller.set(serviceUser,serviceMessage,serviceF,serviceFr,serviceEvent,dialogStage,userLogin);
+
+            dialogStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showEventsEditDialog() {
+        try {
+            // create a new stage for the popup dialog.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("events.fxml"));
+
+            AnchorPane root = (AnchorPane) loader.load();
+
+
+            Scene scene = new Scene(root);
+            dialogStage.setScene(scene);
+
+            EventsController controller = loader.getController();
+            controller.set(serviceUser,serviceMessage,serviceF,serviceFr,serviceEvent,dialogStage,userLogin);
+
+            dialogStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showFriendReqEditDialog() {
         try {
             // create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader();
@@ -108,7 +148,7 @@ public class MenuController  {
             dialogStage.setScene(scene);
 
             FriendshipsReqController controller = loader.getController();
-            controller.set(serviceUser,serviceMessage,serviceF,serviceFr,dialogStage,userLogin);
+            controller.set(serviceUser,serviceMessage,serviceF,serviceFr,serviceEvent,dialogStage,userLogin);
 
             dialogStage.show();
 
@@ -117,7 +157,7 @@ public class MenuController  {
         }
     }
 
-    public void showChatsEditDialog(User user) {
+    public void showChatsEditDialog() {
         try {
             // create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader();
@@ -139,29 +179,9 @@ public class MenuController  {
         }
     }
 
-    public void showUserEditDialog(User user) {
-        try {
-            // create a new stage for the popup dialog.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("user.fxml"));
-
-            AnchorPane root = (AnchorPane) loader.load();
 
 
-            Scene scene = new Scene(root);
-            dialogStage.setScene(scene);
-
-            UserController controller = loader.getController();
-            controller.set(serviceUser,serviceMessage,serviceF,serviceFr,dialogStage,userLogin);
-
-            dialogStage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void showPeopleDialog(User user) {
+    public void showPeopleDialog() {
         try {
             // create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader();
@@ -183,7 +203,7 @@ public class MenuController  {
             e.printStackTrace();
         }
     }
-    public void showFriendsDialog(User user) {
+    public void showFriendsDialog() {
         try {
             // create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader();
@@ -204,11 +224,11 @@ public class MenuController  {
             e.printStackTrace();
         }
     }
-    public void showLoginEditDialog() {
+    public void showWelcomeEditDialog() {
         try {
             // create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("hello-view.fxml"));
+            loader.setLocation(getClass().getResource("welcomePage.fxml"));
 
             AnchorPane root = (AnchorPane) loader.load();
 
@@ -216,14 +236,18 @@ public class MenuController  {
             Scene scene = new Scene(root);
             dialogStage.setScene(scene);
 
-            LoginController controller = loader.getController();
-            controller.setService(serviceUser,serviceMessage,serviceF,serviceFr,dialogStage);
+            WelcomeController controller = loader.getController();
+            controller.setService(serviceUser,serviceMessage,serviceF,serviceFr,serviceEvent,dialogStage);
 
             dialogStage.show();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    protected void setLabelName()
+    {
+        idName.setText(userLogin.toString3());
     }
 
 }
