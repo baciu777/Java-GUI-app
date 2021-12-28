@@ -58,6 +58,7 @@
             <Font name="Century Gothic" size="24.0" />
          </font>
       </Label>
+
       <Button layoutX="14.0" layoutY="529.0" mnemonicParsing="false" onAction="#handleCancel" prefHeight="60.0" prefWidth="65.0" style="-fx-background-color: transparent;">
          <graphic>
             <ImageView fitHeight="52.0" fitWidth="53.0" layoutX="27.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
@@ -67,5 +68,8 @@
             </ImageView>
          </graphic>
       </Button>
+
+      <Button layoutX="275.0" layoutY="424.0" mnemonicParsing="false" onAction="#showNewChatEditDialog" text="create new Chat" />
+
    </children>
 </AnchorPane>

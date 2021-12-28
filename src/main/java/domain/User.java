@@ -18,7 +18,7 @@ public class User extends Entity<Long> {
      */
     private String firstName, lastName;
     private String username,password;
-    private LocalDate birth;
+    private LocalDate birth=null;
     /**
      * list of all user friends
      */

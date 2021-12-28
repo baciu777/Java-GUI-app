@@ -1,18 +1,12 @@
 package service;
 
-import ChangeEvent.ChangeEventType;
 import ChangeEvent.Event;
 
-import domain.Entity;
-import domain.Friendship;
-import domain.Tuple;
-import domain.User;
+import domain.*;
 import domain.validation.ValidationException;
 import observer.Observer;
 import repository.Repository;
-import observer.Observable;
 
-import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -27,7 +21,7 @@ import java.util.stream.Collectors;
 public class ServiceUser  {
     private Repository<Long, User> repoUser;
     private Repository<Tuple<Long, Long>, Friendship> repoFriends;
-    private List<Observer<Event>> observers = new ArrayList<>();
+
 
     /**
      * constructor for the service
@@ -240,11 +234,15 @@ public class ServiceUser  {
     }
 
 
-    public User findByUsername(String username) {
+    public Page findByUsername(String username) {
         Iterable<User> l = repoUser.findAll();
         for (User ur : l) {
-            if (Objects.equals(ur.getUsername(), username))
-                return ur;
+            if (Objects.equals(ur.getUsername(), username)) {
+                Page x=new Page(ur.getFirstName(), ur.getLastName(),ur.getUsername(),ur.getBirth());
+                x.setPassword(ur.getPassword());
+                x.setId(ur.getId());
+                return x;
+            }
 
         }
        throw new ValidationException("this username doesn't exist");

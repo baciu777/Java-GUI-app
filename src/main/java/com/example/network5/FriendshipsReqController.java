@@ -9,10 +9,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import service.ServiceFriendship;
-import service.ServiceFriendshipRequest;
-import service.ServiceMessage;
-import service.ServiceUser;
+import service.*;
 
 import java.util.List;
 import java.util.Objects;
@@ -61,7 +58,7 @@ public class FriendshipsReqController extends MenuController {
 
     ObservableList<DtoFriendReq> modelFriendshipReq2 = FXCollections.observableArrayList();
 
-    public void set(ServiceUser service, ServiceMessage mess, ServiceFriendship serviceFriendshipNew, ServiceFriendshipRequest serviceFriendRequestt, Stage stage, User user) {
+    public void set(ServiceUser service, ServiceMessage mess, ServiceFriendship serviceFriendshipNew, ServiceFriendshipRequest serviceFriendRequestt, ServiceEvent servEvent, Stage stage, Page user) {
 
         this.serviceUser = service;
         this.serviceMessage = mess;
@@ -70,6 +67,7 @@ public class FriendshipsReqController extends MenuController {
         this.serviceFr = serviceFriendRequestt;
         this.dialogStage = stage;
         this.userLogin = user;
+        this.serviceEvent = servEvent;
 
 //        initModelFriendship();
         initModelFriendshipReq();
@@ -120,6 +118,7 @@ public class FriendshipsReqController extends MenuController {
             if (Objects.equals(found.getId(), userLogin.getId()))
                 throw new Exception("This is you");
             serviceFr.rejectRequest(userLogin.getId(), found.getId());
+
             //serviceFr.check_update_deletes();
             //initModelFriendshipReqUpdate(userLogin, found);
             initModelFriendshipReq();
@@ -144,8 +143,13 @@ public class FriendshipsReqController extends MenuController {
             User userLoginNew = serviceUser.findOne(userLogin.getId());
 
             //aici putem scoate de tot approved din baza de date!!!!!!!!!!!
-            serviceFr.check_update_deletes(found,userLoginNew);//ar trebui sa se stearga approved requests
+            serviceFr.check_update_deletes(found, userLoginNew);//ar trebui sa se stearga approved requests
             //initModelFriendshipReqUpdate(userLogin, found);
+//ii okkkk
+            userLogin.removeFrRequestRec(selected);
+            List<User> friends = userLogin.getFriends();
+            friends.add(found);
+            userLogin.setFriends(friends);
             initModelFriendshipReq();
         } catch (Exception e) {
             MessageAlert.showErrorMessage(null, e.getMessage());
@@ -155,20 +159,16 @@ public class FriendshipsReqController extends MenuController {
 
 
     protected void initModelFriendshipReq() {
-        Predicate<FriendRequest> certainUserRight = x -> x.getId().getRight().equals(userLogin.getId());
 
-//am facut aici o susta de functie pt findall()
-        List<DtoFriendReq> friendshipsReqList = StreamSupport.stream(serviceFr.findAllRenew().spliterator(), false)
-                .filter(certainUserRight)
+        List<DtoFriendReq> friendshipsReqList = userLogin.getFriendRequestsReceived().stream()
+
                 .map(x ->
                 {
-                    ImageView imgAcc=setImgAcc();
-                    ImageView imgDec=setImgDec();
-                    User u1 = serviceUser.findOne(x.getId().getLeft());
-                    DtoFriendReq pp=new DtoFriendReq(u1.getFirstName() + " " + u1.getLastName(), userLogin.getFirstName() + " " + userLogin.getLastName(), x.getDate(), x.getStatus());
-                    pp.setImageAcc(imgAcc);
-                    pp.setImageDec(imgDec);
-                    return pp;
+                    ImageView imgAcc = setImgAcc();
+                    ImageView imgDec = setImgDec();
+                    x.setImageAcc(imgAcc);
+                    x.setImageDec(imgDec);
+                    return x;
                 })
                 .collect(Collectors.toList());
 
@@ -177,7 +177,7 @@ public class FriendshipsReqController extends MenuController {
     }
 
     private ImageView setImgAcc() {
-        ImageView image=new ImageView(new Image(this.getClass().getResourceAsStream("/icons8-checkbox-tick-mark-accept-your-checklist-queries-96.png")));
+        ImageView image = new ImageView(new Image(this.getClass().getResourceAsStream("/icons8-checkbox-tick-mark-accept-your-checklist-queries-96.png")));
 
         image.mouseTransparentProperty().addListener((observable, oldVal, newVal) -> {
             if (newVal) {
@@ -193,8 +193,9 @@ public class FriendshipsReqController extends MenuController {
         });
         return image;
     }
+
     private ImageView setImgDec() {
-        ImageView image=new ImageView(new Image(this.getClass().getResourceAsStream("/icons8-cross-sign-in-box-for-decline,-isolated-in-a-white-background.-96.png")));
+        ImageView image = new ImageView(new Image(this.getClass().getResourceAsStream("/icons8-cross-sign-in-box-for-decline,-isolated-in-a-white-background.-96.png")));
 
         image.mouseTransparentProperty().addListener((observable, oldVal, newVal) -> {
             if (newVal) {
@@ -211,31 +212,17 @@ public class FriendshipsReqController extends MenuController {
         return image;
     }
 
-    protected void initModelFriendshipReqUpdate(User userLogin, User found) {
-        Tuple<Long, Long> longLongTuple = new Tuple<>();
-        longLongTuple.setLeft(userLogin.getId());
-        longLongTuple.setRight(found.getId());
-        FriendRequest fr = serviceFr.findOne(longLongTuple);
-        DtoFriendReq newDto = new DtoFriendReq(userLogin.getFirstName() + " " + userLogin.getLastName(), found.getFirstName() + " " + found.getLastName(), fr.getDate(), fr.getStatus());
-
-
-        modelFriendshipReq.add(newDto);
-
-    }
-
 
     protected void initModelFriendshipReq2() {
-        Predicate<FriendRequest> certainUserLeft = x -> x.getId().getLeft().equals(userLogin.getId());
+        List<DtoFriendReq> friendshipsReqList = userLogin.getFriendRequestsSent().stream()
 
-//am facut aici o susta de functie pt findall()
-        List<DtoFriendReq> friendshipsReqList = StreamSupport.stream(serviceFr.findAllRenew().spliterator(), false)
-                .filter(certainUserLeft)
                 .map(x ->
                 {
-
-                    User u1 = serviceUser.findOne(x.getId().getRight());
-                    return new DtoFriendReq(userLogin.getFirstName() + " " + userLogin.getLastName(), u1.getFirstName() + " " + u1.getLastName(), x.getDate(), x.getStatus());
-
+                    ImageView imgAcc = setImgAcc();
+                    ImageView imgDec = setImgDec();
+                    x.setImageAcc(imgAcc);
+                    x.setImageDec(imgDec);
+                    return x;
                 })
                 .collect(Collectors.toList());
 

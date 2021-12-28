@@ -1,5 +1,6 @@
 package com.example.network5;
 
+import domain.Page;
 import domain.User;
 import javafx.fxml.FXML;
 import javafx.geometry.NodeOrientation;
@@ -13,9 +14,12 @@ import javafx.scene.layout.Region;
 import service.ServiceFriendship;
 import service.ServiceUser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class OneUserFriendController {
     User userfriend;
-    User userLogged;
+    Page userLogged;
     ServiceFriendship serv;
     @FXML
     Button deleteFriend;
@@ -26,7 +30,7 @@ public class OneUserFriendController {
     @FXML
     ImageView userImage;
     FriendsController control;
-    public void set(User userfriend,User userLogged,ServiceFriendship serv,FriendsController control)
+    public void set(User userfriend,Page userLogged,ServiceFriendship serv,FriendsController control)
     {
         this.control = control;
         this.serv =serv;
@@ -74,6 +78,16 @@ public class OneUserFriendController {
     public void deleteFriend()
     {
         serv.deleteFriend(userfriend.getId(),userLogged.getId());
+       // userLogged.deleteFriend(userfriend);
+        List<User> newFR=new ArrayList<>();
+        for(User ur:userLogged.getFriends())
+        {
+            if(ur.getId()!=userfriend.getId())
+            {
+                newFR.add(ur);
+            }
+        }
+        userLogged.setFriends(newFR);
         control.initModelFriendship();
     }
 }
