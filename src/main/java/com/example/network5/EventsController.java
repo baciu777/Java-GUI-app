@@ -13,6 +13,7 @@ import service.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 public class EventsController extends MenuController {
@@ -106,8 +107,9 @@ public class EventsController extends MenuController {
 
         Event selected = tableViewEvents.getSelectionModel().getSelectedItem();
         //System.out.println(selected.getId());
-
-        if(  selected!=null && !selected.getIds().containsKey(userLogin.getId()) )
+        long nr = ChronoUnit.DAYS.between(LocalDate.now(), selected.getDate());
+        if(nr>=0)
+        {if(  selected!=null && !selected.getIds().containsKey(userLogin.getId()) )
         {buttonGoingNotOnOff.setText("Going");
             buttonGoingNotOnOff.setVisible(true);}
         else if(selected!=null && selected.getIds().get(userLogin.getId()).longValue()==1L)
@@ -117,7 +119,7 @@ public class EventsController extends MenuController {
         else if(selected!=null)
         {buttonGoingNotOnOff.setText("Notifications on");
             buttonGoingNotOnOff.setVisible(true);
-        }
+        }}
 
     }
     @FXML

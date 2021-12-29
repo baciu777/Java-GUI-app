@@ -11,6 +11,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import service.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -210,6 +211,9 @@ public class FriendshipsReqController extends MenuController {
             handleRejectRequest();
             event.consume();
         });
+
+
+
         return image;
     }
 

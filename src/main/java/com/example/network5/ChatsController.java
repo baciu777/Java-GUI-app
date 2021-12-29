@@ -49,6 +49,7 @@ public class ChatsController extends MenuController {
 
     ObservableList<Chat> modelChat = FXCollections.observableArrayList();
 
+
     ObservableList<Message> chatMessages = FXCollections.observableArrayList();//create observablelist for listview
 
 
@@ -81,10 +82,11 @@ public class ChatsController extends MenuController {
     }
 
 
-    public void initModelChat() {
+    public List<Chat> initModelChat() {
         Iterable<Message> mess = userLogin.getMessages();
 
-        List<Chat> chats = new ArrayList<>();
+
+         List<Chat> chats = new ArrayList<>();
         for (Message ms : mess) {
             List<Long> messageInvolved = new ArrayList<>();
             if (Objects.equals(ms.getFrom().getId(), userLogin.getId()) ||
@@ -119,6 +121,7 @@ public class ChatsController extends MenuController {
 
         }
         modelChat.setAll(chats);
+        return chats;
     }
 
     private boolean containsPeople(List<Long> idsInvolved, List<Chat> chats) {
@@ -215,7 +218,7 @@ public class ChatsController extends MenuController {
         return idsNew;
     }
 
-    private List<Long> takeToWithoutUserLoginIds(List<Long> ids) {
+    protected List<Long> takeToWithoutUserLoginIds(List<Long> ids) {
         List<Long> idsNew = new ArrayList<>();
         for (Long id : ids)
             if (id != userLogin.getId())
@@ -241,13 +244,14 @@ public class ChatsController extends MenuController {
 
 
             NewChatController controller = loader.getController();
-            controller.set(serviceUser,serviceMessage,serviceF,serviceFr,serviceEvent,dialogStage,userLogin);
+            controller.set(serviceUser,serviceMessage,dialogStage,userLogin,this);
 
             dialogStage.show();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
 }

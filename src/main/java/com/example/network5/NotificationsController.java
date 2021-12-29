@@ -63,7 +63,7 @@ public class NotificationsController extends MenuController {
             long nr = ChronoUnit.DAYS.between(LocalDate.now(), ev.getDate());
 
                if (nr == 0 && ev.getIds().containsKey(userLogin.getId()) && ev.getIds().get(userLogin.getId()) == 1L
-                    && serviceEvent.findOneNotificationIdName(userLogin.getId(), ev.getName() + " days left: " + nr) != null) {
+                    && serviceEvent.findOneNotificationIdName(userLogin.getId(), LocalDate.now()+" "+ev.getName() + " days left: " + nr) != null) {
 
 
                 Notifications notificationsBuilder = Notifications.create()
@@ -113,8 +113,11 @@ public class NotificationsController extends MenuController {
         serviceEvent.printUs().forEach(listEv::add);
         for (Event ev : listEv) {
             long nr = ChronoUnit.DAYS.between(LocalDate.now(), ev.getDate());
+
             if (nr >= 0 && ev.getIds().containsKey(userLogin.getId()) && ev.getIds().get(userLogin.getId()) == 1L
-                    && serviceEvent.findOneNotificationIdName(userLogin.getId(), ev.getName() + " days left: " + nr) == null) {
+                    && serviceEvent.findOneNotificationIdName(userLogin.getId(), LocalDate.now()+" "+ev.getName() + " days left: " + nr
+            ) == null
+            ) {
 
 
 
@@ -123,12 +126,12 @@ public class NotificationsController extends MenuController {
                     @Override
                     public void run() {
                         //update application thread
-                        modelNotifications.add( ev.getName() + " days left: " + nr  );
+                        modelNotifications.add( LocalDate.now()+" "+ev.getName() + " days left: " + nr  );
                     }
                 });
 
 
-                serviceEvent.saveNotif(userLogin.getId(),  ev.getName() + " days left: " + nr);
+                serviceEvent.saveNotif(userLogin.getId(),  LocalDate.now()+" "+ev.getName() + " days left: " + nr);
 
 
             }
