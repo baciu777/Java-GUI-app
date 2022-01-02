@@ -3,6 +3,7 @@ package repository.database;
 import domain.User;
 import domain.validation.Validator;
 import repository.Repository;
+import utils.BCrypt;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -172,20 +173,17 @@ public class UserDbRepository implements Repository<Long, User> {
  //
 
 
-
-            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
-            messageDigest.update(entity.getPassword().getBytes());
-            String stringHash = new String(messageDigest.digest());
+            String CryptPassword= BCrypt.hashpw(entity.getPassword(), BCrypt.gensalt(12));
             ps.executeUpdate();
             PreparedStatement psPass= connection.prepareStatement(sqlChat);
 
 
             psPass.setString(1, entity.getUsername());
-            psPass.setString(2,stringHash);
+            psPass.setString(2,CryptPassword);
             psPass.executeUpdate();
 
 
-        } catch (SQLException | NoSuchAlgorithmException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;

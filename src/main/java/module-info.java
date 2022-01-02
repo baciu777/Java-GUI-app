@@ -13,6 +13,7 @@ module com.example.network5 {
 
 
     exports com.example.network5;
+    opens utils to javafx.base;
 
 
 }
