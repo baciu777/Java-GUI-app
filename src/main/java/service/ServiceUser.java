@@ -268,9 +268,9 @@ public class ServiceUser  {
 
     }
     public void verifyPasswordUser(String passwordUser,User user) {
-        System.out.println(user.getPassword());
+
             String CryptPassword= BCrypt.hashpw(passwordUser, BCrypt.gensalt(12));
-        System.out.println(CryptPassword);
+
 
         if(!BCrypt.checkpw(passwordUser,user.getPassword()))
             throw new ValidationException("Password incorrect");

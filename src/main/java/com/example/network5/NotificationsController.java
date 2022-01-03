@@ -62,8 +62,8 @@ public class NotificationsController extends MenuController {
         for (Event ev : listEv) {
             long nr = ChronoUnit.DAYS.between(LocalDate.now(), ev.getDate());
 
-               if (nr == 0 && ev.getIds().containsKey(userLogin.getId()) && ev.getIds().get(userLogin.getId()) == 1L
-                    && serviceEvent.findOneNotificationIdName(userLogin.getId(), LocalDate.now()+" "+ev.getName() + " days left: " + nr) != null) {
+            if (nr == 0 && ev.getIds().containsKey(userLogin.getId()) && ev.getIds().get(userLogin.getId()) == 1L
+        ) {
 
 
                 Notifications notificationsBuilder = Notifications.create()
@@ -80,9 +80,6 @@ public class NotificationsController extends MenuController {
 
         }
     }
-//baciu, logheaza te cu 4, vezi de apar si notificarile de ieri, nu cred din pacate
-
-
 
 
     public void initModel() {
@@ -115,23 +112,20 @@ public class NotificationsController extends MenuController {
             long nr = ChronoUnit.DAYS.between(LocalDate.now(), ev.getDate());
 
             if (nr >= 0 && ev.getIds().containsKey(userLogin.getId()) && ev.getIds().get(userLogin.getId()) == 1L
-                    && serviceEvent.findOneNotificationIdName(userLogin.getId(), LocalDate.now()+" "+ev.getName() + " days left: " + nr
-            ) == null
+                    && serviceEvent.findOneNotificationIdName(userLogin.getId(), LocalDate.now() + " " + ev.getName() + " days left: " + nr) == null
             ) {
-
-
 
 
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
                         //update application thread
-                        modelNotifications.add( LocalDate.now()+" "+ev.getName() + " days left: " + nr  );
+                        modelNotifications.add(LocalDate.now() + " " + ev.getName() + " days left: " + nr);
                     }
                 });
 
 
-                serviceEvent.saveNotif(userLogin.getId(),  LocalDate.now()+" "+ev.getName() + " days left: " + nr);
+                serviceEvent.saveNotif(userLogin.getId(), LocalDate.now() + " " + ev.getName() + " days left: " + nr);
 
 
             }
