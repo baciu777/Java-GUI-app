@@ -101,7 +101,7 @@ public class WelcomeController {
             dialogStage.setScene(scene);
 
             CreateAccountController menuController = loader.getController();
-            menuController.setService(servUser,serviceMessage,serviceFriendship,serviceFriendRequest, dialogStage);
+            menuController.setService(servUser,serviceMessage,serviceFriendship,serviceFriendRequest,serviceEvent, dialogStage);
 
             dialogStage.show();
 

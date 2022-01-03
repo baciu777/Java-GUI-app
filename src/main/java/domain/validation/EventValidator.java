@@ -17,7 +17,7 @@ public class EventValidator implements  Validator<Event>{
             throw new ValidationException("the name must not be null ");
 
         if(entity.getDate()==null)
-            throw new ValidationException("the date should not be null");
+            throw new ValidationException("the date is not in a correct format");
         if(entity.getDate().isBefore(ChronoLocalDate.from(LocalDateTime.now())))
             throw new ValidationException("the date should be in the future");
 

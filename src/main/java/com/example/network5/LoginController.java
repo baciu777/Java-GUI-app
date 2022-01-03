@@ -75,6 +75,7 @@ public class LoginController {
         try {
 
             user=servUser.findByUsername(username);
+
             servUser.verifyPasswordUser(password,user);
             System.out.println(user);
             initPage();

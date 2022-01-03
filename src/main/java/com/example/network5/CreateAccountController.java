@@ -10,10 +10,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import service.ServiceFriendship;
-import service.ServiceFriendshipRequest;
-import service.ServiceMessage;
-import service.ServiceUser;
+import service.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -39,7 +36,7 @@ public class CreateAccountController extends MenuController{
 
 
 
-    public void setService(ServiceUser service, ServiceMessage mess,ServiceFriendship serviceFriendshipNew,ServiceFriendshipRequest serviceFriendRequestt,Stage stage) {
+    public void setService(ServiceUser service, ServiceMessage mess, ServiceFriendship serviceFriendshipNew, ServiceFriendshipRequest serviceFriendRequestt, ServiceEvent servEvent, Stage stage) {
 
         this.serviceUser = service;
         this.serviceMessage=mess;
@@ -47,7 +44,7 @@ public class CreateAccountController extends MenuController{
 
         this.serviceFr=serviceFriendRequestt;
         this.dialogStage = stage;
-
+        this.serviceEvent=servEvent;
 
 
 
