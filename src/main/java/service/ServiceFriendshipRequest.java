@@ -248,7 +248,7 @@ public class ServiceFriendshipRequest   {
         aux3 = (List<FriendRequest>)findAllFrom(aux2,him);
         if(aux3.size()!=0)
         {
-            return "respond";
+            return "pending";
         }
         aux1 = (List<FriendRequest>)findWithStatus(findAll, "REJECTED");
         aux2 = (List<FriendRequest>)findAllTo(aux1,him);

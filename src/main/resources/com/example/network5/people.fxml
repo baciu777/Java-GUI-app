@@ -72,7 +72,7 @@
             </ImageView>
         </graphic>
         </Button>
-      <TilePane fx:id="peopleTile" layoutX="280.0" layoutY="133.0" prefHeight="433.0" prefWidth="410.0" />
+      <TilePane fx:id="peopleTile" layoutX="254.0" layoutY="157.0" prefHeight="410.0" prefWidth="497.0" />
     </children>
 
 </AnchorPane>

@@ -47,6 +47,14 @@ public class PeopleController extends MenuController{
 
         initModelUser();
         setLabelName();
+        setStylePane();
+
+    }
+    private void setStylePane()
+    {
+        peopleTile.setHgap(30);
+        peopleTile.setVgap(20);
+        peopleTile.setPrefColumns(2);
 
     }
 
@@ -87,7 +95,7 @@ public class PeopleController extends MenuController{
                 .collect(Collectors.toList());
         modelUser.setAll(usersList);
         peopleTile.getChildren().clear();
-        peopleTile.getChildren().add(new Label("test"));
+
         for(User u:users)
         {
 
