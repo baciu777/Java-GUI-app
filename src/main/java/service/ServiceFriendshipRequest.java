@@ -65,7 +65,7 @@ public class ServiceFriendshipRequest   {
      * @param id2 long
      */
 
-    private void sendRequest(Long id1, Long id2)
+    public void sendRequest(Long id1, Long id2)
     {
         FriendRequest f = new FriendRequest();
         Tuple<Long, Long> longLongTuple =new Tuple<>();
@@ -248,7 +248,7 @@ public class ServiceFriendshipRequest   {
         aux3 = (List<FriendRequest>)findAllFrom(aux2,him);
         if(aux3.size()!=0)
         {
-            return "respond";
+            return "pending";
         }
         aux1 = (List<FriendRequest>)findWithStatus(findAll, "REJECTED");
         aux2 = (List<FriendRequest>)findAllTo(aux1,him);

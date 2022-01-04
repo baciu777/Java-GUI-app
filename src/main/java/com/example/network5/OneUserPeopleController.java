@@ -4,15 +4,22 @@ import domain.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import service.ServiceFriendship;
 import service.ServiceFriendshipRequest;
 import service.ServiceUser;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class OneUserPeopleController {
     HBox container;
-    Button sendRequest;
+    VBox nameStatusContainer;
+    Button button1;
+    Button button2;
     Label relation;
     Label userName;
     Page loggedUser;
@@ -32,7 +39,29 @@ public class OneUserPeopleController {
         container = new HBox();
         userName = new Label();
         relation = new Label();
-        sendRequest = new Button("Send Request");
+        nameStatusContainer = new VBox();
+       setLogic();
+       setStyle();
+    }
+    public void setStyle()
+    {
+        container.setMinSize(200,70);
+        container.setMaxSize(300,70);
+        container.setStyle("-fx-background-color: #2d2d31;" +
+                "-fx-padding: 10 20 10 20;" +
+                "-fx-background-radius: 20");
+        userName.setStyle("-fx-text-fill:#e9e3d1;" +
+                "-fx-font-family: Century Gothic; ");
+        relation.setStyle("-fx-text-fill:#e9e3d1;" +
+                "-fx-font-family: Century Gothic;" +
+                "-fx-opacity: 70% ");
+        button1.setStyle("-fx-background-color: transparent; -fx-border-color: #e9e3d1;" +
+                "-fx-text-fill:#e9e3d1; -fx-font-family: Century Gothic;");
+        button2.setStyle("-fx-background-color: transparent; -fx-border-color: #e9e3d1;" +
+                "-fx-text-fill:#e9e3d1; -fx-font-family: Century Gothic;");
+    }
+    public void setLogic()
+    {
         userName.setText(peopleUser.getFirstName() + " " + peopleUser.getLastName());
 
         relation.setText("not friends");
@@ -45,23 +74,112 @@ public class OneUserPeopleController {
             relation.setText("you");
 
 
-        container.getChildren().add(userName);
-        container.getChildren().add(relation);
-        container.getChildren().add(sendRequest);
-        if (!Objects.equals(relation.getText(), "not friends")) {
-            sendRequest.setVisible(false);
-        }
-        sendRequest.setOnAction(event -> {
-            try {
-                handleSendRequest();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-    }
+        nameStatusContainer.getChildren().add(userName);
+        nameStatusContainer.getChildren().add(relation);
+        container.getChildren().add(nameStatusContainer);
 
+        setButtons();
+
+    }
+    public void setButtons()
+    {
+        button1 = new Button();
+        button2 = new Button();
+        Region region1 = new Region();
+        HBox.setHgrow(region1, Priority.ALWAYS);
+        if (Objects.equals(relation.getText(), "not friends")) {
+            button1.setText("Send Request");
+            button1.setOnAction(event -> {
+                try {
+                    handleSendRequest();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+            container.getChildren().add(region1);
+            container.getChildren().add(button1);
+        }
+        if(Objects.equals(relation.getText(), "requested"))
+        {
+            button1.setText("Delete Request");
+            button1.setOnAction(event -> {
+                try {
+                    handleUndoRequest();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            });
+            container.getChildren().add(region1);
+            container.getChildren().add(button1);
+        }
+        if(Objects.equals(relation.getText(), "friend"))
+        {
+            button1.setText("Delete");
+            container.setOnMousePressed(event->{button1.setVisible(true);});
+            container.setOnMouseExited(event->{button1.setVisible(false);});
+            button1.setOnAction(event->{deleteFriend();});
+            container.getChildren().add(region1);
+            container.getChildren().add(button1);
+        }
+        if(Objects.equals(relation.getText(), "pending"))
+        {
+            button1.setText("Accept");
+            button2.setText("Decline");
+
+            button1.setOnAction(event->{
+                try {
+                    acceptReq();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+            button2.setOnAction(event->{
+                try {
+                    rejectReq();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+            container.getChildren().add(region1);
+            VBox butonsContainer = new VBox();
+            butonsContainer.setSpacing(5);
+            butonsContainer.getChildren().add(button1);
+            butonsContainer.getChildren().add(button2);
+            container.getChildren().add(butonsContainer);
+        }
+
+
+    }
+    public void acceptReq() throws Exception {
+        servRequests.addFriend(loggedUser.getId(),peopleUser.getId());
+        control.initModelUser();
+    }
+    public void rejectReq() throws Exception {
+        servRequests.rejectRequest(loggedUser.getId(),peopleUser.getId());
+        control.initModelUser();
+    }
+    public void deleteFriend()
+    {
+        servFriend.deleteFriend(peopleUser.getId(),loggedUser.getId());
+        // userLogged.deleteFriend(userfriend);
+        List<User> newFR=new ArrayList<>();
+        //stergem si din prietenii userului logat(page)
+        loggedUser.removeFriend(peopleUser);
+        loggedUser.setFriends(newFR);
+        control.initModelUser();
+    }
+    public void handleUndoRequest()
+    {
+        servRequests.deleteRequest( peopleUser.getId(),loggedUser.getId());
+
+
+
+
+        control.initModelUser();
+    }
     public void handleSendRequest() throws Exception {
-        servRequests.addFriend(loggedUser.getId(), peopleUser.getId());
+        servRequests.sendRequest(loggedUser.getId(), peopleUser.getId());
         Tuple<Long, Long> tuple = new Tuple<>(loggedUser.getId(), peopleUser.getId());
 
         FriendRequest friendRequest = servRequests.findOne(tuple);
