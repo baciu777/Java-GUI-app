@@ -65,7 +65,7 @@ public class ServiceFriendshipRequest   {
      * @param id2 long
      */
 
-    private void sendRequest(Long id1, Long id2)
+    public void sendRequest(Long id1, Long id2)
     {
         FriendRequest f = new FriendRequest();
         Tuple<Long, Long> longLongTuple =new Tuple<>();

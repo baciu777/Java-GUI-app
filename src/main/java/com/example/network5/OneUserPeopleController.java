@@ -153,9 +153,11 @@ public class OneUserPeopleController {
     }
     public void acceptReq() throws Exception {
         servRequests.addFriend(loggedUser.getId(),peopleUser.getId());
+        control.initModelUser();
     }
     public void rejectReq() throws Exception {
         servRequests.rejectRequest(loggedUser.getId(),peopleUser.getId());
+        control.initModelUser();
     }
     public void deleteFriend()
     {
@@ -169,14 +171,15 @@ public class OneUserPeopleController {
     }
     public void handleUndoRequest()
     {
-        servRequests.deleteRequest(loggedUser.getId(), peopleUser.getId());
-        /* Baciu, nu mere :((((
-        nush ce face paginarea ta
-         */
+        servRequests.deleteRequest( peopleUser.getId(),loggedUser.getId());
+
+
+
+
         control.initModelUser();
     }
     public void handleSendRequest() throws Exception {
-        servRequests.addFriend(loggedUser.getId(), peopleUser.getId());
+        servRequests.sendRequest(loggedUser.getId(), peopleUser.getId());
         Tuple<Long, Long> tuple = new Tuple<>(loggedUser.getId(), peopleUser.getId());
 
         FriendRequest friendRequest = servRequests.findOne(tuple);

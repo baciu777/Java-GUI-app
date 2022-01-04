@@ -52,8 +52,21 @@ public class Page extends User{
     }
     public void removeFrRequestSent(DtoFriendReq fr)
     {
+/*
         this.friendRequestsSent.remove(fr);
+
+ */
+        for(DtoFriendReq x : this.friendRequestsSent)
+        {
+            if(Objects.equals(x.getFrom(), fr.getFrom()) && Objects.equals(x.getTo(), fr.getTo()))
+            {
+                this.friendRequestsSent.remove(x);
+                break;
+            }
+        }
+
     }
+
 
     @Override
     public List<User> getFriends() {

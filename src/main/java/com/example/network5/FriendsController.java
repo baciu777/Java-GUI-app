@@ -28,14 +28,8 @@ import java.util.stream.StreamSupport;
 public class FriendsController extends MenuController{
     @FXML
     TextField textFieldSearch;
-    @FXML
-    Button buttonDel;
-    @FXML
-    TableView<User> tableViewUsers;
-    @FXML
-    TableColumn<User, String> tableColumnFirstName;
-    @FXML
-    TableColumn<User, String> tableColumnLastName;
+
+
     @FXML
     TilePane friendsTile;
 
@@ -56,6 +50,7 @@ public class FriendsController extends MenuController{
         textFieldSearch.textProperty().addListener(o -> handleFilter());
         setLabelName();
         setStylePane();
+
     }
     private void setStylePane()
     {
@@ -66,11 +61,7 @@ public class FriendsController extends MenuController{
     @FXML
     public void initialize() {
 
-        buttonDel.setVisible(false);
-        tableColumnFirstName.setCellValueFactory(new PropertyValueFactory<User, String>("FirstName"));
-        tableColumnLastName.setCellValueFactory(new PropertyValueFactory<User, String>("LastName"));
 
-        tableViewUsers.setItems(modelFriendship);
 
 
     }
@@ -109,33 +100,6 @@ public class FriendsController extends MenuController{
         }
     }
 
-    public void handleDel()
-    {
-
-        User selected = (User) tableViewUsers.getSelectionModel().getSelectedItem();
-
-        if(selected==null)
-            return;
-        buttonDel.setVisible(true);
-
-    }
-    @FXML
-    public void handleDeleteFriend() {
-        try {
-            User selected = (User) tableViewUsers.getSelectionModel().getSelectedItem();
-
-            User found = serviceUser.findOne(selected.getId());
-            if (Objects.equals(found.getId(), userLogin.getId()))
-                throw new Exception("This is you");
-            serviceFr.check_update_deletes(userLogin,found);
-            serviceF.deleteFriend(userLogin.getId(), found.getId());
 
 
-
-
-            initModelFriendship();
-        } catch (Exception e) {
-            MessageAlert.showErrorMessage(null, e.getMessage());
-        }
-    }
 }
