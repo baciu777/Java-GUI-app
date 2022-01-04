@@ -14,7 +14,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="730.0" prefWidth="662.0" style="-fx-background-color: linear-gradient( #583b53,#2d2c30);" styleClass="f" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.network5.FriendsController">
+<AnchorPane prefHeight="730.0" prefWidth="662.0" style="-fx-background-color: linear-gradient(#493646 ,#2d2c30);" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.network5.FriendsController">
     <children>
         <Button layoutX="234.0" layoutY="267.0" mnemonicParsing="false" onAction="#handleFriends" style="-fx-background-color: transparent;" text="Friends" textFill="#e9e3d1">
             <font>
@@ -85,9 +85,9 @@
         </Button>
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="230.0" layoutX="21.0" layoutY="73.0" stroke="#e9e3d1" strokeType="INSIDE" strokeWidth="2.0" width="181.0" />
         <Line endX="715.4000244140625" endY="308.6000061035156" startX="234.00001525878906" startY="308.6000061035156" stroke="#e9e3d1" />
-        <TextField fx:id="textFieldSearch" layoutX="75.0" layoutY="322.0" onAction="#handleFilter" prefHeight="26.0" prefWidth="176.0" />
-        <TilePane fx:id="friendsTile" layoutX="100.0" layoutY="375.0" prefHeight="338.0" prefWidth="595.0" />
-        <Label layoutX="19.0" layoutY="322.0" prefHeight="26.0" prefWidth="56.0" text="Search" textFill="#e9e3d1" />
+        <TextField fx:id="textFieldSearch" layoutX="527.0" layoutY="322.0" onAction="#handleFilter" prefHeight="26.0" prefWidth="176.0" />
+        <TilePane fx:id="friendsTile" layoutX="93.0" layoutY="356.0" prefHeight="357.0" prefWidth="622.0" />
+        <Label layoutX="471.0" layoutY="322.0" prefHeight="26.0" prefWidth="56.0" text="Search" textFill="#e9e3d1" />
 
 
 

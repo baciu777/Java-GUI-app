@@ -89,17 +89,20 @@
 
 
 
-      <ListView fx:id="lvChatWindow" layoutX="387.0" layoutY="344.0" prefHeight="200.0" prefWidth="200.0" />
-      <TableView fx:id="tableViewChat" layoutX="149.0" layoutY="332.0" onMouseClicked="#initializeChat" prefHeight="191.0" prefWidth="194.0">
+      <ListView fx:id="lvChatWindow" layoutX="387.0" layoutY="344.0" prefHeight="306.0" prefWidth="279.0" />
+      <TableView fx:id="tableViewChat" layoutX="143.0" layoutY="344.0" onMouseClicked="#initializeChat" prefHeight="306.0" prefWidth="226.0">
          <columns>
             <TableColumn fx:id="tableColumnNameChat" prefWidth="199.20001220703125" text="Conversations" />
          </columns>
       </TableView>
-      <TextField fx:id="newMessage" layoutX="388.0" layoutY="563.0" />
-      <Button fx:id="sendMessage" layoutX="546.0" layoutY="562.0" mnemonicParsing="false" onAction="#handleUser1SubmitMessage" prefHeight="26.0" prefWidth="50.0" text="Send" />
+      <TextField fx:id="newMessage" layoutX="388.0" layoutY="658.0" prefHeight="53.0" prefWidth="194.0" />
+      <Button fx:id="sendMessage" layoutX="594.0" layoutY="660.0" mnemonicParsing="false" onAction="#handleUser1SubmitMessage" prefHeight="54.0" prefWidth="68.0" text="Send">
+         <font>
+            <Font size="18.0" />
+         </font></Button>
 
 
-      <Button layoutX="202.0" layoutY="563.0" mnemonicParsing="false" onAction="#showNewChatEditDialog" text="create new Chat" />
+      <Button layoutX="143.0" layoutY="667.0" mnemonicParsing="false" onAction="#showNewChatEditDialog" prefHeight="35.0" prefWidth="226.0" text="create new Chat" />
 
 
 
