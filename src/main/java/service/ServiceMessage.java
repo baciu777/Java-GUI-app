@@ -43,7 +43,7 @@ public class ServiceMessage {
      * @param toIds-list of user's ids
      * @param message-string
      */
-    public Long save( Long fromId, List<Long> toIds, String message) {
+    public void save( Long fromId, List<Long> toIds, String message) {
         User from=repoUser.findOne(fromId);
         List<User> to=new ArrayList<>();
         toIds.forEach(x->to.add(repoUser.findOne(x)));
@@ -62,7 +62,7 @@ public class ServiceMessage {
         Message save =repoMessage.save(mess);
         if (save != null)
             throw new ValidationException("id already used");
-    return id;
+
     }
 
     /**
@@ -209,7 +209,12 @@ public class ServiceMessage {
 
 
 
-
+    public Message getLastMessSaved()
+    {
+        List<Message> listM=new ArrayList<>();
+        repoMessage.findAll().forEach(listM::add);
+        return listM.get(listM.size()-1);
+    }
 
     public Iterable<Message> findAll()
     {

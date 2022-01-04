@@ -85,8 +85,8 @@ public class NewChatController extends ChatsController {
         if (!found) {
 
             try {
-                Long Id=serviceMessage.save(userLogin.getId(), takeToWithoutUserLoginIds(newChatUsers), newMess.getText());
-                Message newMessageChat = serviceMessage.findOne(Id);
+                serviceMessage.save(userLogin.getId(), takeToWithoutUserLoginIds(newChatUsers), newMess.getText());
+                Message newMessageChat = serviceMessage.getLastMessSaved();
                 userLogin.addMessage(newMessageChat);
 
                 chatMessages.add(newMessageChat);//get 1st user's text from his/her textfield and add message to observablelist
