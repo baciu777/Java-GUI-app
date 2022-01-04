@@ -56,15 +56,9 @@ public class PeopleController extends MenuController{
     public void initialize() {
 
 
-
-        populateUsers();
         textFieldSearch.textProperty().addListener(o -> handleFilter());
     }
-    @FXML
-    public void populateUsers() {
 
-
-    }
 
 
     public void initModelUser() {
@@ -98,15 +92,5 @@ public class PeopleController extends MenuController{
         }
     }
 
-    public void handleSend()
-    {
-
-
-    }
-    @FXML
-    public void handleSendRequest() {
-
-
-    }
 
 }

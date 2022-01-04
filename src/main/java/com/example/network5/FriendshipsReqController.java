@@ -32,8 +32,7 @@ public class FriendshipsReqController extends MenuController {
     TableView<DtoFriendReq> tableViewFriendReq;
     @FXML
     TableColumn<DtoFriendReq, String> tableColumnFrom;
-    @FXML
-    TableColumn<DtoFriendReq, String> tableColumnTo;
+
 
     @FXML
     TableColumn<DtoFriendReq, String> tableColumnDate;
@@ -45,8 +44,7 @@ public class FriendshipsReqController extends MenuController {
     TableColumn<DtoFriendReq, String> tableColumnDecline;
     @FXML
     TableView<DtoFriendReq> tableViewFriendReq2;
-    @FXML
-    TableColumn<DtoFriendReq, String> tableColumnFrom2;
+
     @FXML
     TableColumn<DtoFriendReq, String> tableColumnTo2;
 
@@ -83,7 +81,7 @@ public class FriendshipsReqController extends MenuController {
 
 
         tableColumnFrom.setCellValueFactory(new PropertyValueFactory<DtoFriendReq, String>("from"));
-        tableColumnTo.setCellValueFactory(new PropertyValueFactory<DtoFriendReq, String>("to"));
+
         tableColumnDate.setCellValueFactory(new PropertyValueFactory<DtoFriendReq, String>("date"));
         tableColumnStatus.setCellValueFactory(new PropertyValueFactory<DtoFriendReq, String>("status"));
         tableColumnAccept.setCellValueFactory(new PropertyValueFactory<DtoFriendReq, String>("imageAcc"));
@@ -91,7 +89,7 @@ public class FriendshipsReqController extends MenuController {
 
         tableViewFriendReq.setItems(modelFriendshipReq);
 
-        tableColumnFrom2.setCellValueFactory(new PropertyValueFactory<DtoFriendReq, String>("from"));
+
         tableColumnTo2.setCellValueFactory(new PropertyValueFactory<DtoFriendReq, String>("to"));
         tableColumnDate2.setCellValueFactory(new PropertyValueFactory<DtoFriendReq, String>("date"));
         tableColumnStatus2.setCellValueFactory(new PropertyValueFactory<DtoFriendReq, String>("status"));
@@ -170,10 +168,16 @@ public class FriendshipsReqController extends MenuController {
                     ImageView imgDec = setImgDec();
                     x.setImageAcc(imgAcc);
                     x.setImageDec(imgDec);
+                    if(!Objects.equals(x.getStatus(), "PENDING"))
+                    {
+                        imgAcc.setVisible(false);
+                        imgDec.setVisible(false);
+                        // se afiseaza butoanele doar atunci cand se pot apasa
+                    }
                     return x;
                 })
                 .collect(Collectors.toList());
-
+            // se afiseaza in tabel doar
         modelFriendshipReq.setAll(friendshipsReqList);
 
     }

@@ -82,7 +82,7 @@ public class OneUserFriendController {
         List<User> newFR=new ArrayList<>();
         //stergem si din prietenii userului logat(page)
         userLogged.removeFriend(userfriend);
-        userLogged.setFriends(newFR);
+        //userLogged.setFriends(newFR);
         control.initModelFriendship();
     }
 }

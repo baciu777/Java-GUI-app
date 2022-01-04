@@ -92,7 +92,6 @@
 
       <TableView fx:id="tableViewFriendReq2" layoutX="153.0" layoutY="589.0" prefHeight="114.0" prefWidth="486.0">
          <columns>
-            <TableColumn fx:id="tableColumnFrom2" prefWidth="88.00006103515625" text="From" />
             <TableColumn fx:id="tableColumnTo2" prefWidth="82.39996337890625" text="To" />
             <TableColumn fx:id="tableColumnStatus2" minWidth="8.79998779296875" prefWidth="100.0" text="Status" />
             <TableColumn fx:id="tableColumnDate2" minWidth="0.0" prefWidth="127.2000732421875" text="Date" />
@@ -112,7 +111,6 @@
       <TableView fx:id="tableViewFriendReq" layoutX="146.0" layoutY="358.0" prefHeight="186.0" prefWidth="486.0">
          <columns>
             <TableColumn fx:id="tableColumnFrom" prefWidth="88.00006103515625" text="From" />
-            <TableColumn fx:id="tableColumnTo" prefWidth="73.59991455078125" text="To" />
             <TableColumn fx:id="tableColumnStatus" minWidth="8.79998779296875" prefWidth="97.60003662109375" text="Status" />
             <TableColumn fx:id="tableColumnDate" minWidth="0.0" prefWidth="111.20001220703125" text="Date" />
             <TableColumn fx:id="tableColumnAccept" prefWidth="56.800048828125" text="Accept" />
