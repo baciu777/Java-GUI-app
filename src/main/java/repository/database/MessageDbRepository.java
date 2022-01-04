@@ -149,31 +149,43 @@ public class MessageDbRepository implements Repository<Long, Message> {
         validator.validate(entity);
         Message message = null;
         String sql = "insert into messages (fromm,messagem,replym,datem) values(?,?,?,'" + entity.getDate() + "')";
+
+        String sql3 = "select id from messages where fromm = ? and messagem = ? order by id desc limit 1";
         try (Connection connection = DriverManager.getConnection(url, username, password);
-             PreparedStatement ps = connection.prepareStatement(sql)
+             PreparedStatement ps = connection.prepareStatement(sql);
+             PreparedStatement ps3 = connection.prepareStatement(sql3)
         ) {
-            message = this.findOneConn(entity.getId(), connection);
-            if (message != null)
-                return message;
+            //message = this.findOneConn(entity.getId(), connection);
+            //if (message != null)
+                //return message;
             ps.setLong(1, entity.getFrom().getId());
-
-            String sqlChat = "insert into chats (id1,tom) values (?,?)";
-            PreparedStatement psChat = connection.prepareStatement(sqlChat);
-            List<User> listTo = entity.getTo();
-            for (User ur : listTo) {
-                psChat.setLong(1, entity.getId());
-                psChat.setLong(2, ur.getId());
-                psChat.executeUpdate();
-            }
-
-
             ps.setString(2, entity.getMessage());
             if (entity.getReply() != null)
                 ps.setLong(3, entity.getReply().getId());
             else
                 ps.setLong(3, -1L);
 
+
+
             ps.executeUpdate();
+            ps3.setLong(1, entity.getFrom().getId());
+            ps3.setString(2, entity.getMessage());
+            ResultSet resultSet1 = ps3.executeQuery();
+            Long idBun=null;
+            if(resultSet1.next())
+                idBun=resultSet1.getLong("id");
+
+            String sqlChat = "insert into chats (id1,tom) values (?,?)";
+            PreparedStatement psChat = connection.prepareStatement(sqlChat);
+            List<User> listTo = entity.getTo();
+            for (User ur : listTo) {
+                psChat.setLong(1, idBun);
+                psChat.setLong(2, ur.getId());
+                psChat.executeUpdate();
+            }
+
+
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
