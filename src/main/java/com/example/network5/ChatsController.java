@@ -89,8 +89,9 @@ public class ChatsController extends MenuController {
          List<Chat> chats = new ArrayList<>();
         for (Message ms : mess) {
             List<Long> messageInvolved = new ArrayList<>();
-            if (Objects.equals(ms.getFrom().getId(), userLogin.getId()) ||
-                    ms.getTo().contains(userLogin)) {
+
+            if ((Objects.equals(ms.getFrom().getId(), userLogin.getId()) ||
+                    ms.getTo().contains(serviceUser.findOne(userLogin.getId())))) {
                 ms.getTo().forEach(x -> messageInvolved.add(x.getId()));
                 messageInvolved.add(ms.getFrom().getId());
                 List<Long> messageInvolvedSorted = messageInvolved.stream().sorted().collect(Collectors.toList());
@@ -113,6 +114,7 @@ public class ChatsController extends MenuController {
 
                     }
                     chats.add(chatNew);
+
                 }
 
 
@@ -120,6 +122,7 @@ public class ChatsController extends MenuController {
 
 
         }
+        System.out.println(userLogin.getMessages().size());
         modelChat.setAll(chats);
         return chats;
     }
@@ -194,8 +197,8 @@ public class ChatsController extends MenuController {
     private void handleUser1SubmitMessage(ActionEvent event) {
         Chat selected = (Chat) tableViewChat.getSelectionModel().getSelectedItem();
         try {
-            Long Id=serviceMessage.save(userLogin.getId(), takeToWithoutUserLoginIds(selected.getPeople()), newMessage.getText());
-            Message newMess = serviceMessage.findOne(Id);
+            serviceMessage.save(userLogin.getId(), takeToWithoutUserLoginIds(selected.getPeople()), newMessage.getText());
+            Message newMess = serviceMessage.getLastMessSaved();
                     userLogin.addMessage(newMess);
 
             chatMessages.add(newMess);//get 1st user's text from his/her textfield and add message to observablelist
