@@ -95,7 +95,7 @@
             <TableColumn fx:id="tableColumnTo2" prefWidth="82.39996337890625" text="To" />
             <TableColumn fx:id="tableColumnStatus2" minWidth="8.79998779296875" prefWidth="100.0" text="Status" />
             <TableColumn fx:id="tableColumnDate2" minWidth="0.0" prefWidth="127.2000732421875" text="Date" />
-            <TableColumn prefWidth="75.0" text="Unsend" />
+            <TableColumn fx:id="tableColumnUnsent" prefWidth="75.0" text="Unsend" />
          </columns>
       </TableView>
       <Label layoutX="142.0" layoutY="310.0" prefHeight="44.0" prefWidth="118.0" text="Received" textFill="WHITE">
