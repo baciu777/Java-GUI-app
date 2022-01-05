@@ -45,8 +45,8 @@ public class OneUserPeopleController {
     }
     public void setStyle()
     {
-        container.setMinSize(200,70);
-        container.setMaxSize(300,70);
+        container.setMinSize(270,70);
+        container.setMaxSize(270,70);
         container.setStyle("-fx-background-color: #2d2d31;" +
                 "-fx-padding: 10 20 10 20;" +
                 "-fx-background-radius: 20");
@@ -116,6 +116,7 @@ public class OneUserPeopleController {
         if(Objects.equals(relation.getText(), "friend"))
         {
             button1.setText("Delete");
+            button1.setVisible(false);
             container.setOnMousePressed(event->{button1.setVisible(true);});
             container.setOnMouseExited(event->{button1.setVisible(false);});
             button1.setOnAction(event->{deleteFriend();});

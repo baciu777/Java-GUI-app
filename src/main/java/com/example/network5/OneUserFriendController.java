@@ -60,8 +60,8 @@ public class OneUserFriendController {
     public void setStyle()
     {
 
-        container.setMinSize(200,50);
-        container.setMaxSize(300,50);
+        container.setMinSize(270,70);
+        container.setMaxSize(270,70);
         container.setStyle("-fx-background-color: #2d2d31;" +
                 "-fx-padding: 10 20 10 20;" +
                 "-fx-background-radius: 20");

@@ -28,7 +28,8 @@ import java.util.stream.StreamSupport;
 public class FriendsController extends MenuController{
     @FXML
     TextField textFieldSearch;
-
+    @FXML
+    ScrollPane scroll;
 
     @FXML
     TilePane friendsTile;
@@ -57,6 +58,8 @@ public class FriendsController extends MenuController{
         friendsTile.setHgap(30);
         friendsTile.setVgap(20);
         friendsTile.setPrefColumns(2);
+        scroll.setStyle("-fx-background: transparent;" +
+                "-fx-background-color: transparent;");
     }
     @FXML
     public void initialize() {

@@ -15,38 +15,41 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="730.0" prefWidth="662.0" style="-fx-background-color: linear-gradient( #583b53,#2d2c30);" styleClass="f" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.network5.FriendshipsReqController">
+<AnchorPane prefHeight="730.0" prefWidth="584.0" style="-fx-background-color: linear-gradient(  #726c93,#2d2c30);" styleClass="f" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.network5.FriendshipsReqController">
    <children>
-      <Button layoutX="234.0" layoutY="267.0" mnemonicParsing="false" onAction="#handleFriends" style="-fx-background-color: transparent;" text="Friends" textFill="#e9e3d1">
+      <Button layoutX="217.0" layoutY="267.0" mnemonicParsing="false" onAction="#handleFriends" style="-fx-background-color: transparent;" text="Friends" textFill="#e9e3d1">
          <font>
             <Font size="20.0" />
          </font>
       </Button>
-      <Button layoutX="326.0" layoutY="267.0" mnemonicParsing="false" onAction="#handleChats" style="-fx-background-color: transparent;" text="Chats" textFill="#e9e3d1">
+      <Button layoutX="308.0" layoutY="267.0" mnemonicParsing="false" onAction="#handleChats" style="-fx-background-color: transparent;" text="Chats" textFill="#e9e3d1">
          <font>
             <Font size="20.0" />
          </font>
       </Button>
-      <Button layoutX="403.0" layoutY="267.0" mnemonicParsing="false" onAction="#handleFriendRequests" style="-fx-background-color: transparent;" text="Friend Requests" textFill="#e9e3d1">
+      <Button layoutX="379.0" layoutY="267.0" mnemonicParsing="false" onAction="#handleFriendRequests" style="-fx-background-color: transparent;" text="Friend Requests" textFill="#e9e3d1">
          <font>
             <Font size="20.0" />
          </font>
       </Button>
-      <Button layoutX="571.0" layoutY="267.0" mnemonicParsing="false" onAction="#handlePeople" style="-fx-background-color: transparent;" text="People" textFill="#e9e3d1">
+      <Button layoutX="538.0" layoutY="267.0" mnemonicParsing="false" onAction="#handlePeople" style="-fx-background-color: transparent;" text="People" textFill="#e9e3d1">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+      <Button layoutX="616.0" layoutY="267.0" mnemonicParsing="false" onAction="#handleEvents" style="-fx-background-color: transparent;" text="Events" textFill="#e9e3d1">
          <font>
             <Font size="20.0" />
          </font>
       </Button>
 
       <Button layoutX="14.0" layoutY="529.0" mnemonicParsing="false" onAction="#handleCancel" prefHeight="60.0" prefWidth="65.0" style="-fx-background-color: transparent;" />
-
-
       <ImageView fitHeight="292.0" fitWidth="758.0" layoutX="-11.0" layoutY="-25.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@images/cover2.jpg" />
          </image>
       </ImageView>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" height="278.0" layoutX="-1.0" layoutY="-11.0" stroke="BLACK" strokeType="INSIDE" style="-fx-opacity: 50%;" width="733.0">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="278.0" layoutY="-11.0" stroke="BLACK" strokeType="INSIDE" style="-fx-opacity: 50%;" width="731.0">
          <fill>
             <LinearGradient endX="0.5833333333333333" endY="0.18844698414658073" startX="0.49999998374418786" startY="0.8598484920732903">
                <stops>
@@ -64,12 +67,12 @@
             </LinearGradient>
          </fill>
       </Rectangle>
-      <ImageView fitHeight="194.0" fitWidth="149.0" layoutX="37.0" layoutY="93.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="180.0" fitWidth="155.0" layoutX="33.0" layoutY="119.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@images/anonimUser2.jpg" />
+            <Image url="@images/anonimUser3.jpg" />
          </image>
       </ImageView>
-      <Label fx:id="idName" layoutX="220.0" layoutY="188.0" prefHeight="43.0" prefWidth="318.0" text="Label" textFill="#e9e3d1">
+      <Label fx:id="idName" layoutX="220.0" layoutY="166.0" prefHeight="43.0" prefWidth="318.0" text="Label" textFill="#e9e3d1">
          <font>
             <Font name="Century Gothic" size="31.0" />
          </font>
@@ -83,41 +86,45 @@
             </ImageView>
          </graphic>
       </Button>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="230.0" layoutX="21.0" layoutY="73.0" stroke="#e9e3d1" strokeType="INSIDE" strokeWidth="2.0" width="181.0" />
       <Line endX="715.4000244140625" endY="308.6000061035156" startX="234.00001525878906" startY="308.6000061035156" stroke="#e9e3d1" />
-
-
-
-
-
-      <TableView fx:id="tableViewFriendReq2" layoutX="153.0" layoutY="589.0" prefHeight="114.0" prefWidth="486.0">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="233.0" layoutX="19.0" layoutY="91.0" stroke="#e9e3d1" strokeType="INSIDE" strokeWidth="2.0" width="179.0" />
+      <Button layoutX="210.0" layoutY="200.0" mnemonicParsing="false" onAction="#handleNotifications" prefHeight="60.0" prefWidth="51.0" style="-fx-background-color: transparent;">
+         <graphic>
+            <ImageView fitHeight="53.0" fitWidth="48.0" layoutX="27.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/notif.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <TableView fx:id="tableViewFriendReq2" layoutX="191.0" layoutY="553.0" prefHeight="146.0" prefWidth="522.0">
          <columns>
-            <TableColumn fx:id="tableColumnTo2" prefWidth="82.39996337890625" text="To" />
-            <TableColumn fx:id="tableColumnStatus2" minWidth="8.79998779296875" prefWidth="100.0" text="Status" />
-            <TableColumn fx:id="tableColumnDate2" minWidth="0.0" prefWidth="127.2000732421875" text="Date" />
-            <TableColumn fx:id="tableColumnUnsent" prefWidth="75.0" text="Unsend" />
+            <TableColumn fx:id="tableColumnTo2" prefWidth="107.99998474121094" text="To" />
+            <TableColumn fx:id="tableColumnStatus2" minWidth="8.79998779296875" prefWidth="103.20001220703125" text="Status" />
+            <TableColumn fx:id="tableColumnDate2" minWidth="0.0" prefWidth="220.0" text="Date" />
+            <TableColumn fx:id="tableColumnUnsent" prefWidth="91.20001220703125" text="Unsend" />
          </columns>
       </TableView>
-      <Label layoutX="142.0" layoutY="310.0" prefHeight="44.0" prefWidth="118.0" text="Received" textFill="WHITE">
+      <Label layoutX="72.0" layoutY="365.0" prefHeight="44.0" prefWidth="118.0" text="Received" textFill="WHITE">
          <font>
             <Font name="Century Gothic" size="20.0" />
          </font>
       </Label>
-      <Label layoutX="153.0" layoutY="537.0" prefHeight="44.0" prefWidth="118.0" text="Requested" textFill="#ece3e3">
+      <Label layoutX="72.0" layoutY="553.0" prefHeight="44.0" prefWidth="118.0" text="Requested" textFill="#ece3e3">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <TableView fx:id="tableViewFriendReq" layoutX="146.0" layoutY="358.0" prefHeight="186.0" prefWidth="486.0">
+      <TableView fx:id="tableViewFriendReq" layoutX="189.0" layoutY="365.0" prefHeight="159.0" prefWidth="522.0">
          <columns>
-            <TableColumn fx:id="tableColumnFrom" prefWidth="88.00006103515625" text="From" />
-            <TableColumn fx:id="tableColumnStatus" minWidth="8.79998779296875" prefWidth="97.60003662109375" text="Status" />
-            <TableColumn fx:id="tableColumnDate" minWidth="0.0" prefWidth="111.20001220703125" text="Date" />
-            <TableColumn fx:id="tableColumnAccept" prefWidth="56.800048828125" text="Accept" />
-            <TableColumn fx:id="tableColumnDecline" prefWidth="51.2000732421875" text="Decline" />
+            <TableColumn fx:id="tableColumnFrom" prefWidth="111.19999694824219" text="From" />
+            <TableColumn fx:id="tableColumnStatus" minWidth="8.79998779296875" prefWidth="92.79998779296875" text="Status" />
+            <TableColumn fx:id="tableColumnDate" minWidth="0.0" prefWidth="161.5999755859375" text="Date" />
+            <TableColumn fx:id="tableColumnAccept" prefWidth="70.4000244140625" text="Accept" />
+            <TableColumn fx:id="tableColumnDecline" prefWidth="87.20001220703125" text="Decline" />
          </columns>
       </TableView>
-      <TextField fx:id="SearchingName" layoutX="427.0" layoutY="316.0" prefHeight="30.0" prefWidth="238.0" />
+      <TextField fx:id="SearchingName" layoutX="499.0" layoutY="317.0" prefHeight="26.0" prefWidth="214.0" />
 
 
 

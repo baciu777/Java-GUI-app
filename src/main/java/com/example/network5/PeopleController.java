@@ -23,7 +23,8 @@ public class PeopleController extends MenuController{
     @FXML
     TextField textFieldSearch;
 
-
+    @FXML
+    ScrollPane scroll;
     @FXML
     TilePane peopleTile;
     ObservableList<DtoUser> modelUser = FXCollections.observableArrayList();
@@ -47,8 +48,11 @@ public class PeopleController extends MenuController{
     private void setStylePane()
     {
         peopleTile.setHgap(30);
-        peopleTile.setVgap(20);
+        peopleTile.setVgap(30);
         peopleTile.setPrefColumns(2);
+       scroll.setStyle("-fx-background: transparent;" +
+               "-fx-background-color: transparent;");
+
 
     }
 
