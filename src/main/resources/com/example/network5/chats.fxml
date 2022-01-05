@@ -90,7 +90,7 @@
 
 
       <ListView fx:id="lvChatWindow" layoutX="387.0" layoutY="344.0" prefHeight="306.0" prefWidth="279.0" />
-      <TableView fx:id="tableViewChat" layoutX="143.0" layoutY="344.0" onMouseClicked="#initializeChat" prefHeight="306.0" prefWidth="226.0">
+      <TableView   fx:id="tableViewChat" layoutX="143.0" layoutY="344.0" onMouseClicked="#initializeChat" prefHeight="306.0" prefWidth="226.0">
          <columns>
             <TableColumn fx:id="tableColumnNameChat" prefWidth="199.20001220703125" text="Conversations" />
          </columns>

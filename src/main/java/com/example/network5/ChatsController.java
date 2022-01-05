@@ -1,5 +1,6 @@
 package com.example.network5;
 
+import ChangeEvent.MessageTaskChangeEvent;
 import domain.*;
 import domain.validation.ValidationException;
 import javafx.collections.FXCollections;
@@ -18,6 +19,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import observer.Observer;
 import service.ServiceFriendship;
 import service.ServiceFriendshipRequest;
 import service.ServiceMessage;
@@ -30,7 +32,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public class ChatsController extends MenuController {
+public class ChatsController extends MenuController implements Observer<MessageTaskChangeEvent> {
 
     @FXML
     TableView<Chat> tableViewChat;
@@ -52,7 +54,7 @@ public class ChatsController extends MenuController {
 
     ObservableList<Message> chatMessages = FXCollections.observableArrayList();//create observablelist for listview
 
-
+    Chat chatSelected=null;
     public void set(ServiceUser service, ServiceMessage mess, ServiceFriendship serviceFriendshipNew, ServiceFriendshipRequest serviceFriendRequestt, Stage stage, Page user) {
 
         this.serviceUser = service;
@@ -63,7 +65,7 @@ public class ChatsController extends MenuController {
         this.dialogStage = stage;
         this.userLogin = user;
 
-
+        serviceMessage.addObserver(this);
         initModelChat();
 
         setLabelName();
@@ -140,11 +142,13 @@ public class ChatsController extends MenuController {
         // TODO
 
         Chat selected = (Chat) tableViewChat.getSelectionModel().getSelectedItem();
-        if (selected == null)
-            return;
+        if (selected != null)
+            chatSelected=selected;
 
+        if(chatSelected==null)
+            return;
         chatMessages.setAll(
-                serviceMessage.groupChat(userLogin.getMessages(), selected.getPeople()));
+                serviceMessage.groupChat(userLogin.getMessages(), chatSelected.getPeople()));
 
         lvChatWindow.setItems(chatMessages);//attach the observable list to the listview
         lvChatWindow.setCellFactory(param -> {
@@ -196,13 +200,15 @@ public class ChatsController extends MenuController {
     @FXML
     private void handleUser1SubmitMessage(ActionEvent event) {
         Chat selected = (Chat) tableViewChat.getSelectionModel().getSelectedItem();
-        try {
-            serviceMessage.save(userLogin.getId(), takeToWithoutUserLoginIds(selected.getPeople()), newMessage.getText());
-            Message newMess = serviceMessage.getLastMessSaved();
-                    userLogin.addMessage(newMess);
 
-            chatMessages.add(newMess);//get 1st user's text from his/her textfield and add message to observablelist
-            initializeChat();
+        try {
+            System.out.println("inceppp");
+            serviceMessage.save(userLogin.getId(), takeToWithoutUserLoginIds(selected.getPeople()), newMessage.getText());
+            //Message newMess = serviceMessage.getLastMessSaved();
+                    //userLogin.addMessage(newMess);
+            System.out.println("teerminnn");
+            //chatMessages.add(newMess);//get 1st user's text from his/her textfield and add message to observablelist
+            //initializeChat();
             newMessage.setText("");//clear 1st user's textfield
         } catch (ValidationException e) {
             MessageAlert.showErrorMessage(null, e.getMessage());
@@ -257,4 +263,15 @@ public class ChatsController extends MenuController {
 
     }
 
+    @Override
+    public void update(MessageTaskChangeEvent messageTaskChangeEvent) {
+        System.out.println("intruuuuuuu");
+        System.out.println(messageTaskChangeEvent.getData());
+            userLogin.addMessage(messageTaskChangeEvent.getData());
+
+            initModelChat();
+            initializeChat();
+
+
+    }
 }
