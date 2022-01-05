@@ -88,6 +88,7 @@
          </graphic>
       </Button>
       <Line endX="715.4000244140625" endY="308.6000061035156" startX="234.00001525878906" startY="308.6000061035156" stroke="#e9e3d1" />
+
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="233.0" layoutX="19.0" layoutY="91.0" stroke="#e9e3d1" strokeType="INSIDE" strokeWidth="2.0" width="179.0" />
       <Button layoutX="210.0" layoutY="200.0" mnemonicParsing="false" onAction="#handleNotifications" prefHeight="60.0" prefWidth="51.0" style="-fx-background-color: transparent;">
          <graphic>
@@ -100,6 +101,7 @@
       </Button>
       <ListView fx:id="lvChatWindow" layoutX="299.0" layoutY="344.0" prefHeight="278.0" prefWidth="396.0" />
       <TableView fx:id="tableViewChat" layoutX="114.0" layoutY="344.0" onMouseClicked="#initializeChat" prefHeight="278.0" prefWidth="168.0">
+
          <columns>
             <TableColumn fx:id="tableColumnNameChat" prefWidth="166.40000915527344" text="Conversations" />
          </columns>

@@ -47,6 +47,7 @@ public class LoginController {
 
     @FXML
     public void handleCancel(){
+
         showWelcomeEditDialog();
     }
 
@@ -201,24 +202,7 @@ public class LoginController {
         //dialogStage=stage;
     }
     public void showWelcomeEditDialog() {
-        try {
-            // create a new stage for the popup dialog.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("welcomePage.fxml"));
+        dialogStage.close();
 
-            AnchorPane root = (AnchorPane) loader.load();
-
-
-            Scene scene = new Scene(root);
-            dialogStage.setScene(scene);
-
-            WelcomeController controller = loader.getController();
-            controller.setService(servUser,serviceMessage,serviceFriendship,serviceFriendRequest,serviceEvent,dialogStage);
-
-            dialogStage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

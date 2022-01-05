@@ -86,13 +86,13 @@ public class NewChatController extends ChatsController {
 
             try {
                 serviceMessage.save(userLogin.getId(), takeToWithoutUserLoginIds(newChatUsers), newMess.getText());
-                Message newMessageChat = serviceMessage.getLastMessSaved();
-                userLogin.addMessage(newMessageChat);
+                //Message newMessageChat = serviceMessage.getLastMessSaved();
+                //userLogin.addMessage(newMessageChat);
 
-                chatMessages.add(newMessageChat);//get 1st user's text from his/her textfield and add message to observablelist
+                //chatMessages.add(newMessageChat);//get 1st user's text from his/her textfield and add message to observablelist
 
                 newMess.setText("");//clear 1st user's textfield
-                controllerChat.initModelChat();
+                //controllerChat.initModelChat();
                 Alert informationAlert = new Alert(Alert.AlertType.INFORMATION);
                 informationAlert.setHeaderText("Chat created");
                 informationAlert.showAndWait();

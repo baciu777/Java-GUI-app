@@ -225,25 +225,29 @@ public class MenuController  {
         }
     }
     public void showWelcomeEditDialog() {
-        try {
+        dialogStage.close();
+        //am schimbat aici
+        //try {
+
             // create a new stage for the popup dialog.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("welcomePage.fxml"));
+           // FXMLLoader loader = new FXMLLoader();
+           // loader.setLocation(getClass().getResource("welcomePage.fxml"));
 
-            AnchorPane root = (AnchorPane) loader.load();
+           // AnchorPane root = (AnchorPane) loader.load();
 
 
-            Scene scene = new Scene(root);
-            dialogStage.setScene(scene);
+           // Scene scene = new Scene(root);
+            //dialogStage.setScene(scene);
 
-            WelcomeController controller = loader.getController();
-            controller.setService(serviceUser,serviceMessage,serviceF,serviceFr,serviceEvent,dialogStage);
+           // WelcomeController controller = loader.getController();
+            //controller.setService(serviceUser,serviceMessage,serviceF,serviceFr,serviceEvent,dialogStage);
 
-            dialogStage.show();
+            //dialogStage.show();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        //} catch (IOException e) {
+           // e.printStackTrace();
+       // }
+
     }
     protected void setLabelName()
     {
