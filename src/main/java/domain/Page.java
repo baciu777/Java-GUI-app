@@ -48,14 +48,19 @@ public class Page extends User{
     }
     public void removeFrRequestRec(DtoFriendReq fr)
     {
-        this.friendRequestsReceived.remove(fr);
+        this.friendRequestsReceived.removeIf(x-> Objects.equals(fr.getFrom(), x.getFrom()) && Objects.equals(x.getTo(), fr.getTo()) && Objects.equals(fr.getStatus(), x.getStatus()));
+    }
+    public void addFriendPage(User f)
+    {
+
+        this.friends.add(f);
     }
     public void removeFrRequestSent(DtoFriendReq fr)
     {
-/*
-        this.friendRequestsSent.remove(fr);
 
- */
+        this.friendRequestsSent.removeIf(x-> Objects.equals(fr.getFrom(), x.getFrom()) && Objects.equals(x.getTo(), fr.getTo()) && Objects.equals(fr.getStatus(), x.getStatus()));
+
+ /*
         for(DtoFriendReq x : this.friendRequestsSent)
         {
             if(Objects.equals(x.getFrom(), fr.getFrom()) && Objects.equals(x.getTo(), fr.getTo()))
@@ -64,7 +69,7 @@ public class Page extends User{
                 break;
             }
         }
-
+*/
     }
 
 
@@ -90,6 +95,10 @@ public class Page extends User{
     public void addMessage(Message mess)
     {
         messages.add(mess);
+    }
+    public void addRequestRec(DtoFriendReq fr)
+    {
+        friendRequestsReceived.add(fr);
     }
     //DACA FACEAM OBSERVER IN PAGE NU ERA LA FEL DE EFICIENT, DEOARECE RELUAM TOT DIN BAZA DE DATE CAND SE
     //SCHIMBA CEVA, ASA DOAR ADAUG CATE UN PRIETEN/REQUEST/MESAJ

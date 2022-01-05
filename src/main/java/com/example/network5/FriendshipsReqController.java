@@ -11,12 +11,9 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import service.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 public class FriendshipsReqController extends MenuController {
 
@@ -32,8 +29,7 @@ public class FriendshipsReqController extends MenuController {
     TableView<DtoFriendReq> tableViewFriendReq;
     @FXML
     TableColumn<DtoFriendReq, String> tableColumnFrom;
-    @FXML
-    TableColumn<DtoFriendReq, String> tableColumnTo;
+
 
     @FXML
     TableColumn<DtoFriendReq, String> tableColumnDate;
@@ -45,8 +41,7 @@ public class FriendshipsReqController extends MenuController {
     TableColumn<DtoFriendReq, String> tableColumnDecline;
     @FXML
     TableView<DtoFriendReq> tableViewFriendReq2;
-    @FXML
-    TableColumn<DtoFriendReq, String> tableColumnFrom2;
+
     @FXML
     TableColumn<DtoFriendReq, String> tableColumnTo2;
 
@@ -54,10 +49,11 @@ public class FriendshipsReqController extends MenuController {
     TableColumn<DtoFriendReq, String> tableColumnDate2;
     @FXML
     TableColumn<DtoFriendReq, String> tableColumnStatus2;
+    @FXML
+    TableColumn<DtoFriendReq, String> tableColumnUnsent;
+    ObservableList<DtoFriendReq> modelFriendshipReqRec = FXCollections.observableArrayList();
 
-    ObservableList<DtoFriendReq> modelFriendshipReq = FXCollections.observableArrayList();
-
-    ObservableList<DtoFriendReq> modelFriendshipReq2 = FXCollections.observableArrayList();
+    ObservableList<DtoFriendReq> modelFriendshipReqSent = FXCollections.observableArrayList();
 
     public void set(ServiceUser service, ServiceMessage mess, ServiceFriendship serviceFriendshipNew, ServiceFriendshipRequest serviceFriendRequestt, ServiceEvent servEvent, Stage stage, Page user) {
 
@@ -71,8 +67,8 @@ public class FriendshipsReqController extends MenuController {
         this.serviceEvent = servEvent;
 
 //        initModelFriendship();
-        initModelFriendshipReq();
-        initModelFriendshipReq2();
+        initModelFriendshipReqRec();
+        initModelFriendshipReqSent();
         setLabelName();
 
     }
@@ -83,20 +79,21 @@ public class FriendshipsReqController extends MenuController {
 
 
         tableColumnFrom.setCellValueFactory(new PropertyValueFactory<DtoFriendReq, String>("from"));
-        tableColumnTo.setCellValueFactory(new PropertyValueFactory<DtoFriendReq, String>("to"));
+
         tableColumnDate.setCellValueFactory(new PropertyValueFactory<DtoFriendReq, String>("date"));
         tableColumnStatus.setCellValueFactory(new PropertyValueFactory<DtoFriendReq, String>("status"));
         tableColumnAccept.setCellValueFactory(new PropertyValueFactory<DtoFriendReq, String>("imageAcc"));
         tableColumnDecline.setCellValueFactory(new PropertyValueFactory<DtoFriendReq, String>("imageDec"));
 
-        tableViewFriendReq.setItems(modelFriendshipReq);
+        tableViewFriendReq.setItems(modelFriendshipReqRec);
 
-        tableColumnFrom2.setCellValueFactory(new PropertyValueFactory<DtoFriendReq, String>("from"));
+
         tableColumnTo2.setCellValueFactory(new PropertyValueFactory<DtoFriendReq, String>("to"));
         tableColumnDate2.setCellValueFactory(new PropertyValueFactory<DtoFriendReq, String>("date"));
         tableColumnStatus2.setCellValueFactory(new PropertyValueFactory<DtoFriendReq, String>("status"));
+        tableColumnUnsent.setCellValueFactory(new PropertyValueFactory<DtoFriendReq, String>("imageUndo"));
 
-        tableViewFriendReq2.setItems(modelFriendshipReq2);
+        tableViewFriendReq2.setItems(modelFriendshipReqSent);
 
     }
 
@@ -123,7 +120,7 @@ public class FriendshipsReqController extends MenuController {
             //neaparat astaaaaa
             userLogin.removeFrRequestRec(selected);
 
-            initModelFriendshipReq();
+            initModelFriendshipReqRec();
         } catch (Exception e) {
             MessageAlert.showErrorMessage(null, e.getMessage());
         }
@@ -137,7 +134,7 @@ public class FriendshipsReqController extends MenuController {
 
             String fullName = selected.getFrom();
             User found = serviceUser.findbyNameFirst(fullName);
-            User found2 = serviceUser.findOne(found.getId());
+
 
             if (Objects.equals(found.getId(), userLogin.getId()))
                 throw new Exception("This is you");
@@ -152,7 +149,28 @@ public class FriendshipsReqController extends MenuController {
             List<User> friends = userLogin.getFriends();
             friends.add(found);
             userLogin.setFriends(friends);
-            initModelFriendshipReq();
+            initModelFriendshipReqRec();
+        } catch (Exception e) {
+            MessageAlert.showErrorMessage(null, e.getMessage());
+        }
+
+    }
+    @FXML
+    public void handleUndoRequest() {
+        try {
+            DtoFriendReq selected = tableViewFriendReq2.getSelectionModel().getSelectedItem();
+
+
+            String fullName = selected.getTo();
+            User found = serviceUser.findbyNameFirst(fullName);
+
+
+            if (Objects.equals(found.getId(), userLogin.getId()))
+                throw new Exception("This is you");
+
+            userLogin.removeFrRequestSent(selected);
+            serviceFr.deleteRequest( found.getId(),userLogin.getId());
+            initModelFriendshipReqSent();
         } catch (Exception e) {
             MessageAlert.showErrorMessage(null, e.getMessage());
         }
@@ -160,7 +178,7 @@ public class FriendshipsReqController extends MenuController {
     }
 
 
-    protected void initModelFriendshipReq() {
+    protected void initModelFriendshipReqRec() {
 
         List<DtoFriendReq> friendshipsReqList = userLogin.getFriendRequestsReceived().stream()
 
@@ -170,11 +188,12 @@ public class FriendshipsReqController extends MenuController {
                     ImageView imgDec = setImgDec();
                     x.setImageAcc(imgAcc);
                     x.setImageDec(imgDec);
+
                     return x;
                 })
                 .collect(Collectors.toList());
-
-        modelFriendshipReq.setAll(friendshipsReqList);
+            // se afiseaza in tabel doar
+        modelFriendshipReqRec.setAll(friendshipsReqList);
 
     }
 
@@ -191,6 +210,23 @@ public class FriendshipsReqController extends MenuController {
         image.setFitWidth(20);
         image.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, event -> {
             handleAcceptRequest();
+            event.consume();
+        });
+        return image;
+    }
+    private ImageView setImgUndo() {
+        ImageView image = new ImageView(new Image(this.getClass().getResourceAsStream("/icons8-checkbox-tick-mark-accept-your-checklist-queries-96.png")));
+
+        image.mouseTransparentProperty().addListener((observable, oldVal, newVal) -> {
+            if (newVal) {
+                image.setMouseTransparent(false);
+            }
+        });
+
+        image.setFitHeight(20);
+        image.setFitWidth(20);
+        image.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, event -> {
+            handleUndoRequest();
             event.consume();
         });
         return image;
@@ -218,20 +254,21 @@ public class FriendshipsReqController extends MenuController {
     }
 
 
-    protected void initModelFriendshipReq2() {
+    protected void initModelFriendshipReqSent() {
+
         List<DtoFriendReq> friendshipsReqList = userLogin.getFriendRequestsSent().stream()
 
                 .map(x ->
                 {
-                    ImageView imgAcc = setImgAcc();
-                    ImageView imgDec = setImgDec();
-                    x.setImageAcc(imgAcc);
-                    x.setImageDec(imgDec);
+                    ImageView imgUndo = setImgUndo();
+
+
+                    x.setImageUndo(imgUndo);
                     return x;
                 })
                 .collect(Collectors.toList());
 
-        modelFriendshipReq2.setAll(friendshipsReqList);
+        modelFriendshipReqSent.setAll(friendshipsReqList);
 
     }
 

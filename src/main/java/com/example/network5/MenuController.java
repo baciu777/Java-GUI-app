@@ -170,7 +170,7 @@ public class MenuController  {
             dialogStage.setScene(scene);
 
             ChatsController controller = loader.getController();
-            controller.set(serviceUser,serviceMessage,serviceF,serviceFr,dialogStage,userLogin);
+            controller.set(serviceUser,serviceMessage,serviceF,serviceFr,serviceEvent,dialogStage,userLogin);
 
             dialogStage.show();
 
@@ -194,7 +194,7 @@ public class MenuController  {
             dialogStage.setScene(scene);
 
             PeopleController controller = loader.getController();
-            controller.set(serviceUser,serviceMessage,serviceF,serviceFr,dialogStage,userLogin);
+            controller.set(serviceUser,serviceMessage,serviceF,serviceFr,serviceEvent,dialogStage,userLogin);
 
 
             dialogStage.show();
@@ -216,7 +216,7 @@ public class MenuController  {
             dialogStage.setScene(scene);
 
             FriendsController controller = loader.getController();
-            controller.set(serviceUser,serviceMessage,serviceF,serviceFr,dialogStage,userLogin);
+            controller.set(serviceUser,serviceMessage,serviceF,serviceFr,serviceEvent,dialogStage,userLogin);
 
             dialogStage.show();
 
