@@ -3,6 +3,7 @@ package service;
 import ChangeEvent.ChangeEventType;
 import ChangeEvent.Event;
 
+import ChangeEvent.MessageTaskChangeEvent;
 import domain.Message;
 import domain.Page;
 import domain.User;
@@ -23,9 +24,10 @@ import java.util.stream.Collectors;
  * repoMessage-Message Repository
  * repoUser-User Repository
  */
-public class ServiceMessage {
+public class ServiceMessage implements Observable<MessageTaskChangeEvent> {
     private Repository<Long, Message> repoMessage;
     private Repository<Long, User> repoUser;
+    private List<Observer<MessageTaskChangeEvent>> observers=new ArrayList<>();
 
     /**
      * constructor
@@ -50,18 +52,14 @@ public class ServiceMessage {
         Message mess=new Message( from,  to,  message,null);
         mess.setDate(LocalDateTime.now());
         long id = 0L;
-        for (Message ms:  repoMessage.findAll()) {
-            if (ms.getId() > id)
-                id = ms.getId();
 
-        }
-        id++;
 
-        mess.setId(id);
+        //mess.setId(id);
 
         Message save =repoMessage.save(mess);
         if (save != null)
             throw new ValidationException("id already used");
+        notifyObservers(new MessageTaskChangeEvent( mess));
 
     }
 
@@ -90,8 +88,11 @@ public class ServiceMessage {
         mess.setId(id);
 
         Message save =repoMessage.save(mess);
+
         if (save != null)
             throw new ValidationException("id already used");
+        notifyObservers(new MessageTaskChangeEvent( mess));
+
 
 
     }
@@ -222,4 +223,18 @@ public class ServiceMessage {
     }
 
 
+    @Override
+    public void addObserver(Observer<MessageTaskChangeEvent> e) {
+        observers.add(e);
+    }
+
+    @Override
+    public void removeObserver(Observer<MessageTaskChangeEvent> e) {
+        observers.remove(e);
+    }
+
+    @Override
+    public void notifyObservers(MessageTaskChangeEvent t) {
+        observers.stream().forEach(x->x.update(t));
+    }
 }

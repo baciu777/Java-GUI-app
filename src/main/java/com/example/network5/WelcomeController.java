@@ -63,7 +63,7 @@ public class WelcomeController {
             AnchorPane root = (AnchorPane) loader.load();
 
 
-
+            Stage dialogStage = new Stage();
             Scene scene = new Scene(root);
             dialogStage.setScene(scene);
 
@@ -96,7 +96,7 @@ public class WelcomeController {
             AnchorPane root = (AnchorPane) loader.load();
 
 
-
+            Stage dialogStage = new Stage();
             Scene scene = new Scene(root);
             dialogStage.setScene(scene);
 

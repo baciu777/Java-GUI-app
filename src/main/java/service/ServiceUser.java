@@ -46,15 +46,8 @@ public class ServiceUser  {
      */
     public void save(String firstname, String lastname, String username, String password, LocalDate birth) {
         User user = new User(firstname, lastname, username, birth);
-        long id = 0L;
-        for (User ur : repoUser.findAll()) {
-            if (ur.getId() > id)
-                id = ur.getId();
+        //long id = 0L;
 
-        }
-        id++;
-
-        user.setId(id);
         user.setPassword(password);
         User save = repoUser.save(user);
         if (save != null)
