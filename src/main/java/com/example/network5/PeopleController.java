@@ -8,10 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.TilePane;
 import javafx.stage.Stage;
-import service.ServiceFriendship;
-import service.ServiceFriendshipRequest;
-import service.ServiceMessage;
-import service.ServiceUser;
+import service.*;
 
 import java.util.List;
 import java.util.Objects;
@@ -31,12 +28,13 @@ public class PeopleController extends MenuController{
 
 
 
-    public void set(ServiceUser service, ServiceMessage mess, ServiceFriendship serviceFriendshipNew, ServiceFriendshipRequest serviceFriendRequestt, Stage stage, Page user) {
+    public void set(ServiceUser service, ServiceMessage mess, ServiceFriendship serviceFriendshipNew, ServiceFriendshipRequest serviceFriendRequestt, ServiceEvent servEvent, Stage stage, Page user) {
         this.serviceUser = service;
         this.serviceMessage = mess;
         this.serviceF = serviceFriendshipNew;
 
         this.serviceFr = serviceFriendRequestt;
+        this.serviceEvent = servEvent;
         this.dialogStage = stage;
         this.userLogin = user;
 

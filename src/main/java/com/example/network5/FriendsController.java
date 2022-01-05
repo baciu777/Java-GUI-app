@@ -14,10 +14,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import service.ServiceFriendship;
-import service.ServiceFriendshipRequest;
-import service.ServiceMessage;
-import service.ServiceUser;
+import service.*;
 
 import java.util.List;
 import java.util.Objects;
@@ -37,7 +34,7 @@ public class FriendsController extends MenuController{
 
     ObservableList<User> modelFriendship = FXCollections.observableArrayList();
 
-    public void set(ServiceUser service, ServiceMessage mess, ServiceFriendship serviceFriendshipNew, ServiceFriendshipRequest serviceFriendRequestt, Stage stage, Page user) {
+    public void set(ServiceUser service, ServiceMessage mess, ServiceFriendship serviceFriendshipNew, ServiceFriendshipRequest serviceFriendRequestt, ServiceEvent servEvent, Stage stage, Page user) {
 
         this.serviceUser = service;
         this.serviceMessage = mess;
@@ -45,6 +42,7 @@ public class FriendsController extends MenuController{
 
         this.serviceFr = serviceFriendRequestt;
         this.dialogStage = stage;
+        this.serviceEvent = servEvent;
         this.userLogin = user;
 
         initModelFriendship();

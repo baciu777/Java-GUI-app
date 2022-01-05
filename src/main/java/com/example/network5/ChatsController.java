@@ -18,10 +18,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import service.ServiceFriendship;
-import service.ServiceFriendshipRequest;
-import service.ServiceMessage;
-import service.ServiceUser;
+import service.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -53,7 +50,7 @@ public class ChatsController extends MenuController {
     ObservableList<Message> chatMessages = FXCollections.observableArrayList();//create observablelist for listview
 
 
-    public void set(ServiceUser service, ServiceMessage mess, ServiceFriendship serviceFriendshipNew, ServiceFriendshipRequest serviceFriendRequestt, Stage stage, Page user) {
+    public void set(ServiceUser service, ServiceMessage mess, ServiceFriendship serviceFriendshipNew, ServiceFriendshipRequest serviceFriendRequestt, ServiceEvent servEvent, Stage stage, Page user) {
 
         this.serviceUser = service;
         this.serviceMessage = mess;
@@ -61,6 +58,7 @@ public class ChatsController extends MenuController {
 
         this.serviceFr = serviceFriendRequestt;
         this.dialogStage = stage;
+        this.serviceEvent= servEvent;
         this.userLogin = user;
 
 
