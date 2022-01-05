@@ -203,10 +203,14 @@ public class ChatsController extends MenuController implements Observer<MessageT
     @FXML
     private void handleUser1SubmitMessage(ActionEvent event) {
         Chat selected = (Chat) tableViewChat.getSelectionModel().getSelectedItem();
+        if (selected != null)
+            chatSelected=selected;
 
+        if(chatSelected==null)
+            return;
         try {
             System.out.println("inceppp");
-            serviceMessage.save(userLogin.getId(), takeToWithoutUserLoginIds(selected.getPeople()), newMessage.getText());
+            serviceMessage.save(userLogin.getId(), takeToWithoutUserLoginIds(chatSelected.getPeople()), newMessage.getText());
             //Message newMess = serviceMessage.getLastMessSaved();
                     //userLogin.addMessage(newMess);
             System.out.println("teerminnn");

@@ -6,31 +6,111 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="579.0" style="-fx-background-color: linear-gradient(  #726c93,#2d2c30);" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.network5.EventsController">
+<AnchorPane prefHeight="730.0" prefWidth="584.0" style="-fx-background-color: linear-gradient(  #726c93,#2d2c30);" styleClass="f" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.network5.EventsController">
    <children>
-      <TableView fx:id="tableViewEvents" layoutX="35.0" layoutY="104.0" onMouseClicked="#handleGoing" prefHeight="258.0" prefWidth="271.0">
-        <columns>
-          <TableColumn fx:id="tableColumnNameEvent" prefWidth="112.79998779296875" text="name" />
-          <TableColumn fx:id="tableColumnDateEvent" prefWidth="151.20001220703125" text="date" />
-        </columns>
+      <Button layoutX="217.0" layoutY="267.0" mnemonicParsing="false" onAction="#handleFriends" style="-fx-background-color: transparent;" text="Friends" textFill="#e9e3d1">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+      <Button layoutX="308.0" layoutY="267.0" mnemonicParsing="false" onAction="#handleChats" style="-fx-background-color: transparent;" text="Chats" textFill="#e9e3d1">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+      <Button layoutX="379.0" layoutY="267.0" mnemonicParsing="false" onAction="#handleFriendRequests" style="-fx-background-color: transparent;" text="Friend Requests" textFill="#e9e3d1">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+      <Button layoutX="538.0" layoutY="267.0" mnemonicParsing="false" onAction="#handlePeople" style="-fx-background-color: transparent;" text="People" textFill="#e9e3d1">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+      <Button layoutX="616.0" layoutY="267.0" mnemonicParsing="false" onAction="#handleEvents" style="-fx-background-color: transparent;" text="Events" textFill="#e9e3d1">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+
+      <Button layoutX="14.0" layoutY="529.0" mnemonicParsing="false" onAction="#handleCancel" prefHeight="60.0" prefWidth="65.0" style="-fx-background-color: transparent;" />
+      <ImageView fitHeight="292.0" fitWidth="758.0" layoutX="-11.0" layoutY="-25.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/cover2.jpg" />
+         </image>
+      </ImageView>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="278.0" layoutY="-11.0" stroke="BLACK" strokeType="INSIDE" style="-fx-opacity: 50%;" width="731.0">
+         <fill>
+            <LinearGradient endX="0.5833333333333333" endY="0.18844698414658073" startX="0.49999998374418786" startY="0.8598484920732903">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.0" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </fill>
+      </Rectangle>
+      <ImageView fitHeight="180.0" fitWidth="155.0" layoutX="33.0" layoutY="119.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/anonimUser3.jpg" />
+         </image>
+      </ImageView>
+      <Label fx:id="idName" layoutX="220.0" layoutY="166.0" prefHeight="43.0" prefWidth="318.0" text="Label" textFill="#e9e3d1">
+         <font>
+            <Font name="Century Gothic" size="31.0" />
+         </font>
+      </Label>
+      <Button layoutX="20.0" layoutY="640.0" mnemonicParsing="false" onAction="#handleCancel" prefHeight="60.0" prefWidth="65.0" style="-fx-background-color: transparent;">
+         <graphic>
+            <ImageView fitHeight="52.0" fitWidth="53.0" layoutX="27.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/logout.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Line endX="715.4000244140625" endY="308.6000061035156" startX="234.00001525878906" startY="308.6000061035156" stroke="#e9e3d1" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="233.0" layoutX="19.0" layoutY="91.0" stroke="#e9e3d1" strokeType="INSIDE" strokeWidth="2.0" width="179.0" />
+      <Button layoutX="210.0" layoutY="200.0" mnemonicParsing="false" onAction="#handleNotifications" prefHeight="60.0" prefWidth="51.0" style="-fx-background-color: transparent;">
+         <graphic>
+            <ImageView fitHeight="53.0" fitWidth="48.0" layoutX="27.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/notif.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <TableView fx:id="tableViewEvents" layoutX="91.0" layoutY="353.0" onMouseClicked="#handleGoing" prefHeight="329.0" prefWidth="318.0">
+         <columns>
+            <TableColumn fx:id="tableColumnNameEvent" prefWidth="149.59996032714844" text="name" />
+            <TableColumn fx:id="tableColumnDateEvent" prefWidth="168.800048828125" text="date" />
+         </columns>
       </TableView>
-      <TextField fx:id="newName" layoutX="370.0" layoutY="247.0" prefHeight="26.0" prefWidth="175.0" />
-      <DatePicker fx:id="date" layoutX="370.0" layoutY="288.0" />
-      <Button fx:id="saveEvent" layoutX="409.0" layoutY="329.0" mnemonicParsing="false" onAction="#handleSaveEvent" text="Create Event" />
-      <Button fx:id="buttonGoingNotOnOff" layoutX="324.0" layoutY="122.0" mnemonicParsing="false" onAction="#Going" prefHeight="35.0" prefWidth="68.0" text="Going" textAlignment="CENTER">
+      <TextField fx:id="newName" layoutX="474.0" layoutY="562.0" prefHeight="26.0" prefWidth="175.0" />
+      <DatePicker fx:id="date" layoutX="474.0" layoutY="602.0" />
+      <Button fx:id="saveEvent" layoutX="520.0" layoutY="640.0" mnemonicParsing="false" onAction="#handleSaveEvent" text="Create Event" />
+      <Button fx:id="buttonGoingNotOnOff" layoutX="440.0" layoutY="353.0" mnemonicParsing="false" onAction="#Going" prefHeight="35.0" prefWidth="68.0" text="Going" textAlignment="CENTER">
          <font>
             <Font size="14.0" />
          </font></Button>
-      <Label layoutX="35.0" layoutY="14.0" text="Events" textFill="#e9e3d1">
-         <font>
-            <Font name="Century Gothic" size="36.0" />
-         </font>
-      </Label>
-      <Line endX="35.000022888183594" endY="60.40000915527344" startX="562.4000244140625" startY="60.4000129699707" stroke="#e9e3d1" />
-      <Line endX="35.000022888183594" endY="60.40000915527344" layoutX="-1.0" layoutY="8.0" startX="562.4000244140625" startY="60.4000129699707" stroke="#e9e3d1" />
+
    </children>
 </AnchorPane>

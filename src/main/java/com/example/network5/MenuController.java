@@ -99,7 +99,7 @@ public class MenuController  {
 
             AnchorPane root = (AnchorPane) loader.load();
 
-
+            Stage dialogStage = new Stage();
             Scene scene = new Scene(root);
             dialogStage.setScene(scene);
 
