@@ -48,17 +48,25 @@ public class Page extends User{
     }
     public void removeFrRequestRec(DtoFriendReq fr)
     {
-        this.friendRequestsReceived.removeIf(x-> Objects.equals(fr.getFrom(), x.getFrom()) && Objects.equals(x.getTo(), fr.getTo()) && Objects.equals(fr.getStatus(), x.getStatus()));
+        this.friendRequestsReceived.removeIf(x-> Objects.equals(fr.getFrom(), x.getFrom()) && Objects.equals(x.getTo(), fr.getTo()) );
     }
     public void addFriendPage(User f)
     {
 
         this.friends.add(f);
     }
+    public void setFriendReqRec(List<DtoFriendReq> fr)
+    {
+        this.friendRequestsReceived=fr;
+    }
+    public void setFriendReqSent(List<DtoFriendReq> fr)
+    {
+        this.friendRequestsSent=fr;
+    }
     public void removeFrRequestSent(DtoFriendReq fr)
     {
 
-        this.friendRequestsSent.removeIf(x-> Objects.equals(fr.getFrom(), x.getFrom()) && Objects.equals(x.getTo(), fr.getTo()) && Objects.equals(fr.getStatus(), x.getStatus()));
+        this.friendRequestsSent.removeIf(x-> Objects.equals(fr.getFrom(), x.getFrom()) && Objects.equals(x.getTo(), fr.getTo()) );
 
  /*
         for(DtoFriendReq x : this.friendRequestsSent)

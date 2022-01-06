@@ -62,13 +62,11 @@ public class FriendshipsReqController extends MenuController  {
 
 
 
-                System.out.println("daaaaaaaaaaaa");
                 FriendRequest frR = frRequestChangeEvent.getData();
-                /////////////////////////////baaa
-                if (Objects.equals(frR.getId().getRight(), userLogin.getId()) ) {
+
                     initModelFriendshipReqRec();
                     initModelFriendshipReqSent();
-                }
+
             }
         };
 
@@ -165,10 +163,7 @@ public class FriendshipsReqController extends MenuController  {
             //aici putem scoate de tot approved din baza de date!!!!!!!!!!!
             serviceFr.check_update_deletes(found, userLoginNew);//ar trebui sa se stearga approved requests
 
-            userLogin.removeFrRequestRec(selected);
-            List<User> friends = userLogin.getFriends();
-            friends.add(found);
-            userLogin.setFriends(friends);
+
             initModelFriendshipReqRec();
         } catch (Exception e) {
             MessageAlert.showErrorMessage(null, e.getMessage());
@@ -187,8 +182,8 @@ public class FriendshipsReqController extends MenuController  {
 
             if (Objects.equals(found.getId(), userLogin.getId()))
                 throw new Exception("This is you");
+//init?????
 
-            userLogin.removeFrRequestSent(selected);
             serviceFr.deleteRequest( found.getId(),userLogin.getId());
             initModelFriendshipReqSent();
         } catch (Exception e) {

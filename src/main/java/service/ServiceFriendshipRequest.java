@@ -150,6 +150,17 @@ public class ServiceFriendshipRequest  implements Observable<FrRequestChangeEven
         Tuple<Long, Long> longLongTuple =new Tuple<>();
         longLongTuple.setLeft(id2);
         longLongTuple.setRight(id1);
+          request_repo.delete(longLongTuple);
+
+        notifyObservers(new FrRequestChangeEvent(null,"unsend"));
+
+
+    }
+    public void deleteRequest1(Long id1, Long id2)
+    {
+        Tuple<Long, Long> longLongTuple =new Tuple<>();
+        longLongTuple.setLeft(id2);
+        longLongTuple.setRight(id1);
         request_repo.delete(longLongTuple);
 
     }
@@ -157,8 +168,8 @@ public class ServiceFriendshipRequest  implements Observable<FrRequestChangeEven
     {
 
         if(servFriendship.areFriends(u1,u2)) {
-            deleteRequest(u1.getId(), u2.getId());
-            deleteRequest(u2.getId(),u1.getId());
+            deleteRequest1(u1.getId(), u2.getId());
+            deleteRequest1(u2.getId(),u1.getId());
         }
 
     }
