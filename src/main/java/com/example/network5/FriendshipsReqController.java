@@ -1,5 +1,6 @@
 package com.example.network5;
 
+import ChangeEvent.FrRequestChangeEvent;
 import domain.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,14 +10,14 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import observer.Observer;
 import service.*;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class FriendshipsReqController extends MenuController {
-
+public class FriendshipsReqController extends MenuController  {
 
     @FXML
     private TextField SearchingName;
@@ -55,6 +56,20 @@ public class FriendshipsReqController extends MenuController {
 
     ObservableList<DtoFriendReq> modelFriendshipReqSent = FXCollections.observableArrayList();
 
+    Observer<FrRequestChangeEvent> obsFrr=new Observer<FrRequestChangeEvent>() {
+        @Override
+        public void update(FrRequestChangeEvent frRequestChangeEvent) {
+
+
+
+                FriendRequest frR = frRequestChangeEvent.getData();
+
+                    initModelFriendshipReqRec();
+                    initModelFriendshipReqSent();
+
+            }
+        };
+
     public void set(ServiceUser service, ServiceMessage mess, ServiceFriendship serviceFriendshipNew, ServiceFriendshipRequest serviceFriendRequestt, ServiceEvent servEvent, Stage stage, Page user) {
 
         this.serviceUser = service;
@@ -65,10 +80,14 @@ public class FriendshipsReqController extends MenuController {
         this.dialogStage = stage;
         this.userLogin = user;
         this.serviceEvent = servEvent;
+        serviceFriendRequestt.addObserver(obsFrr);
+        //serviceMessage.addObserver(obsMess);
 
 //        initModelFriendship();
+
         initModelFriendshipReqRec();
         initModelFriendshipReqSent();
+
         setLabelName();
 
     }
@@ -143,12 +162,8 @@ public class FriendshipsReqController extends MenuController {
 
             //aici putem scoate de tot approved din baza de date!!!!!!!!!!!
             serviceFr.check_update_deletes(found, userLoginNew);//ar trebui sa se stearga approved requests
-            //initModelFriendshipReqUpdate(userLogin, found);
-//ii okkkk
-            userLogin.removeFrRequestRec(selected);
-            List<User> friends = userLogin.getFriends();
-            friends.add(found);
-            userLogin.setFriends(friends);
+
+
             initModelFriendshipReqRec();
         } catch (Exception e) {
             MessageAlert.showErrorMessage(null, e.getMessage());
@@ -167,8 +182,8 @@ public class FriendshipsReqController extends MenuController {
 
             if (Objects.equals(found.getId(), userLogin.getId()))
                 throw new Exception("This is you");
+//init?????
 
-            userLogin.removeFrRequestSent(selected);
             serviceFr.deleteRequest( found.getId(),userLogin.getId());
             initModelFriendshipReqSent();
         } catch (Exception e) {
@@ -249,7 +264,6 @@ public class FriendshipsReqController extends MenuController {
         });
 
 
-
         return image;
     }
 
@@ -270,6 +284,61 @@ public class FriendshipsReqController extends MenuController {
 
         modelFriendshipReqSent.setAll(friendshipsReqList);
 
+    }
+
+
+
+
+
+    @FXML
+    public void handleCancel() {
+        serviceFr.removeObserver(obsFrr);
+
+        showWelcomeEditDialog();
+    }
+
+    @FXML
+    public void handleFriendRequests() {
+        serviceFr.removeObserver(obsFrr);
+
+        showFriendReqEditDialog();
+    }
+
+    @FXML
+    public void handleFriends() {
+        serviceFr.removeObserver(obsFrr);
+
+        showFriendsDialog();
+    }
+
+    @FXML
+    public void handlePeople() {
+        serviceFr.removeObserver(obsFrr);
+
+
+        showPeopleDialog();
+    }
+
+    @FXML
+    public void handleChats() {
+        serviceFr.removeObserver(obsFrr);
+
+
+        showChatsEditDialog();
+    }
+
+    @FXML
+    public void handleEvents() {
+        serviceFr.removeObserver(obsFrr);
+
+        showEventsEditDialog();
+    }
+
+    @FXML
+    public void handleNotifications() {
+        serviceFr.removeObserver(obsFrr);
+
+        showNotifEditDialog();
     }
 
 

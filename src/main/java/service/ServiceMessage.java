@@ -214,7 +214,16 @@ public class ServiceMessage implements Observable<MessageTaskChangeEvent> {
     {
         List<Message> listM=new ArrayList<>();
         repoMessage.findAll().forEach(listM::add);
-        return listM.get(listM.size()-1);
+        Long maxx=-1L;
+        for(Message ms:listM)
+        {
+            if(ms.getId()>maxx)
+            maxx=ms.getId();
+
+        }
+        if(maxx==-1L)
+            return null;
+        return repoMessage.findOne(maxx);
     }
 
     public Iterable<Message> findAll()
@@ -225,6 +234,8 @@ public class ServiceMessage implements Observable<MessageTaskChangeEvent> {
 
     @Override
     public void addObserver(Observer<MessageTaskChangeEvent> e) {
+
+
         observers.add(e);
     }
 

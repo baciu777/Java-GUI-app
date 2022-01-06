@@ -39,6 +39,7 @@ public class NotificationsController extends MenuController {
         this.dialogStage = stage;
         this.userLogin = user;
         this.serviceEvent = serviceEvent;
+        //serviceMessage.addObserver(obsMess);
         initModel();
         displayAppointmentNotification();
 

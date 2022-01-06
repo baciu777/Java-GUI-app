@@ -79,9 +79,9 @@ public class OneUserFriendController {
     {
         serv.deleteFriend(userfriend.getId(),userLogged.getId());
        // userLogged.deleteFriend(userfriend);
-        List<User> newFR=new ArrayList<>();
+
         //stergem si din prietenii userului logat(page)
-        userLogged.removeFriend(userfriend);
+
         //userLogged.setFriends(newFR);
         control.initModelFriendship();
     }

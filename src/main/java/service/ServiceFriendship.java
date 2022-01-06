@@ -18,7 +18,7 @@ import ChangeEvent.*;
  * repoUser-Repository for users
  * repoFriends-Repository for friendships
  */
-public class ServiceFriendship {
+public class ServiceFriendship implements Observable<FriendChangeEvent>{
     private Repository<Long, User> repoUser;
     private Repository<Tuple<Long, Long>, Friendship> repoFriends;
 
@@ -64,6 +64,7 @@ public class ServiceFriendship {
         Friendship save = repoFriends.save(fr);
         if (save != null)
             throw new ValidationException("ids are already used");
+        notifyObservers(new FriendChangeEvent(fr,"add"));
 
     }
 
@@ -84,6 +85,7 @@ public class ServiceFriendship {
         Friendship del = repoFriends.delete(t);
         if (del == null)
             throw new ValidationException("you are not in a friendship");
+        notifyObservers(new FriendChangeEvent(del,"del"));
 
     }
     /**
@@ -124,5 +126,20 @@ public class ServiceFriendship {
         return friendsList;
     }
 
+    private List<Observer<FriendChangeEvent>> observers=new ArrayList<>();
+    @Override
+    public void addObserver(Observer<FriendChangeEvent> e) {
 
+        observers.add(e);
+    }
+
+    @Override
+    public void removeObserver(Observer<FriendChangeEvent> e) {
+        observers.remove(e);
+    }
+
+    @Override
+    public void notifyObservers(FriendChangeEvent t) {
+        observers.stream().forEach(x->x.update(t));
+    }
 }

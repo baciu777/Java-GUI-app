@@ -48,17 +48,25 @@ public class Page extends User{
     }
     public void removeFrRequestRec(DtoFriendReq fr)
     {
-        this.friendRequestsReceived.removeIf(x-> Objects.equals(fr.getFrom(), x.getFrom()) && Objects.equals(x.getTo(), fr.getTo()) && Objects.equals(fr.getStatus(), x.getStatus()));
+        this.friendRequestsReceived.removeIf(x-> Objects.equals(fr.getFrom(), x.getFrom()) && Objects.equals(x.getTo(), fr.getTo()) );
     }
     public void addFriendPage(User f)
     {
 
         this.friends.add(f);
     }
+    public void setFriendReqRec(List<DtoFriendReq> fr)
+    {
+        this.friendRequestsReceived=fr;
+    }
+    public void setFriendReqSent(List<DtoFriendReq> fr)
+    {
+        this.friendRequestsSent=fr;
+    }
     public void removeFrRequestSent(DtoFriendReq fr)
     {
 
-        this.friendRequestsSent.removeIf(x-> Objects.equals(fr.getFrom(), x.getFrom()) && Objects.equals(x.getTo(), fr.getTo()) && Objects.equals(fr.getStatus(), x.getStatus()));
+        this.friendRequestsSent.removeIf(x-> Objects.equals(fr.getFrom(), x.getFrom()) && Objects.equals(x.getTo(), fr.getTo()) );
 
  /*
         for(DtoFriendReq x : this.friendRequestsSent)
@@ -92,14 +100,19 @@ public class Page extends User{
     {
         friendRequestsSent.add(frRSent);
     }
+    public void addRequestRec(DtoFriendReq frRSent)
+    {
+        friendRequestsReceived.add(frRSent);
+    }
+    public void delRequestRec(DtoFriendReq frRSent)
+    {
+        friendRequestsReceived.removeIf(frr->Objects.equals( frr,frRSent));
+    }
     public void addMessage(Message mess)
     {
         messages.add(mess);
     }
-    public void addRequestRec(DtoFriendReq fr)
-    {
-        friendRequestsReceived.add(fr);
-    }
+
     //DACA FACEAM OBSERVER IN PAGE NU ERA LA FEL DE EFICIENT, DEOARECE RELUAM TOT DIN BAZA DE DATE CAND SE
     //SCHIMBA CEVA, ASA DOAR ADAUG CATE UN PRIETEN/REQUEST/MESAJ
 }

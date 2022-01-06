@@ -191,6 +191,7 @@ public class LoginController {
             MenuController menuController = loader.getController();
             menuController.setService(servUser,serviceMessage,serviceFriendship,serviceFriendRequest,serviceEvent, dialogStage, user);
 
+            menuController.setObs();
             dialogStage.show();
 
         } catch (IOException e) {
