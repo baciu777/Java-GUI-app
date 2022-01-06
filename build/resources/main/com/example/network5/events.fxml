@@ -107,7 +107,7 @@
       <TextField fx:id="newName" layoutX="474.0" layoutY="562.0" prefHeight="26.0" prefWidth="175.0" />
       <DatePicker fx:id="date" layoutX="474.0" layoutY="602.0" />
       <Button fx:id="saveEvent" layoutX="520.0" layoutY="640.0" mnemonicParsing="false" onAction="#handleSaveEvent" text="Create Event" />
-      <Button fx:id="buttonGoingNotOnOff" layoutX="440.0" layoutY="353.0" mnemonicParsing="false" onAction="#Going" prefHeight="35.0" prefWidth="68.0" text="Going" textAlignment="CENTER">
+      <Button fx:id="buttonGoingNotOnOff" layoutX="440.0" layoutY="391.0" mnemonicParsing="false" onAction="#Going" prefHeight="34.0" prefWidth="168.0" text="Going" textAlignment="CENTER">
          <font>
             <Font size="14.0" />
          </font></Button>
