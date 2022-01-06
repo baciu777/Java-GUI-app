@@ -19,11 +19,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
 import observer.Observer;
-import service.ServiceFriendship;
-import service.ServiceFriendshipRequest;
-import service.ServiceMessage;
-import service.ServiceUser;
+import service.*;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -65,9 +64,11 @@ public class ChatsController extends MenuController {
 
     ObservableList<Message> chatMessages = FXCollections.observableArrayList();//create observablelist for listview
 
-    Chat chatSelected = null;
+    Chat chatSelected=null;
 
-    public void set(ServiceUser service, ServiceMessage mess, ServiceFriendship serviceFriendshipNew, ServiceFriendshipRequest serviceFriendRequestt, Stage stage, Page user) {
+    public void set(ServiceUser service, ServiceMessage mess, ServiceFriendship serviceFriendshipNew, ServiceFriendshipRequest serviceFriendRequestt, ServiceEvent servEvent, Stage stage, Page user) {
+
+
 
         this.serviceUser = service;
         this.serviceMessage = mess;
@@ -76,6 +77,7 @@ public class ChatsController extends MenuController {
         serviceMessage.addObserver(obsMessNew);
         this.serviceFr = serviceFriendRequestt;
         this.dialogStage = stage;
+        this.serviceEvent= servEvent;
         this.userLogin = user;
 
 
@@ -213,17 +215,23 @@ public class ChatsController extends MenuController {
     @FXML
     private void handleUser1SubmitMessage(ActionEvent event) {
         Chat selected = (Chat) tableViewChat.getSelectionModel().getSelectedItem();
+        if (selected != null)
+            chatSelected=selected;
 
+        if(chatSelected==null)
+            return;
         try {
+
 
             serviceMessage.save(userLogin.getId(), takeToWithoutUserLoginIds(selected.getPeople()), newMessage.getText());
             Message newMess = serviceMessage.getLastMessSaved();
             userLogin.addMessage(newMess);
 
-////////////////////////////mesajele le pune inainte de la cele primite din notify
             chatMessages.add(newMess);//get 1st user's text from his/her textfield and add message to observablelist
 
-            //initializeChat();
+//////verificaa!!!!
+
+
             newMessage.setText("");//clear 1st user's textfield
         } catch (ValidationException e) {
             MessageAlert.showErrorMessage(null, e.getMessage());

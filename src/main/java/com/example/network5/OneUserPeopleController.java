@@ -45,8 +45,8 @@ public class OneUserPeopleController {
     }
     public void setStyle()
     {
-        container.setMinSize(200,70);
-        container.setMaxSize(300,70);
+        container.setMinSize(270,70);
+        container.setMaxSize(270,70);
         container.setStyle("-fx-background-color: #2d2d31;" +
                 "-fx-padding: 10 20 10 20;" +
                 "-fx-background-radius: 20");
@@ -117,6 +117,7 @@ public class OneUserPeopleController {
         if(Objects.equals(relation.getText(), "friend"))
         {
             button1.setText("Delete");
+            button1.setVisible(false);
             container.setOnMousePressed(event->{button1.setVisible(true);});
             container.setOnMouseExited(event->{button1.setVisible(false);});
             button1.setOnAction(event->{deleteFriend();});
@@ -153,11 +154,30 @@ public class OneUserPeopleController {
 
     }
     public void acceptReq() throws Exception {
+        Tuple<Long, Long> tuple = new Tuple<>( peopleUser.getId(),loggedUser.getId());
+
+        FriendRequest friendRequest = servRequests.findOne(tuple);
+        User u1 = servUser.findOne(peopleUser.getId());
+        DtoFriendReq newRequest = new DtoFriendReq( u1.getFirstName() + " " + u1.getLastName(),loggedUser.getFirstName() + " " + loggedUser.getLastName(), friendRequest.getDate(), friendRequest.getStatus());
+        loggedUser.removeFrRequestRec(newRequest);
+
+        loggedUser.addFriendPage(peopleUser);
+
         servRequests.addFriend(loggedUser.getId(),peopleUser.getId());
         control.initModelUser();
     }
     public void rejectReq() throws Exception {
+
+
+        Tuple<Long, Long> tuple = new Tuple<>( peopleUser.getId(),loggedUser.getId());
+
+        FriendRequest friendRequest = servRequests.findOne(tuple);
+        User u1 = servUser.findOne(peopleUser.getId());
+        DtoFriendReq newRequest = new DtoFriendReq(u1.getFirstName() + " " + u1.getLastName(),loggedUser.getFirstName() + " " + loggedUser.getLastName(), friendRequest.getDate(), friendRequest.getStatus());
+        loggedUser.removeFrRequestRec(newRequest);
+
         servRequests.rejectRequest(loggedUser.getId(),peopleUser.getId());
+
         control.initModelUser();
     }
     public void deleteFriend()
@@ -171,10 +191,14 @@ public class OneUserPeopleController {
     }
     public void handleUndoRequest()
     {
+        Tuple<Long, Long> tuple = new Tuple<>(loggedUser.getId(), peopleUser.getId());
+
+        FriendRequest friendRequest = servRequests.findOne(tuple);
+        User u1 = servUser.findOne(peopleUser.getId());
+        DtoFriendReq newRequest = new DtoFriendReq(loggedUser.getFirstName() + " " + loggedUser.getLastName(), u1.getFirstName() + " " + u1.getLastName(), friendRequest.getDate(), friendRequest.getStatus());
+        loggedUser.removeFrRequestSent(newRequest);
+
         servRequests.deleteRequest( peopleUser.getId(),loggedUser.getId());
-
-
-
 
         control.initModelUser();
     }

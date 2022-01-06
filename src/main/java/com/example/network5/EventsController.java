@@ -51,7 +51,7 @@ public class EventsController extends MenuController {
         this.serviceEvent=serviceEvent;
         buttonGoingNotOnOff.setVisible(false);
         initModelEvents();
-
+        setLabelName();
 
     }
 

@@ -10,7 +10,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.TilePane;
 import javafx.stage.Stage;
+
 import observer.Observer;
+
 import service.*;
 
 import java.util.List;
@@ -22,6 +24,11 @@ import java.util.stream.StreamSupport;
 public class PeopleController extends MenuController  {
     @FXML
     TextField textFieldSearch;
+
+
+    @FXML
+    ScrollPane scroll;
+
     @FXML
     TilePane peopleTile;
 
@@ -45,12 +52,13 @@ public class PeopleController extends MenuController  {
     };
 
 
-    public void set(ServiceUser service, ServiceMessage mess, ServiceFriendship serviceFriendshipNew, ServiceFriendshipRequest serviceFriendRequestt, Stage stage, Page user) {
+    public void set(ServiceUser service, ServiceMessage mess, ServiceFriendship serviceFriendshipNew, ServiceFriendshipRequest serviceFriendRequestt, ServiceEvent servEvent, Stage stage, Page user) {
         this.serviceUser = service;
         this.serviceMessage = mess;
         this.serviceF = serviceFriendshipNew;
 
         this.serviceFr = serviceFriendRequestt;
+        this.serviceEvent = servEvent;
         this.dialogStage = stage;
         this.userLogin = user;
         this.serviceFr.addObserver(obsFrrPriv);
@@ -67,8 +75,11 @@ public class PeopleController extends MenuController  {
 
     private void setStylePane() {
         peopleTile.setHgap(30);
-        peopleTile.setVgap(20);
+        peopleTile.setVgap(30);
         peopleTile.setPrefColumns(2);
+       scroll.setStyle("-fx-background: transparent;" +
+               "-fx-background-color: transparent;");
+
 
     }
 
@@ -76,15 +87,14 @@ public class PeopleController extends MenuController  {
     public void initialize() {
 
 
-        populateUsers();
+
+
         textFieldSearch.textProperty().addListener(o -> handleFilter());
     }
 
-    @FXML
-    public void populateUsers() {
 
 
-    }
+
 
 
 
@@ -146,6 +156,7 @@ public class PeopleController extends MenuController  {
     }
 
 
+
     @FXML
     public void handleCancel() {
         serviceF.removeObserver(frObs);
@@ -196,5 +207,6 @@ public class PeopleController extends MenuController  {
         serviceF.removeObserver(frObs);
         showNotifEditDialog();
     }
+
 
 }

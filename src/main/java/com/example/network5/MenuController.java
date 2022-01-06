@@ -167,7 +167,7 @@ protected Observer<FrRequestChangeEvent> obsFrriendReq=new Observer<FrRequestCha
 
             AnchorPane root = (AnchorPane) loader.load();
 
-
+            Stage dialogStage = new Stage();
             Scene scene = new Scene(root);
             dialogStage.setScene(scene);
 
@@ -238,7 +238,7 @@ protected Observer<FrRequestChangeEvent> obsFrriendReq=new Observer<FrRequestCha
             dialogStage.setScene(scene);
 
             ChatsController controller = loader.getController();
-            controller.set(serviceUser,serviceMessage,serviceF,serviceFr,dialogStage,userLogin);
+            controller.set(serviceUser,serviceMessage,serviceF,serviceFr,serviceEvent,dialogStage,userLogin);
 
             dialogStage.show();
 
@@ -262,7 +262,7 @@ protected Observer<FrRequestChangeEvent> obsFrriendReq=new Observer<FrRequestCha
             dialogStage.setScene(scene);
 
             PeopleController controller = loader.getController();
-            controller.set(serviceUser,serviceMessage,serviceF,serviceFr,dialogStage,userLogin);
+            controller.set(serviceUser,serviceMessage,serviceF,serviceFr,serviceEvent,dialogStage,userLogin);
 
 
             dialogStage.show();
@@ -284,7 +284,7 @@ protected Observer<FrRequestChangeEvent> obsFrriendReq=new Observer<FrRequestCha
             dialogStage.setScene(scene);
 
             FriendsController controller = loader.getController();
-            controller.set(serviceUser,serviceMessage,serviceF,serviceFr,dialogStage,userLogin);
+            controller.set(serviceUser,serviceMessage,serviceF,serviceFr,serviceEvent,dialogStage,userLogin);
 
             dialogStage.show();
 

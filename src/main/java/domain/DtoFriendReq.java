@@ -18,7 +18,7 @@ public class DtoFriendReq {
     String status;
     ImageView imageAcc;
     ImageView imageDec;
-
+    ImageView imageUndo;
     public DtoFriendReq(String from,String to, LocalDateTime date, String status) {
         this.from=from;
         this.to=to;
@@ -33,6 +33,10 @@ public class DtoFriendReq {
     public ImageView getImageAcc() {
         return imageAcc;
     }
+    public ImageView getImageUndo()
+    {
+        return imageUndo;
+    }
 
     public void setImageAcc(ImageView imageAcc) {
         this.imageAcc = imageAcc;
@@ -44,6 +48,10 @@ public class DtoFriendReq {
 
     public void setImageDec(ImageView imageDec) {
         this.imageDec = imageDec;
+    }
+    public void setImageUndo(ImageView imageUndo)
+    {
+        this.imageUndo = imageUndo;
     }
 
     public String getFrom() {
