@@ -1,17 +1,25 @@
 package com.example.network5;
 
+import ChangeEvent.FrRequestChangeEvent;
+import ChangeEvent.FriendChangeEvent;
+import ChangeEvent.MessageTaskChangeEvent;
 import domain.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.TilePane;
 import javafx.stage.Stage;
+import observer.Observable;
+import observer.Observer;
 import service.*;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Objects;
 
-public class MenuController  {
+public class MenuController   {
 
 
 
@@ -21,11 +29,103 @@ public class MenuController  {
     protected ServiceUser serviceUser;
     protected ServiceMessage serviceMessage;
     protected ServiceEvent serviceEvent;
+
     @FXML
     protected Label idName;
 
     Stage dialogStage;
     Page userLogin;
+
+   protected Observer<MessageTaskChangeEvent> obsMess=new Observer<MessageTaskChangeEvent>() {
+        @Override
+        public void update(MessageTaskChangeEvent messageTaskChangeEvent) {
+
+            System.out.println("update from menu controller chat");
+            if(!Objects.equals(messageTaskChangeEvent.getData().getFrom().getId(), userLogin.getId()))
+            {userLogin.addMessage(messageTaskChangeEvent.getData());
+
+                }
+
+
+
+        }
+        };
+protected Observer<FrRequestChangeEvent> obsFrriendReq=new Observer<FrRequestChangeEvent>() {
+    @Override
+    public void update(FrRequestChangeEvent frRequestChangeEvent) {
+        System.out.println("daaaaaaaaaaaa");
+        FriendRequest frR = frRequestChangeEvent.getData();
+        if (Objects.equals(frR.getId().getRight(), userLogin.getId()) && Objects.equals(frR.getStatus(), "APPROVED")) {
+            User u1 = serviceUser.findOne(frR.getId().getLeft());
+            DtoFriendReq pp = new DtoFriendReq(u1.getFirstName() + " " + u1.getLastName(), userLogin.getFirstName() + " " + userLogin.getLastName(), frR.getDate(), frR.getStatus());
+
+            userLogin.removeFrRequestRec(pp);
+            List<User> friends = userLogin.getFriends();
+            friends.add(u1);
+
+            userLogin.setFriends(friends);
+
+
+        }
+        if (Objects.equals(frR.getId().getLeft(), userLogin.getId()) && Objects.equals(frR.getStatus(), "APPROVED")) {
+            User u1 = serviceUser.findOne(frR.getId().getRight());
+            DtoFriendReq pp = new DtoFriendReq(userLogin.getFirstName() + " " + userLogin.getLastName(), u1.getFirstName() + " " + u1.getLastName(), frR.getDate(), frR.getStatus());
+
+            userLogin.removeFrRequestRec(pp);
+            List<User> friends = userLogin.getFriends();
+            friends.add(u1);
+
+            userLogin.setFriends(friends);
+
+
+        }
+
+
+        if (Objects.equals(frR.getStatus(), "PENDING") && Objects.equals(frR.getId().getRight(), userLogin.getId())) {
+            User u1 = serviceUser.findOne(frR.getId().getLeft());
+            DtoFriendReq pp = new DtoFriendReq(u1.getFirstName() + " " + u1.getLastName(), userLogin.getFirstName() + " " + userLogin.getLastName(), frR.getDate(), frR.getStatus());
+
+            userLogin.addRequestRec(pp);
+
+        }
+
+        if (Objects.equals(frR.getStatus(), "REJECTED") && Objects.equals(frR.getId().getRight(), userLogin.getId())) {
+            User u1 = serviceUser.findOne(frR.getId().getLeft());
+            DtoFriendReq pp = new DtoFriendReq(u1.getFirstName() + " " + u1.getLastName(), userLogin.getFirstName() + " " + userLogin.getLastName(), frR.getDate(), frR.getStatus());
+
+            userLogin.delRequestRec(pp);
+        }
+        if (Objects.equals(frR.getStatus(), "REJECTED") && Objects.equals(frR.getId().getLeft(), userLogin.getId())) {
+            User u1 = serviceUser.findOne(frR.getId().getRight());
+            DtoFriendReq pp = new DtoFriendReq(userLogin.getFirstName() + " " + userLogin.getLastName(), u1.getFirstName() + " " + u1.getLastName(), frR.getDate(), frR.getStatus());
+
+            userLogin.delRequestRec(pp);
+        }
+
+    }
+
+
+
+
+};
+
+    Observer<FriendChangeEvent> frObsFriends=new Observer<FriendChangeEvent>() {
+        @Override
+        public void update(FriendChangeEvent friendChangeEvent) {
+            System.out.println(userLogin.getFriendRequestsReceived().size());
+            if (Objects.equals(friendChangeEvent.getType(), "del") && Objects.equals(friendChangeEvent.getData().getId().getRight(), userLogin.getId())) {
+                User u1 = serviceUser.findOne(friendChangeEvent.getData().getId().getLeft());
+                userLogin.deleteFriend(u1);
+
+            }
+            if (Objects.equals(friendChangeEvent.getType(), "del") && Objects.equals(friendChangeEvent.getData().getId().getLeft(), userLogin.getId())) {
+                User u1 = serviceUser.findOne(friendChangeEvent.getData().getId().getRight());
+                userLogin.deleteFriend(u1);
+
+            }
+            //initModelUser();
+        }
+    };
 
     public void setService(ServiceUser service, ServiceMessage mess,ServiceFriendship serviceFriendshipNew,ServiceFriendshipRequest serviceFriendRequestt,ServiceEvent servEvent,Stage stage,Page user) {
 
@@ -37,6 +137,9 @@ public class MenuController  {
         this.dialogStage = stage;
         this.userLogin=user;
         this.serviceEvent=servEvent;
+        //this.serviceMessage.addObserver(obsMess);
+
+
         setLabelName();
 
 
@@ -54,44 +157,9 @@ public class MenuController  {
 
 
 
-    @FXML
-    public void handleCancel(){
-        showWelcomeEditDialog();
-    }
 
-    @FXML
-    public void handleFriendRequests()
-    {
-    showFriendReqEditDialog();
-    }
-    @FXML
-    public void handleFriends()
-    {
-        showFriendsDialog();
-    }
 
-    @FXML
-    public void handlePeople()
-    {
-        showPeopleDialog();
-    }
-    @FXML
-    public void handleChats()
-    {
-        showChatsEditDialog();
-    }
-    @FXML
-    public void handleEvents()
-    {
-        showEventsEditDialog();
-    }
-    @FXML
-    public void handleNotifications()
-    {
-        showNotifEditDialog();
-    }
-
-    private void showNotifEditDialog() {
+    public void showNotifEditDialog() {
         try {
             // create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader();
@@ -113,7 +181,7 @@ public class MenuController  {
         }
     }
 
-    private void showEventsEditDialog() {
+    public void showEventsEditDialog() {
         try {
             // create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader();
@@ -254,4 +322,55 @@ public class MenuController  {
         idName.setText(userLogin.toString3());
     }
 
+
+
+
+
+    @FXML
+    public void handleCancel(){
+        showWelcomeEditDialog();
+    }
+
+    @FXML
+    public void handleFriendRequests()
+    {
+        showFriendReqEditDialog();
+    }
+    @FXML
+    public void handleFriends()
+    {
+        showFriendsDialog();
+    }
+
+    @FXML
+    public void handlePeople()
+
+    {
+
+        showPeopleDialog();
+    }
+    @FXML
+    public void handleChats()
+
+    {
+
+
+        showChatsEditDialog();
+    }
+    @FXML
+    public void handleEvents()
+    {
+        showEventsEditDialog();
+    }
+    @FXML
+    public void handleNotifications()
+    {
+        showNotifEditDialog();
+    }
+
+    public void setObs() {
+        serviceFr.addObserver(obsFrriendReq);
+        serviceMessage.addObserver(obsMess);
+        serviceF.addObserver(frObsFriends);
+    }
 }

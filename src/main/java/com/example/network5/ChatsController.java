@@ -32,7 +32,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public class ChatsController extends MenuController implements Observer<MessageTaskChangeEvent> {
+public class ChatsController extends MenuController {
 
     @FXML
     TableView<Chat> tableViewChat;
@@ -48,24 +48,37 @@ public class ChatsController extends MenuController implements Observer<MessageT
     @FXML
     private ListView<Message> lvChatWindow;
 
+    Observer<MessageTaskChangeEvent> obsMessNew = new Observer<MessageTaskChangeEvent>() {
+        @Override
+        public void update(MessageTaskChangeEvent messageTaskChangeEvent) {
+            System.out.println("intruuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu");
+            if (!Objects.equals(messageTaskChangeEvent.getData().getFrom().getId(), userLogin.getId())) {
+                initModelChat();
+                initializeChat();
+            }
 
+
+        }
+    };
     ObservableList<Chat> modelChat = FXCollections.observableArrayList();
 
 
     ObservableList<Message> chatMessages = FXCollections.observableArrayList();//create observablelist for listview
 
-    Chat chatSelected=null;
+    Chat chatSelected = null;
+
     public void set(ServiceUser service, ServiceMessage mess, ServiceFriendship serviceFriendshipNew, ServiceFriendshipRequest serviceFriendRequestt, Stage stage, Page user) {
 
         this.serviceUser = service;
         this.serviceMessage = mess;
         this.serviceF = serviceFriendshipNew;
-
+        //serviceMessage.removeObserver(obsMess);
+        serviceMessage.addObserver(obsMessNew);
         this.serviceFr = serviceFriendRequestt;
         this.dialogStage = stage;
         this.userLogin = user;
 
-        serviceMessage.addObserver(this);
+
         initModelChat();
 
         setLabelName();
@@ -80,7 +93,6 @@ public class ChatsController extends MenuController implements Observer<MessageT
         tableViewChat.setItems(modelChat);
 
 
-
     }
 
 
@@ -88,7 +100,7 @@ public class ChatsController extends MenuController implements Observer<MessageT
         Iterable<Message> mess = userLogin.getMessages();
 
 
-         List<Chat> chats = new ArrayList<>();
+        List<Chat> chats = new ArrayList<>();
         for (Message ms : mess) {
             List<Long> messageInvolved = new ArrayList<>();
 
@@ -143,13 +155,14 @@ public class ChatsController extends MenuController implements Observer<MessageT
 
         Chat selected = (Chat) tableViewChat.getSelectionModel().getSelectedItem();
         if (selected != null)
-            chatSelected=selected;
+            chatSelected = selected;
 
-        if(chatSelected==null)
+        if (chatSelected == null)
             return;
         chatMessages.setAll(
                 serviceMessage.groupChat(userLogin.getMessages(), chatSelected.getPeople()));
 
+//nu cred ca le da in ordine
         lvChatWindow.setItems(chatMessages);//attach the observable list to the listview
         lvChatWindow.setCellFactory(param -> {
             ListCell<Message> cell = new ListCell<Message>() {
@@ -176,7 +189,7 @@ public class ChatsController extends MenuController implements Observer<MessageT
                         setText(null);
                         setGraphic(null);
                     } else {
-                        System.out.println(item.getFrom());
+
                         if (!item.getFrom().getId().equals(userLogin.getId())) {
                             lblUserLeft.setText(item.getFrom().getFirstName() + " " + item.getFrom().getLastName() + ":");
                             lblTextLeft.setText(item.getMessage());
@@ -202,12 +215,14 @@ public class ChatsController extends MenuController implements Observer<MessageT
         Chat selected = (Chat) tableViewChat.getSelectionModel().getSelectedItem();
 
         try {
-            System.out.println("inceppp");
+
             serviceMessage.save(userLogin.getId(), takeToWithoutUserLoginIds(selected.getPeople()), newMessage.getText());
-            //Message newMess = serviceMessage.getLastMessSaved();
-                    //userLogin.addMessage(newMess);
-            System.out.println("teerminnn");
-            //chatMessages.add(newMess);//get 1st user's text from his/her textfield and add message to observablelist
+            Message newMess = serviceMessage.getLastMessSaved();
+            userLogin.addMessage(newMess);
+
+////////////////////////////mesajele le pune inainte de la cele primite din notify
+            chatMessages.add(newMess);//get 1st user's text from his/her textfield and add message to observablelist
+
             //initializeChat();
             newMessage.setText("");//clear 1st user's textfield
         } catch (ValidationException e) {
@@ -235,6 +250,7 @@ public class ChatsController extends MenuController implements Observer<MessageT
 
         return idsNew;
     }
+
     @FXML
     private void showNewChatEditDialog() {
         try {
@@ -253,7 +269,7 @@ public class ChatsController extends MenuController implements Observer<MessageT
 
 
             NewChatController controller = loader.getController();
-            controller.set(serviceUser,serviceMessage,dialogStage,userLogin,this);
+            controller.set(serviceUser, serviceMessage, dialogStage, userLogin, this);
 
             dialogStage.show();
 
@@ -263,15 +279,56 @@ public class ChatsController extends MenuController implements Observer<MessageT
 
     }
 
-    @Override
-    public void update(MessageTaskChangeEvent messageTaskChangeEvent) {
-        System.out.println("intruuuuuuu");
-        System.out.println(messageTaskChangeEvent.getData());
-            userLogin.addMessage(messageTaskChangeEvent.getData());
+    @FXML
+    public void handleCancel() {
+        serviceMessage.removeObserver(obsMessNew);
 
-            initModelChat();
-            initializeChat();
-
-
+        showWelcomeEditDialog();
     }
+
+    @FXML
+    public void handleFriendRequests() {
+        serviceMessage.removeObserver(obsMessNew);
+
+        showFriendReqEditDialog();
+    }
+
+    @FXML
+    public void handleFriends() {
+        serviceMessage.removeObserver(obsMessNew);
+
+        showFriendsDialog();
+    }
+
+    @FXML
+    public void handlePeople() {
+        serviceMessage.removeObserver(obsMessNew);
+
+
+        showPeopleDialog();
+    }
+
+    @FXML
+    public void handleChats() {
+        serviceMessage.removeObserver(obsMessNew);
+
+
+        showChatsEditDialog();
+    }
+
+    @FXML
+    public void handleEvents() {
+        serviceMessage.removeObserver(obsMessNew);
+
+        showEventsEditDialog();
+    }
+
+    @FXML
+    public void handleNotifications() {
+        serviceMessage.removeObserver(obsMessNew);
+
+        showNotifEditDialog();
+    }
+
+
 }

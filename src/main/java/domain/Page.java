@@ -87,6 +87,14 @@ public class Page extends User{
     {
         friendRequestsSent.add(frRSent);
     }
+    public void addRequestRec(DtoFriendReq frRSent)
+    {
+        friendRequestsReceived.add(frRSent);
+    }
+    public void delRequestRec(DtoFriendReq frRSent)
+    {
+        friendRequestsReceived.removeIf(frr->Objects.equals( frr,frRSent));
+    }
     public void addMessage(Message mess)
     {
         messages.add(mess);

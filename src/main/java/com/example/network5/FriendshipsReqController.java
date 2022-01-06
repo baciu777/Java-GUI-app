@@ -1,5 +1,6 @@
 package com.example.network5;
 
+import ChangeEvent.FrRequestChangeEvent;
 import domain.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,6 +10,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import observer.Observer;
 import service.*;
 
 import java.util.ArrayList;
@@ -18,8 +20,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public class FriendshipsReqController extends MenuController {
-
+public class FriendshipsReqController extends MenuController  {
 
     @FXML
     private TextField SearchingName;
@@ -59,6 +60,21 @@ public class FriendshipsReqController extends MenuController {
 
     ObservableList<DtoFriendReq> modelFriendshipReq2 = FXCollections.observableArrayList();
 
+    Observer<FrRequestChangeEvent> obsFrr=new Observer<FrRequestChangeEvent>() {
+        @Override
+        public void update(FrRequestChangeEvent frRequestChangeEvent) {
+
+
+
+                System.out.println("daaaaaaaaaaaa");
+                FriendRequest frR = frRequestChangeEvent.getData();
+                if (Objects.equals(frR.getId().getRight(), userLogin.getId()) )
+
+                initModelFriendshipReq2();
+                initModelFriendshipReq();
+            }
+        };
+
     public void set(ServiceUser service, ServiceMessage mess, ServiceFriendship serviceFriendshipNew, ServiceFriendshipRequest serviceFriendRequestt, ServiceEvent servEvent, Stage stage, Page user) {
 
         this.serviceUser = service;
@@ -69,8 +85,11 @@ public class FriendshipsReqController extends MenuController {
         this.dialogStage = stage;
         this.userLogin = user;
         this.serviceEvent = servEvent;
+        serviceFriendRequestt.addObserver(obsFrr);
+        //serviceMessage.addObserver(obsMess);
 
 //        initModelFriendship();
+
         initModelFriendshipReq();
         initModelFriendshipReq2();
         setLabelName();
@@ -146,8 +165,7 @@ public class FriendshipsReqController extends MenuController {
 
             //aici putem scoate de tot approved din baza de date!!!!!!!!!!!
             serviceFr.check_update_deletes(found, userLoginNew);//ar trebui sa se stearga approved requests
-            //initModelFriendshipReqUpdate(userLogin, found);
-//ii okkkk
+
             userLogin.removeFrRequestRec(selected);
             List<User> friends = userLogin.getFriends();
             friends.add(found);
@@ -213,7 +231,6 @@ public class FriendshipsReqController extends MenuController {
         });
 
 
-
         return image;
     }
 
@@ -233,6 +250,61 @@ public class FriendshipsReqController extends MenuController {
 
         modelFriendshipReq2.setAll(friendshipsReqList);
 
+    }
+
+
+
+
+
+    @FXML
+    public void handleCancel() {
+        serviceFr.removeObserver(obsFrr);
+
+        showWelcomeEditDialog();
+    }
+
+    @FXML
+    public void handleFriendRequests() {
+        serviceFr.removeObserver(obsFrr);
+
+        showFriendReqEditDialog();
+    }
+
+    @FXML
+    public void handleFriends() {
+        serviceFr.removeObserver(obsFrr);
+
+        showFriendsDialog();
+    }
+
+    @FXML
+    public void handlePeople() {
+        serviceFr.removeObserver(obsFrr);
+
+
+        showPeopleDialog();
+    }
+
+    @FXML
+    public void handleChats() {
+        serviceFr.removeObserver(obsFrr);
+
+
+        showChatsEditDialog();
+    }
+
+    @FXML
+    public void handleEvents() {
+        serviceFr.removeObserver(obsFrr);
+
+        showEventsEditDialog();
+    }
+
+    @FXML
+    public void handleNotifications() {
+        serviceFr.removeObserver(obsFrr);
+
+        showNotifEditDialog();
     }
 
 

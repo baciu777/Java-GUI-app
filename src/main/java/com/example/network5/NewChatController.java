@@ -45,7 +45,7 @@ public class NewChatController extends ChatsController {
 
         this.dialogStage = stage;
         this.userLogin = user;
-
+        //serviceMessage.addObserver(obsMess);
         controllerChat=controller;
         newChatUsers.add(userLogin.getId());
         initModelNewChat();
@@ -86,13 +86,12 @@ public class NewChatController extends ChatsController {
 
             try {
                 serviceMessage.save(userLogin.getId(), takeToWithoutUserLoginIds(newChatUsers), newMess.getText());
-                //Message newMessageChat = serviceMessage.getLastMessSaved();
-                //userLogin.addMessage(newMessageChat);
-
-                //chatMessages.add(newMessageChat);//get 1st user's text from his/her textfield and add message to observablelist
-
+                Message newMessageChat = serviceMessage.getLastMessSaved();
+                userLogin.addMessage(newMessageChat);
+                chatMessages.add(newMessageChat);//get 1st user's text from his/her textfield and add message to observablelist
+                //initializeChat();
                 newMess.setText("");//clear 1st user's textfield
-                //controllerChat.initModelChat();
+                controllerChat.initModelChat();
                 Alert informationAlert = new Alert(Alert.AlertType.INFORMATION);
                 informationAlert.setHeaderText("Chat created");
                 informationAlert.showAndWait();

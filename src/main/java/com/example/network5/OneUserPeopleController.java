@@ -92,6 +92,7 @@ public class OneUserPeopleController {
             button1.setOnAction(event -> {
                 try {
                     handleSendRequest();
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -165,8 +166,7 @@ public class OneUserPeopleController {
         // userLogged.deleteFriend(userfriend);
         List<User> newFR=new ArrayList<>();
         //stergem si din prietenii userului logat(page)
-        loggedUser.removeFriend(peopleUser);
-        loggedUser.setFriends(newFR);
+
         control.initModelUser();
     }
     public void handleUndoRequest()
@@ -181,12 +181,11 @@ public class OneUserPeopleController {
     public void handleSendRequest() throws Exception {
         servRequests.sendRequest(loggedUser.getId(), peopleUser.getId());
         Tuple<Long, Long> tuple = new Tuple<>(loggedUser.getId(), peopleUser.getId());
+        FriendRequest frFound=servRequests.findOne(tuple);
+        DtoFriendReq dto= new DtoFriendReq(loggedUser.getFirstName() + " " + loggedUser.getLastName(), peopleUser.getFirstName() + " " + peopleUser.getLastName(), frFound.getDate(), frFound.getStatus());
 
-        FriendRequest friendRequest = servRequests.findOne(tuple);
-        User u1 = servUser.findOne(peopleUser.getId());
-        DtoFriendReq newRequest = new DtoFriendReq(loggedUser.getFirstName() + " " + loggedUser.getLastName(), u1.getFirstName() + " " + u1.getLastName(), friendRequest.getDate(), friendRequest.getStatus());
-        loggedUser.addRequestSent(newRequest);
-
+        loggedUser.addRequestSent(dto);
+/////////////////////
         control.initModelUser();
     }
 

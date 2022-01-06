@@ -1,6 +1,7 @@
 package service;
 
 import ChangeEvent.*;
+import com.example.network5.MenuController;
 import domain.*;
 import observer.Observable;
 import observer.Observer;
@@ -16,7 +17,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public class ServiceFriendshipRequest   {
+public class ServiceFriendshipRequest  implements Observable<FrRequestChangeEvent> {
     /**
      * constructor for the service
      *
@@ -56,6 +57,7 @@ public class ServiceFriendshipRequest   {
         f.setDate(LocalDateTime.now());
         request_repo.update(f);
         servFriendship.addFriend(id1,id2);
+        notifyObservers(new FrRequestChangeEvent(f));//////////////////////////
 
     }
 
@@ -75,6 +77,8 @@ public class ServiceFriendshipRequest   {
         f.setId(longLongTuple);
         f.setStatus("PENDING");
         request_repo.save(f);
+        notifyObservers(new FrRequestChangeEvent(f));//////////////////////////
+
 
     }
 
@@ -106,6 +110,7 @@ public class ServiceFriendshipRequest   {
         f.setStatus("REJECTED");
         f.setDate(LocalDateTime.now());
         request_repo.update(f);
+        notifyObservers(new FrRequestChangeEvent(f));
 
     }
 
@@ -124,11 +129,14 @@ public class ServiceFriendshipRequest   {
         longLongTuple.setLeft(id2);
         longLongTuple.setRight(id1);
         FriendRequest f = request_repo.findOne(longLongTuple);
-        if(f==null)
-            sendRequest(id1,id2);
+
+        if(f==null) {
+            sendRequest(id1, id2);
+
+        }
         else
-        if(Objects.equals(f.getStatus(), "PENDING"))
-            acceptRequest(id2,id1);
+        {if(Objects.equals(f.getStatus(), "PENDING"))
+            acceptRequest(id2,id1);}
 
     }
 
@@ -143,6 +151,7 @@ public class ServiceFriendshipRequest   {
         longLongTuple.setLeft(id2);
         longLongTuple.setRight(id1);
         request_repo.delete(longLongTuple);
+
     }
     public void check_update_deletes(User u1,User u2)
     {
@@ -263,4 +272,24 @@ public class ServiceFriendshipRequest   {
     public FriendRequest findOne(Tuple<Long,Long> id) {
         return request_repo.findOne(id);
     }
+
+    private List<Observer<FrRequestChangeEvent>> observers=new ArrayList<>();
+
+    @Override
+    public void addObserver(Observer<FrRequestChangeEvent> e) {
+        //observers.clear();
+
+        observers.add(e);
+    }
+
+    @Override
+    public void removeObserver(Observer<FrRequestChangeEvent> e) {
+        observers.remove(e);
+    }
+
+    @Override
+    public void notifyObservers(FrRequestChangeEvent t) {
+        observers.stream().forEach(x->x.update(t));
+    }
+
 }
