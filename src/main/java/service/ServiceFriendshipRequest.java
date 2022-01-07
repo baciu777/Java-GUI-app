@@ -168,6 +168,7 @@ public class ServiceFriendshipRequest  implements Observable<FrRequestChangeEven
     {
 
         if(servFriendship.areFriends(u1,u2)) {
+            System.out.println("dada");
             deleteRequest1(u1.getId(), u2.getId());
             deleteRequest1(u2.getId(),u1.getId());
         }

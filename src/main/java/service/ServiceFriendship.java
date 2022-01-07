@@ -107,6 +107,7 @@ public class ServiceFriendship implements Observable<FriendChangeEvent>{
 
     }
 
+
     public Iterable<Friendship> findAll() {
         return repoFriends.findAll();
     }

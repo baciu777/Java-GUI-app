@@ -54,9 +54,7 @@ public class MenuController {
     protected Observer<FrRequestChangeEvent> obsFrriendReq = new Observer<FrRequestChangeEvent>() {
         @Override
         public void update(FrRequestChangeEvent frRequestChangeEvent) {
-            System.out.println("---------------1-------------");
-            System.out.println(userLogin.getFriendRequestsReceived().size());
-            System.out.println(userLogin.getFriendRequestsSent().size());
+
            /* FriendRequest frR = frRequestChangeEvent.getData();
             if (!Objects.equals(frRequestChangeEvent.getType(), "unsend")) {
                 if (Objects.equals(frR.getId().getRight(), userLogin.getId()) && Objects.equals(frR.getStatus(), "APPROVED")) {
@@ -153,9 +151,7 @@ public class MenuController {
                     .collect(Collectors.toList());
 
             userLogin.setFriendRequestsSent(friendshipsReqList2);
-            System.out.println("received "+userLogin.getFriendRequestsReceived().size());
-            System.out.println("sent "+userLogin.getFriendRequestsSent().size());
-            System.out.println("---------------2-------------");
+
         }
 
 

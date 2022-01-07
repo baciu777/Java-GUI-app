@@ -156,9 +156,9 @@ public class OneUserPeopleController {
     public void acceptReq() throws Exception {
 
 
-        User userLoginNew = servUser.findOne(loggedUser.getId());
         servRequests.addFriend(loggedUser.getId(),peopleUser.getId());
-        //servRequests.check_update_deletes(peopleUser, userLoginNew);//ar trebui sa se stearga approved requests
+        User userLoginNew = servUser.findOne(loggedUser.getId());
+        servRequests.check_update_deletes(peopleUser, userLoginNew);//ar trebui sa se stearga approved requests
 
         control.initModelUser();
     }
