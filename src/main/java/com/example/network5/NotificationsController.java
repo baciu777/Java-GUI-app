@@ -23,6 +23,7 @@ import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class NotificationsController extends MenuController {
 
@@ -40,7 +41,7 @@ public class NotificationsController extends MenuController {
         this.userLogin = user;
         this.serviceEvent = serviceEvent;
         //serviceMessage.addObserver(obsMess);
-        initModel();
+        //initModel();
         displayAppointmentNotification();
 
     }
@@ -49,7 +50,7 @@ public class NotificationsController extends MenuController {
     public void initialize() {
 
         Platform.setImplicitExit(false);
-        listVIewNotifications.setItems(modelNotifications);
+        listVIewNotifications.setItems(modelNotifications.sorted(Comparator.reverseOrder()));
 
 
     }
@@ -80,6 +81,7 @@ public class NotificationsController extends MenuController {
 
 
         }
+        initModel();///incercaaam sa fie in ordine
     }
 
 
@@ -87,12 +89,17 @@ public class NotificationsController extends MenuController {
         List<Notification> listNf = new ArrayList<>();
         serviceEvent.printUsNotif().forEach(listNf::add);
         List<Notification> listNfNew = new ArrayList<>();
-        listNf.forEach(listNfNew::add);
 
-        for (Notification nf : listNfNew) {
+        modelNotifications.clear();
+        listNf.forEach(listNfNew::add);
+        listNfNew=  listNfNew.stream().sorted(Comparator.comparing(Notification::getNotif)).collect(Collectors.toList());
+     //   Collections.reverse(listNfNew);///fdgsdfgdskdsnskdfng
+        for (Notification nf : listNfNew)
+        {
             if (Objects.equals(nf.getIduser(), userLogin.getId()))
                 modelNotifications.add(nf.getNotif());
         }
+
     }
 
     public void notifyy() {
@@ -102,7 +109,7 @@ public class NotificationsController extends MenuController {
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         //scheduler.schedule(this::startNotifications, delay, TimeUnit.MILLISECONDS);
         scheduler.scheduleAtFixedRate(this::startNotifications, delay, 86400000, TimeUnit.MILLISECONDS);
-        //startNotifications();
+        initModel();
     }
 
     public Runnable startNotifications() {
@@ -121,8 +128,11 @@ public class NotificationsController extends MenuController {
                     @Override
                     public void run() {
                         //update application thread
+
                         modelNotifications.add(LocalDate.now() + " " + ev.getName() + " days left: " + nr);
+
                     }
+
                 });
 
 
@@ -132,7 +142,9 @@ public class NotificationsController extends MenuController {
             }
 
 
+
         }
+
         return null;
     }
 
