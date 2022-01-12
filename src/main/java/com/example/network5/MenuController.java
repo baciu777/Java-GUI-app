@@ -13,6 +13,10 @@ import javafx.scene.layout.TilePane;
 import javafx.stage.Stage;
 import observer.Observable;
 import observer.Observer;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import service.*;
 
 import java.io.IOException;
@@ -237,7 +241,48 @@ public class MenuController {
             e.printStackTrace();
         }
     }
+    @FXML
+    public void handlePDF()
+    {
+        try{
+        //Creating PDF document object
+        PDDocument document = new PDDocument();
+        PDPage my_page = new PDPage();
+        document.addPage(my_page);
+        //Saving the document
+        document.save("C:/Users/ioana/Documents/GitHub/pdfs/second.pdf");
+            PDPageContentStream contentStream = new PDPageContentStream(document, my_page);
 
+            //Begin the Content stream
+            contentStream.beginText();
+
+            //Setting the font to the Content stream
+            contentStream.setFont(PDType1Font.TIMES_ROMAN, 12);
+
+            //Setting the position for the line
+            contentStream.newLineAtOffset(25, 500);
+
+            String text = "This is the sample document and we are adding content to it.";
+
+            //Adding text in the form of string
+            contentStream.showText(text);
+
+            //Ending the content stream
+            contentStream.endText();
+
+            System.out.println("Content added");
+
+            //Closing the content stream
+            contentStream.close();
+        System.out.println("PDF created");
+
+        //Closing the document
+
+            document.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public void showFriendReqEditDialog() {
         try {
             // create a new stage for the popup dialog.

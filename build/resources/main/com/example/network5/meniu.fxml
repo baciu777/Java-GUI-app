@@ -94,6 +94,7 @@
             </ImageView>
          </graphic>
       </Button>
+      <Button layoutX="83.0" layoutY="352.0" mnemonicParsing="false" onAction="#handlePDF" text="Extract PDF" />
 
 
    </children>
