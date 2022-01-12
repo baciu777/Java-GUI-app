@@ -111,6 +111,7 @@
          <font>
             <Font size="14.0" />
          </font></Button>
+      <TextField fx:id="PDFFileName" layoutX="46.0" layoutY="392.0" prefHeight="26.0" prefWidth="318.0" />
 
    </children>
 </AnchorPane>
