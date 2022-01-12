@@ -89,7 +89,7 @@ public class FriendshipsReqController extends MenuController  {
         initModelFriendshipReqSent();
 
         setLabelName();
-
+        setStyleTable();
     }
 
     @FXML
@@ -116,12 +116,16 @@ public class FriendshipsReqController extends MenuController  {
 
     }
 
+
     /*
-    @FXML
-    public void handleCancel() {
-        dialogStage.close();
+    bucatele de style care nu se pot face din scene builder
+     */
+    public void setStyleTable()
+    {
+        tableViewFriendReq.setStyle("-fx-background: transparent;" +
+                "-fx-background-color: transparent;");
+
     }
-    */
 
     @FXML
     public void handleRejectRequest() {

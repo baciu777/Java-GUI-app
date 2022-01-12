@@ -6,7 +6,7 @@ module com.example.network5 {
             requires com.dlsc.formsfx;
                     requires org.kordamp.bootstrapfx.core;
     requires java.sql;
-
+    requires org.apache.pdfbox;
     opens domain to javafx.base;
 
     opens com.example.network5 to javafx.fxml;

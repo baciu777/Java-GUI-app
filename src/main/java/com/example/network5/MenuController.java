@@ -8,11 +8,16 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.TilePane;
 import javafx.stage.Stage;
 import observer.Observable;
 import observer.Observer;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import service.*;
 
 import java.io.IOException;
@@ -34,7 +39,8 @@ public class MenuController {
 
     @FXML
     protected Label idName;
-
+    @FXML
+    protected TextField PDFFileName;
     Stage dialogStage;
     Page userLogin;
 
@@ -237,7 +243,67 @@ public class MenuController {
             e.printStackTrace();
         }
     }
+    @FXML
+    public void handlePDF()
+    {
+        try{
+        PDDocument document = new PDDocument();
+        PDPage my_page = new PDPage();
+        document.addPage(my_page);
+        /*
+            PDPageContentStream contentStream = new PDPageContentStream(document, my_page);
+            contentStream.beginText();
+            contentStream.setFont(PDType1Font.TIMES_ROMAN, 12);
+            contentStream.newLineAtOffset(25, 500);
+            String text = "This is the sample document and we are adding content to it.";
+            contentStream.showText(text);
+            contentStream.endText();
 
+            contentStream.beginText();
+            contentStream.setFont(PDType1Font.TIMES_ROMAN, 12);
+            contentStream.newLineAtOffset(25, 100);
+            String text2 = "This is the SECOND sample document and we are adding content to it.";
+            contentStream.showText(text2);
+            contentStream.endText();
+*/
+
+            PDPageContentStream contentStream = new PDPageContentStream(document, my_page);
+            contentStream.beginText();
+            contentStream.setFont(PDType1Font.TIMES_ROMAN, 20);
+            contentStream.newLineAtOffset(100, 700);
+            String text1 = userLogin.toString3();
+            contentStream.showText(text1);
+            contentStream.endText();
+
+
+            List<User> friends = userLogin.getFriends();
+            int indexline = 650;
+            for(User x: friends)
+            {
+                contentStream.beginText();
+                contentStream.setFont(PDType1Font.TIMES_ROMAN, 12);
+                contentStream.newLineAtOffset(100, indexline);
+                String textx = x.toString3();
+                contentStream.showText(textx);
+                contentStream.endText();
+                indexline = indexline - 30;
+            }
+            contentStream.close();
+
+            System.out.println("Content added");
+
+            document.save(PDFFileName.getText());
+
+
+        System.out.println("PDF created");
+
+
+
+            document.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public void showFriendReqEditDialog() {
         try {
             // create a new stage for the popup dialog.
@@ -356,6 +422,7 @@ public class MenuController {
 
     protected void setLabelName() {
         idName.setText(userLogin.toString3());
+        PDFFileName.setText("C:/Users/ioana/Documents/GitHub/pdfs/first.pdf");
     }
 
 

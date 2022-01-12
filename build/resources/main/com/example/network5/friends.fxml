@@ -104,6 +104,7 @@
               <TilePane fx:id="friendsTile" prefHeight="298.0" prefWidth="582.0" />
          </content>
       </ScrollPane>
+        <TextField fx:id="PDFFileName" layoutX="46.0" layoutY="392.0" prefHeight="26.0" prefWidth="318.0" />
 
     </children>
 </AnchorPane>
