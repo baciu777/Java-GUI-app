@@ -43,7 +43,7 @@ public class ServiceEvent implements Observable<EventChangeEvent> {
         ev.setId(id);
 
         Event save = repoEvents.save(ev);
-        notifyObservers(new EventChangeEvent( ev));
+        notifyObservers(new EventChangeEvent(ev));
         if (save != null)
             throw new ValidationException("id already used");
 

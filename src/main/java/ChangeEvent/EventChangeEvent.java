@@ -1,18 +1,12 @@
 package ChangeEvent;
 
-import domain.Friendship;
 
 public class EventChangeEvent implements Event {
 
-    private Event data;
+    private domain.Event data;
     private String stringT;
 
-    public EventChangeEvent( Event  data,String stringT) {
-
-        this.data = data;
-        this.stringT=stringT;
-    }
-    public EventChangeEvent( Event  data) {
+   public EventChangeEvent( domain.Event data) {
 
         this.data = data;
         this.stringT=null;
@@ -21,7 +15,7 @@ public class EventChangeEvent implements Event {
 
 
 
-    public Event getData() {
+    public domain.Event getData() {
         return data;
     }
     public String getType() {

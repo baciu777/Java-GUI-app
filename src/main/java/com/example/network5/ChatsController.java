@@ -50,7 +50,7 @@ public class ChatsController extends MenuController {
     Observer<MessageTaskChangeEvent> obsMessNew = new Observer<MessageTaskChangeEvent>() {
         @Override
         public void update(MessageTaskChangeEvent messageTaskChangeEvent) {
-            System.out.println("intruuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu");
+
             if (!Objects.equals(messageTaskChangeEvent.getData().getFrom().getId(), userLogin.getId())) {
                 initModelChat();
                 initializeChat();
@@ -164,7 +164,7 @@ public class ChatsController extends MenuController {
         chatMessages.setAll(
                 serviceMessage.groupChat(userLogin.getMessages(), chatSelected.getPeople()));
 
-//nu cred ca le da in ordine
+
         lvChatWindow.setItems(chatMessages);//attach the observable list to the listview
         lvChatWindow.setCellFactory(param -> {
             ListCell<Message> cell = new ListCell<Message>() {
@@ -210,6 +210,10 @@ public class ChatsController extends MenuController {
                         if (!item.getFrom().getId().equals(userLogin.getId())) {
                             lblUserLeft.setText(item.getFrom().getFirstName() + " " + item.getFrom().getLastName() + ":");
                             lblTextLeft.setText(item.getMessage());
+
+                            lblTextLeft.setStyle("-fx-font-size: 12px;\n" +
+                                    "                            -fx-font-weight: bold;\n" +
+                                    "                            -fx-text-fill: #4a56e2;");
                             //lblTextLeft.setTextFill(Color.color(1, 0, 0));
                             setGraphic(hBoxLeft);
                         } else {
@@ -240,12 +244,13 @@ public class ChatsController extends MenuController {
             if(selectedItem!=null)
                 serviceMessage.saveReply(userLogin.getId(), newMessage.getText(),selectedItem.getId());
             else
-            serviceMessage.save(userLogin.getId(), takeToWithoutUserLoginIds(selected.getPeople()), newMessage.getText());
+            serviceMessage.save(userLogin.getId(), takeToWithoutUserLoginIds(chatSelected.getPeople()), newMessage.getText());
             Message newMess = serviceMessage.getLastMessSaved();
+            System.out.println(newMess.getId());
             userLogin.addMessage(newMess);
 
             chatMessages.add(newMess);//get 1st user's text from his/her textfield and add message to observablelist
-
+            //initializeChat();
 //////verificaa!!!!
 
 

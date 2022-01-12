@@ -45,7 +45,8 @@ public class MenuController {
 
             System.out.println("update from menu controller chat");
             if (!Objects.equals(messageTaskChangeEvent.getData().getFrom().getId(), userLogin.getId())) {
-                userLogin.addMessage(messageTaskChangeEvent.getData());
+                userLogin.addMessage(serviceMessage.getLastMessSaved());
+                System.out.println(serviceMessage.getLastMessSaved());
 
             }
 
