@@ -37,37 +37,37 @@ public class MessageDbRepository implements Repository<Long, Message> {
         if (aLong == null)
             throw new IllegalArgumentException("Id must be not null");
 
-        String sql = "SELECT * from messages where messages.id = ?";
-        Message mess;
-        try (Connection connection = DriverManager.getConnection(url, username, password);
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, Math.toIntExact(aLong));
-            ResultSet resultSet = statement.executeQuery();
+            String sql = "SELECT * from messages where messages.id = ?";
+            Message mess;
+            try (Connection connection = DriverManager.getConnection(url, username, password);
+                 PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setInt(1, Math.toIntExact(aLong));
+                ResultSet resultSet = statement.executeQuery();
 
-            if (resultSet.next()) {
-                Long id = resultSet.getLong("id");
-                LocalDateTime date = LocalDateTime.ofInstant(resultSet.getTimestamp("datem").toInstant(), ZoneOffset.ofHours(0));
-                Long fromId = resultSet.getLong("fromm");
-                User from = findOneUser(fromId, connection);
-                List<User> to = new ArrayList<>();
-                List<Long> idList = findTo(id);
-                idList.forEach(x -> to.add(findOneUser(x, connection)));
-                String message = resultSet.getString("messagem");
-                Long idreply = resultSet.getLong("replym");
-                Message reply = this.findOneConn(idreply, connection);
-                mess = new Message(from, to, message);
-                mess.setId(id);
-                mess.setDate(date);
-                mess.setReply(reply);
-                return mess;
+                if (resultSet.next()) {
+                    Long id = resultSet.getLong("id");
+                    LocalDateTime date = LocalDateTime.ofInstant(resultSet.getTimestamp("datem").toInstant(), ZoneOffset.ofHours(0));
+                    Long fromId = resultSet.getLong("fromm");
+                    User from = findOneUser(fromId, connection);
+                    List<User> to = new ArrayList<>();
+                    List<Long> idList = findTo(id);
+                    idList.forEach(x -> to.add(findOneUser(x, connection)));
+                    String message = resultSet.getString("messagem");
+                    Long idreply = resultSet.getLong("replym");
+                    Message reply = this.findOneConn(idreply, connection);
+                    mess = new Message(from, to, message);
+                    mess.setId(id);
+                    mess.setDate(date);
+                    mess.setReply(reply);
+                    return mess;
 
+                }
+
+
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
             }
-
-
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return null;
+            return null;
 
     }
 
@@ -301,4 +301,7 @@ public class MessageDbRepository implements Repository<Long, Message> {
         }
         return null;
     }
+
+
+
 }

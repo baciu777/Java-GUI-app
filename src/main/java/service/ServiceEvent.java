@@ -1,22 +1,31 @@
 package service;
 
+import ChangeEvent.EventChangeEvent;
+import ChangeEvent.FriendChangeEvent;
 import domain.Entity;
 import domain.Event;
 import domain.Notification;
 import domain.User;
 import domain.validation.ValidationException;
+import observer.Observable;
+import observer.Observer;
+import paging.PageR;
+import paging.Pageable;
+import paging.PageableImplementation;
+import paging.PagingRepository;
 import repository.Repository;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
-public class ServiceEvent {
-    private Repository<Long, Event> repoEvents;
+public class ServiceEvent implements Observable<EventChangeEvent> {
+    private PagingRepository<Long, Event> repoEvents;
     private Repository<Long, Notification> repoNotif;
+    private int page = 0;
+    private int size = 3;
 
-    public ServiceEvent(Repository<Long, Event> repoEvents, Repository<Long, Notification> repoNotif) {
+    public ServiceEvent(PagingRepository<Long, Event> repoEvents, Repository<Long, Notification> repoNotif) {
         this.repoEvents = repoEvents;
         this.repoNotif = repoNotif;
     }
@@ -34,6 +43,7 @@ public class ServiceEvent {
         ev.setId(id);
 
         Event save = repoEvents.save(ev);
+        notifyObservers(new EventChangeEvent(ev));
         if (save != null)
             throw new ValidationException("id already used");
 
@@ -115,6 +125,45 @@ public class ServiceEvent {
 
 
     }
+    private Pageable pageable;
+
+    public void setPageSize(int size) {
+        this.size = size;
+    }
+    public int getPageSize() {
+        return size;
+    }
+    public void setPageNumber(int pageNumber) {
+        this.page = pageNumber;
+    }
 
 
+    public Set<Event> getNextEvents() {
+
+        this.page++;
+        return getEventsOnPage(this.page);
+    }
+
+    public Set<Event> getEventsOnPage(int page) {
+        this.page=page;
+        Pageable pageable = new PageableImplementation(page, this.size);
+        PageR<Event> studentPage =repoEvents.findAllPage(pageable);
+        return studentPage.getContent().collect(Collectors.toSet());
+    }
+
+    private List<Observer<EventChangeEvent>> observers=new ArrayList<>();
+    @Override
+    public void addObserver(Observer<EventChangeEvent> e) {
+        observers.add(e);
+    }
+
+    @Override
+    public void removeObserver(Observer<EventChangeEvent> e) {
+        observers.remove(e);
+    }
+
+    @Override
+    public void notifyObservers(EventChangeEvent t) {
+        observers.stream().forEach(x->x.update(t));
+    }
 }

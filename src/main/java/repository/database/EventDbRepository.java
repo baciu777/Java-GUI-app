@@ -1,20 +1,20 @@
 package repository.database;
 
-import domain.Event;
-import domain.FriendRequest;
-import domain.Tuple;
-import domain.User;
+import domain.*;
 import domain.validation.Validator;
-import repository.Repository;
+import paging.PageR;
+import paging.Pageable;
+import paging.Paginator;
+import paging.PagingRepository;
 
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
-public class EventDbRepository implements Repository<Long, Event> {
+public class EventDbRepository implements PagingRepository<Long, Event> {
     private String url;
     private String username;
     private String password;
@@ -229,4 +229,10 @@ public class EventDbRepository implements Repository<Long, Event> {
     }
 
 
+    @Override
+    public PageR<Event> findAllPage(Pageable pageable) {
+     Paginator<Event> paginator = new Paginator<Event>(pageable,
+                StreamSupport.stream(this.findAll().spliterator(),false).sorted(Comparator.comparing(Event::getDate).reversed()).collect(Collectors.toList()));
+        return paginator.paginate();
+    }
 }

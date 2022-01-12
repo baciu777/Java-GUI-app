@@ -78,14 +78,7 @@ public class ServiceMessage implements Observable<MessageTaskChangeEvent> {
         Message mess=new Message( from,to,message,replyMess);
         mess.setDate(LocalDateTime.now());
         long id = 0L;
-        for (Message ms:  repoMessage.findAll()) {
-            if (ms.getId() > id)
-                id = ms.getId();
 
-        }
-        id++;
-
-        mess.setId(id);
 
         Message save =repoMessage.save(mess);
 
@@ -177,7 +170,8 @@ public class ServiceMessage implements Observable<MessageTaskChangeEvent> {
 
     public List<Message> groupChat(List<Message> messagesUser,List<Long> ids)
     {
-
+        System.out.println("aici");
+        System.out.println(messagesUser.get(messagesUser.size()-1).getId());
         List<Message> result=messagesUser.stream()
             .filter(m-> (ids.contains(m.getFrom().getId())))
             .filter(m-> m.getTo().size()==ids.size()-1)
@@ -218,7 +212,7 @@ public class ServiceMessage implements Observable<MessageTaskChangeEvent> {
         for(Message ms:listM)
         {
             if(ms.getId()>maxx)
-            maxx=ms.getId();
+                maxx=ms.getId();
 
         }
         if(maxx==-1L)

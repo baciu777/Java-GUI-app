@@ -3,6 +3,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Pagination?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -98,20 +99,39 @@
             </ImageView>
          </graphic>
       </Button>
-      <TableView fx:id="tableViewEvents" layoutX="91.0" layoutY="353.0" onMouseClicked="#handleGoing" prefHeight="329.0" prefWidth="318.0">
+      <TableView fx:id="tableViewEvents" layoutX="14.0" layoutY="440.0" onMouseClicked="#handleGoing" prefHeight="127.0" prefWidth="318.0">
          <columns>
             <TableColumn fx:id="tableColumnNameEvent" prefWidth="149.59996032714844" text="name" />
             <TableColumn fx:id="tableColumnDateEvent" prefWidth="168.800048828125" text="date" />
          </columns>
       </TableView>
-      <TextField fx:id="newName" layoutX="474.0" layoutY="562.0" prefHeight="26.0" prefWidth="175.0" />
-      <DatePicker fx:id="date" layoutX="474.0" layoutY="602.0" />
-      <Button fx:id="saveEvent" layoutX="520.0" layoutY="640.0" mnemonicParsing="false" onAction="#handleSaveEvent" text="Create Event" />
-      <Button fx:id="buttonGoingNotOnOff" layoutX="440.0" layoutY="391.0" mnemonicParsing="false" onAction="#Going" prefHeight="34.0" prefWidth="168.0" text="Going" textAlignment="CENTER">
+      <TextField fx:id="newName" layoutX="474.0" layoutY="528.0" prefHeight="26.0" prefWidth="175.0" />
+      <DatePicker fx:id="date" layoutX="474.0" layoutY="566.0" />
+      <Button fx:id="saveEvent" layoutX="520.0" layoutY="604.0" mnemonicParsing="false" onAction="#handleSaveEvent" text="Create Event" />
+      <Button fx:id="buttonGoingNotOnOff" layoutX="359.0" layoutY="469.0" mnemonicParsing="false" onAction="#Going" prefHeight="34.0" prefWidth="168.0" text="Going" textAlignment="CENTER">
          <font>
             <Font size="14.0" />
          </font></Button>
+
+      <Pagination fx:id="pagination" layoutX="84.0" layoutY="443.0" maxPageIndicatorCount="5" prefHeight="197.0" prefWidth="270.0" />
+      <Label layoutX="365.0" layoutY="522.0" prefHeight="34.0" prefWidth="130.0" text="Name" textFill="#e9e3d1">
+         <font>
+            <Font name="Century Gothic" size="31.0" />
+         </font>
+      </Label>
+      <Label layoutX="365.0" layoutY="559.0" prefHeight="34.0" prefWidth="130.0" text="Date" textFill="#e9e3d1">
+         <font>
+            <Font name="Century Gothic" size="31.0" />
+         </font>
+      </Label>
+      <Label layoutX="88.0" layoutY="390.0" prefHeight="34.0" prefWidth="130.0" text="Events" textFill="#e9e3d1">
+         <font>
+            <Font name="Century Gothic" size="31.0" />
+         </font>
+      </Label>
+
       <TextField fx:id="PDFFileName" layoutX="46.0" layoutY="392.0" prefHeight="26.0" prefWidth="318.0" />
+
 
    </children>
 </AnchorPane>
