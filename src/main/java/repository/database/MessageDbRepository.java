@@ -50,7 +50,7 @@ public class MessageDbRepository implements Repository<Long, Message> {
                     Long fromId = resultSet.getLong("fromm");
                     User from = findOneUser(fromId, connection);
                     List<User> to = new ArrayList<>();
-                    List<Long> idList = findTo(id);
+                    List<Long> idList = findToConn(id,connection);
                     idList.forEach(x -> to.add(findOneUser(x, connection)));
                     String message = resultSet.getString("messagem");
                     Long idreply = resultSet.getLong("replym");
@@ -87,7 +87,7 @@ public class MessageDbRepository implements Repository<Long, Message> {
                 Long fromId = resultSet.getLong("fromm");
                 User from = findOneUser(fromId, connection);
                 List<User> to = new ArrayList<>();
-                List<Long> idList = findTo(id);
+                List<Long> idList = findToConn(id,connection);
                 idList.forEach(x -> to.add(findOneUser(x, connection)));
                 String message = resultSet.getString("messagem");
                 Long idreply = resultSet.getLong("replym");
@@ -107,26 +107,72 @@ public class MessageDbRepository implements Repository<Long, Message> {
         return null;
 
     }
+    private Message findOneConnReply(Long aLong, Connection connection) {
+        if (aLong == null)
+            throw new IllegalArgumentException("Id must be not null");
+
+        String sql = "SELECT * from messages where messages.id = ?";
+        Message mess;
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, Math.toIntExact(aLong));
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                Long id = resultSet.getLong("id");
+                LocalDateTime date = LocalDateTime.ofInstant(resultSet.getTimestamp("datem").toInstant(), ZoneOffset.ofHours(0));
+                Long fromId = resultSet.getLong("fromm");
+                User from = findOneUser(fromId, connection);
+                List<User> to = new ArrayList<>();
+                List<Long> idList = findToConn(id,connection);
+                idList.forEach(x -> to.add(findOneUser(x, connection)));
+                String message = resultSet.getString("messagem");
+                Long idreply = resultSet.getLong("replym");
+
+                mess = new Message(from, to, message);
+                mess.setId(id);
+                mess.setDate(date);
+                //mess.setReply(idreply);
+                return mess;
+
+            }
+
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
+
+    }
 
     @Override
     public Iterable<Message> findAll() {
         Set<Message> messages = new HashSet<>();
         Message mess = null;
-        try (Connection connection = DriverManager.getConnection(url, username, password);
-             PreparedStatement statement = connection.prepareStatement("SELECT * from messages order by datem");
-             ResultSet resultSet = statement.executeQuery()) {
 
+        try (Connection connection = DriverManager.getConnection(url, username, password);
+
+             PreparedStatement statement = connection.prepareStatement("SELECT * from messages ");
+
+
+         ResultSet resultSet = statement.executeQuery())
+
+
+
+
+         {
+             //connection.setAutoCommit(false);
+//resultSet.setFetchSize(50);
             while (resultSet.next()) {
                 Long id = resultSet.getLong("id");
                 LocalDateTime date = LocalDateTime.ofInstant(resultSet.getTimestamp("datem").toInstant(), ZoneOffset.ofHours(0));
                 Long fromId = resultSet.getLong("fromm");
                 User from = findOneUser(fromId, connection);
                 List<User> to = new ArrayList<>();
-                List<Long> idList = findTo(id);
+                List<Long> idList = findToConn(id,connection);
                 idList.forEach(x -> to.add(findOneUser(x, connection)));
                 String message = resultSet.getString("messagem");
                 Long idreply = resultSet.getLong("replym");
-                Message reply = this.findOneConn(idreply, connection);
+                Message reply = this.findOneConnReply(idreply, connection);
                 mess = new Message(from, to, message);
                 mess.setId(id);
                 mess.setDate(date);
@@ -279,10 +325,10 @@ public class MessageDbRepository implements Repository<Long, Message> {
         return null;
     }
 
-    private List<Long> findTo(Long id) {
+
+    private List<Long> findToConn(Long id,Connection connection) {
         List<Long> toIds = new ArrayList<>();
-        try (Connection connection = DriverManager.getConnection(url, username, password);
-             PreparedStatement statement = connection.prepareStatement("select tom \n" +
+        try (   PreparedStatement statement = connection.prepareStatement("select tom \n" +
                      "from chats c inner join messages m on c.id1 = m.id \n" +
                      "where (m.id=?)")) {
             statement.setLong(1, id);
