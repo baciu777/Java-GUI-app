@@ -12,6 +12,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import paging.PagingRepository;
 import repository.Repository;
 import repository.database.*;
 import service.*;
@@ -29,7 +30,7 @@ public class HelloApplication extends Application {
         repoDbFr.findAll().forEach(System.out::println);
         Repository<Long, Message> repoDbMs = new MessageDbRepository("jdbc:postgresql://localhost:5432/network", "postgres", "ioana", new MessageValidator());
         Repository<Tuple<Long, Long>, FriendRequest> repoDbFrRq = new FriendRequestDbRepository("jdbc:postgresql://localhost:5432/network", "postgres", "ioana");
-        Repository<Long, Event> repoDbEv = new EventDbRepository("jdbc:postgresql://localhost:5432/network", "postgres", "ioana", new EventValidator());
+        PagingRepository<Long, Event> repoDbEv = new EventDbRepository("jdbc:postgresql://localhost:5432/network", "postgres", "ioana", new EventValidator());
         Repository<Long, Notification> repoDbNf = new NotificationsDbRepository("jdbc:postgresql://localhost:5432/network", "postgres", "ioana", new EventValidator());
 
         ServiceUser servUser = new ServiceUser(repoDb, repoDbFr);

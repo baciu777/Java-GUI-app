@@ -191,7 +191,22 @@ public class ChatsController extends MenuController {
                         setText(null);
                         setGraphic(null);
                     } else {
+                        //AICI INTRA REPLY URILE
+                        if(item.getReply()!=null && item.getReply().getId()!=-1L) {
+                            if (!item.getFrom().getId().equals(userLogin.getId())) {
+                                lblUserLeft.setText( item.getFrom().getFirstName() + " " + item.getFrom().getLastName() + ": "+"( reply to "+item.getReply().getMessage()+" ) ");
+                                lblTextLeft.setText(item.getMessage());
+                                //lblTextLeft.setTextFill(Color.color(1, 0, 0));
 
+                                setGraphic(hBoxLeft);
+                            } else {
+                                lblUserRight.setText(":" + " ( reply to "+item.getReply().getMessage()+" ) "+item.getFrom().getFirstName() + " " + item.getFrom().getLastName());
+                                lblTextRight.setText(item.getMessage());
+                                setGraphic(hBoxRight);
+                            }
+                        }
+                        else
+                            //AICI INTRA MESAJELE NORMALE
                         if (!item.getFrom().getId().equals(userLogin.getId())) {
                             lblUserLeft.setText(item.getFrom().getFirstName() + " " + item.getFrom().getLastName() + ":");
                             lblTextLeft.setText(item.getMessage());
@@ -221,8 +236,10 @@ public class ChatsController extends MenuController {
         if(chatSelected==null)
             return;
         try {
-
-
+            Message selectedItem =  lvChatWindow.getSelectionModel().getSelectedItem();
+            if(selectedItem!=null)
+                serviceMessage.saveReply(userLogin.getId(), newMessage.getText(),selectedItem.getId());
+            else
             serviceMessage.save(userLogin.getId(), takeToWithoutUserLoginIds(selected.getPeople()), newMessage.getText());
             Message newMess = serviceMessage.getLastMessSaved();
             userLogin.addMessage(newMess);

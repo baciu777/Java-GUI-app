@@ -1,6 +1,8 @@
 package repository;
 
 import domain.Entity;
+import paging.PageR;
+import paging.Pageable;
 
 /**
  * Repository class
@@ -62,5 +64,6 @@ public interface Repository<ID, E extends Entity<ID>> {
      *             if the entity is not valid.
      */
     E update(E entity);
+
 
 }

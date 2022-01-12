@@ -1,5 +1,6 @@
 package com.example.network5;
 
+import ChangeEvent.EventChangeEvent;
 import ChangeEvent.FrRequestChangeEvent;
 import ChangeEvent.FriendChangeEvent;
 import ChangeEvent.MessageTaskChangeEvent;
@@ -51,74 +52,12 @@ public class MenuController {
 
         }
     };
+
     protected Observer<FrRequestChangeEvent> obsFrriendReq = new Observer<FrRequestChangeEvent>() {
         @Override
         public void update(FrRequestChangeEvent frRequestChangeEvent) {
 
-           /* FriendRequest frR = frRequestChangeEvent.getData();
-            if (!Objects.equals(frRequestChangeEvent.getType(), "unsend")) {
-                if (Objects.equals(frR.getId().getRight(), userLogin.getId()) && Objects.equals(frR.getStatus(), "APPROVED")) {
-                    User u1 = serviceUser.findOne(frR.getId().getLeft());
-                    DtoFriendReq pp = new DtoFriendReq(u1.getFirstName() + " " + u1.getLastName(), userLogin.getFirstName() + " " + userLogin.getLastName(), frR.getDate(), frR.getStatus());
-                    System.out.println(userLogin.getFriendRequestsReceived().size());
-                    userLogin.removeFrRequestRec(pp);
-                    System.out.println(userLogin.getFriendRequestsReceived().size());
-                    List<User> friends = userLogin.getFriends();
-                    friends.add(u1);
 
-                    userLogin.setFriends(friends);
-
-
-                }
-                if (Objects.equals(frR.getId().getLeft(), userLogin.getId()) && Objects.equals(frR.getStatus(), "APPROVED")) {
-                    User u1 = serviceUser.findOne(frR.getId().getRight());
-                    DtoFriendReq pp = new DtoFriendReq(userLogin.getFirstName() + " " + userLogin.getLastName(), u1.getFirstName() + " " + u1.getLastName(), frR.getDate(), frR.getStatus());
-                    System.out.println("dadadada");
-                    userLogin.removeFrRequestSent(pp);
-                    List<User> friends = userLogin.getFriends();
-                    friends.add(u1);
-
-                    userLogin.setFriends(friends);
-
-
-
-                }
-                if (Objects.equals(frR.getStatus(), "PENDING") && Objects.equals(frR.getId().getRight(), userLogin.getId())) {
-                    User u1 = serviceUser.findOne(frR.getId().getLeft());
-                    DtoFriendReq pp = new DtoFriendReq(u1.getFirstName() + " " + u1.getLastName(), userLogin.getFirstName() + " " + userLogin.getLastName(), frR.getDate(), frR.getStatus());
-
-                    userLogin.addRequestRec(pp);
-
-                }
-                if (Objects.equals(frR.getStatus(), "REJECTED") && Objects.equals(frR.getId().getRight(), userLogin.getId())) {
-                    User u1 = serviceUser.findOne(frR.getId().getLeft());
-                    DtoFriendReq pp = new DtoFriendReq(u1.getFirstName() + " " + u1.getLastName(), userLogin.getFirstName() + " " + userLogin.getLastName(), frR.getDate(), frR.getStatus());
-
-                    userLogin.removeFrRequestRec(pp);
-                }
-                if (Objects.equals(frR.getStatus(), "REJECTED") && Objects.equals(frR.getId().getLeft(), userLogin.getId())) {
-                    User u1 = serviceUser.findOne(frR.getId().getRight());
-                    DtoFriendReq pp = new DtoFriendReq(userLogin.getFirstName() + " " + userLogin.getLastName(), u1.getFirstName() + " " + u1.getLastName(), frR.getDate(), frR.getStatus());
-
-                    userLogin.removeFrRequestSent(pp);
-                }
-            }
-           // if (Objects.equals(frR.getId().getLeft(), userLogin.getId()) && Objects.equals(frRequestChangeEvent.getType(), "unsend")) {
-               // User u1 = serviceUser.findOne(frR.getId().getRight());
-              //  DtoFriendReq pp = new DtoFriendReq(userLogin.getFirstName() + " " + userLogin.getLastName(), u1.getFirstName() + " " + u1.getLastName(), frR.getDate(), frR.getStatus());
-
-
-              //  userLogin.removeFrRequestRec(pp);
-            //}
-            else
-            if (Objects.equals(frR.getId().getRight(), userLogin.getId()) && Objects.equals(frRequestChangeEvent.getType(), "unsend")) {
-
-
-                User u1 = serviceUser.findOne(frR.getId().getLeft());
-                DtoFriendReq pp = new DtoFriendReq(u1.getFirstName() + " " + u1.getLastName(), userLogin.getFirstName() + " " + userLogin.getLastName(), frR.getDate(), frR.getStatus());
-
-                userLogin.removeFrRequestRec(pp);
-            }*/
             List<User> fr = new ArrayList<>();
             serviceF.friends(userLogin.getId()).forEach(fr::add);
             userLogin.setFriends(fr);
