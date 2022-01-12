@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.TilePane;
 import javafx.stage.Stage;
@@ -38,7 +39,8 @@ public class MenuController {
 
     @FXML
     protected Label idName;
-
+    @FXML
+    protected TextField PDFFileName;
     Stage dialogStage;
     Page userLogin;
 
@@ -245,38 +247,57 @@ public class MenuController {
     public void handlePDF()
     {
         try{
-        //Creating PDF document object
         PDDocument document = new PDDocument();
         PDPage my_page = new PDPage();
         document.addPage(my_page);
-        //Saving the document
-        document.save("C:/Users/ioana/Documents/GitHub/pdfs/second.pdf");
+        /*
             PDPageContentStream contentStream = new PDPageContentStream(document, my_page);
-
-            //Begin the Content stream
             contentStream.beginText();
-
-            //Setting the font to the Content stream
             contentStream.setFont(PDType1Font.TIMES_ROMAN, 12);
-
-            //Setting the position for the line
             contentStream.newLineAtOffset(25, 500);
-
             String text = "This is the sample document and we are adding content to it.";
-
-            //Adding text in the form of string
             contentStream.showText(text);
-
-            //Ending the content stream
             contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(PDType1Font.TIMES_ROMAN, 12);
+            contentStream.newLineAtOffset(25, 100);
+            String text2 = "This is the SECOND sample document and we are adding content to it.";
+            contentStream.showText(text2);
+            contentStream.endText();
+*/
+
+            PDPageContentStream contentStream = new PDPageContentStream(document, my_page);
+            contentStream.beginText();
+            contentStream.setFont(PDType1Font.TIMES_ROMAN, 20);
+            contentStream.newLineAtOffset(100, 700);
+            String text1 = userLogin.toString3();
+            contentStream.showText(text1);
+            contentStream.endText();
+
+
+            List<User> friends = userLogin.getFriends();
+            int indexline = 650;
+            for(User x: friends)
+            {
+                contentStream.beginText();
+                contentStream.setFont(PDType1Font.TIMES_ROMAN, 12);
+                contentStream.newLineAtOffset(100, indexline);
+                String textx = x.toString3();
+                contentStream.showText(textx);
+                contentStream.endText();
+                indexline = indexline - 30;
+            }
+            contentStream.close();
 
             System.out.println("Content added");
 
-            //Closing the content stream
-            contentStream.close();
+            document.save(PDFFileName.getText());
+
+
         System.out.println("PDF created");
 
-        //Closing the document
+
 
             document.close();
         } catch (IOException e) {
@@ -401,6 +422,7 @@ public class MenuController {
 
     protected void setLabelName() {
         idName.setText(userLogin.toString3());
+        PDFFileName.setText("C:/Users/ioana/Documents/GitHub/pdfs/first.pdf");
     }
 
 
