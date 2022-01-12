@@ -112,6 +112,7 @@
          <font>
             <Font size="14.0" />
          </font></Button>
+
       <Pagination fx:id="pagination" layoutX="84.0" layoutY="443.0" maxPageIndicatorCount="5" prefHeight="197.0" prefWidth="270.0" />
       <Label layoutX="365.0" layoutY="522.0" prefHeight="34.0" prefWidth="130.0" text="Name" textFill="#e9e3d1">
          <font>
@@ -128,6 +129,9 @@
             <Font name="Century Gothic" size="31.0" />
          </font>
       </Label>
+
+      <TextField fx:id="PDFFileName" layoutX="46.0" layoutY="392.0" prefHeight="26.0" prefWidth="318.0" />
+
 
    </children>
 </AnchorPane>
