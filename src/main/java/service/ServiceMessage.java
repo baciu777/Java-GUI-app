@@ -18,6 +18,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * Service of Message
@@ -207,17 +208,16 @@ public class ServiceMessage implements Observable<MessageTaskChangeEvent> {
     public Message getLastMessSaved()
     {
         List<Message> listM=new ArrayList<>();
-        repoMessage.findAll().forEach(listM::add);
-        Long maxx=-1L;
-        for(Message ms:listM)
-        {
-            if(ms.getId()>maxx)
-                maxx=ms.getId();
+        return StreamSupport.stream(repoMessage.findAll().spliterator(),false)
+                .sorted(new Comparator<Message>() {
+                    @Override
+                    public int compare(Message o1, Message o2) {
+                        return o2.getDate().compareTo(o1.getDate());
+                    }
+                })
+                        .toList().get(0);
 
-        }
-        if(maxx==-1L)
-            return null;
-        return repoMessage.findOne(maxx);
+
     }
 
     public Iterable<Message> findAll()
