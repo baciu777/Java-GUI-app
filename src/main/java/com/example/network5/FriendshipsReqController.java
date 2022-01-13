@@ -122,8 +122,11 @@ public class FriendshipsReqController extends MenuController  {
      */
     public void setStyleTable()
     {
-        tableViewFriendReq.setStyle("-fx-background: transparent;" +
-                "-fx-background-color: transparent;");
+       /* tableViewFriendReq.setStyle("-fx-background: transparent;" +
+                "-fx-background-color: transparent;" +
+                "-fx-base:transparent;" +
+                "-fx-border-color:blue;");*/
+        //tableColumnFrom.setStyle("-fx-border-color:blue");
 
     }
 

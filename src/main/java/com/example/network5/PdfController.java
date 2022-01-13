@@ -75,21 +75,33 @@ public class PdfController {
 
             List<User> friends = userLogin.getFriends();
             int indexline = 650;
+            contentStream.beginText();
+            contentStream.setFont(PDType1Font.TIMES_ROMAN, 15);
+            contentStream.newLineAtOffset(100, indexline);
+            contentStream.showText("Prieteni:");
+            contentStream.endText();
+            indexline = indexline - 30;
             for(User x: friends)
             {
                 contentStream.beginText();
                 contentStream.setFont(PDType1Font.TIMES_ROMAN, 12);
-                contentStream.newLineAtOffset(100, indexline);
+                contentStream.newLineAtOffset(120, indexline);
                 String textx = x.toString3();
                 contentStream.showText(textx);
                 contentStream.endText();
                 indexline = indexline - 30;
             }
+            contentStream.beginText();
+            contentStream.setFont(PDType1Font.TIMES_ROMAN, 15);
+            contentStream.newLineAtOffset(100, indexline);
+            contentStream.showText("Mesaje:");
+            contentStream.endText();
+            indexline = indexline - 30;
             for(Message x: getHistoryMess())
             {
                 contentStream.beginText();
                 contentStream.setFont(PDType1Font.TIMES_ROMAN, 12);
-                contentStream.newLineAtOffset(100, indexline);
+                contentStream.newLineAtOffset(120, indexline);
                 String textx = x.toString();
                 contentStream.showText(textx);
                 contentStream.endText();

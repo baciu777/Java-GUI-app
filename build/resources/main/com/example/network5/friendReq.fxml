@@ -15,7 +15,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="730.0" prefWidth="584.0" style="-fx-background-color: linear-gradient(  #726c93,#2d2c30);" styleClass="f" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.network5.FriendshipsReqController">
+<AnchorPane prefHeight="730.0" prefWidth="584.0" style="-fx-background-color: linear-gradient(  #726c93,#2d2c30);" stylesheets="@TableStyleForAll.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.network5.FriendshipsReqController">
    <children>
       <Button layoutX="217.0" layoutY="267.0" mnemonicParsing="false" onAction="#handleFriends" style="-fx-background-color: transparent;" text="Friends" textFill="#e9e3d1">
          <font>
@@ -115,20 +115,23 @@
             <Font size="20.0" />
          </font>
       </Label>
-      <TableView fx:id="tableViewFriendReq" layoutX="189.0" layoutY="365.0" prefHeight="159.0" prefWidth="522.0">
+      <TableView fx:id="tableViewFriendReq" layoutX="189.0" layoutY="365.0" prefHeight="154.0" prefWidth="514.0">
          <columns>
             <TableColumn fx:id="tableColumnFrom" prefWidth="111.19999694824219" text="From" />
             <TableColumn fx:id="tableColumnStatus" minWidth="8.79998779296875" prefWidth="92.79998779296875" text="Status" />
-            <TableColumn fx:id="tableColumnDate" minWidth="0.0" prefWidth="161.5999755859375" text="Date" />
-            <TableColumn fx:id="tableColumnAccept" prefWidth="70.4000244140625" text="Accept" />
-            <TableColumn fx:id="tableColumnDecline" prefWidth="87.20001220703125" text="Decline" />
+            <TableColumn fx:id="tableColumnDate" minWidth="0.0" prefWidth="191.199951171875" text="Date" />
+            <TableColumn fx:id="tableColumnAccept" prefWidth="60.0" text="Accept" />
+            <TableColumn fx:id="tableColumnDecline" prefWidth="56.7999267578125" text="Decline" />
          </columns>
       </TableView>
       <TextField fx:id="SearchingName" layoutX="499.0" layoutY="317.0" prefHeight="26.0" prefWidth="214.0" />
 
 
 
-
+      <Button layoutX="20.0" layoutY="333.0" mnemonicParsing="false" onAction="#showPdfExportDialog" style="-fx-background-color: #e9e3d1;" text="Extract PDF" textFill="#4a3e54">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Button>
 
    </children>
 </AnchorPane>

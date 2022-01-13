@@ -104,7 +104,10 @@
               <TilePane fx:id="friendsTile" prefHeight="298.0" prefWidth="582.0" />
          </content>
       </ScrollPane>
-
+        <Button layoutX="20.0" layoutY="333.0" mnemonicParsing="false" onAction="#showPdfExportDialog" style="-fx-background-color: #e9e3d1;" text="Extract PDF" textFill="#4a3e54">
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font></Button>
 
     </children>
 </AnchorPane>
