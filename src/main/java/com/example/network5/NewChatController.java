@@ -22,7 +22,8 @@ import java.util.stream.StreamSupport;
 
 public class NewChatController extends ChatsController {
 
-
+    @FXML
+    TextField textFieldSearch;
     @FXML
     TableView<User> tableViewUsers;
     @FXML
@@ -32,9 +33,17 @@ public class NewChatController extends ChatsController {
     @FXML
     TextField newMess;
     ObservableList<User> modelNewChat = FXCollections.observableArrayList();
+    ObservableList<User> modelNewChat2 = FXCollections.observableArrayList();
     List<Long> newChatUsers = new ArrayList<>();
+
     ChatsController controllerChat;
 
+    @FXML
+    TableView<User> tableViewUsers2;
+    @FXML
+    TableColumn<User, String> tableColumnFirstName2;
+    @FXML
+    TableColumn<User, String> tableColumnLastName2;
     @FXML
     Button buttonAdd;
 
@@ -46,6 +55,7 @@ public class NewChatController extends ChatsController {
         this.dialogStage = stage;
         this.userLogin = user;
         //serviceMessage.addObserver(obsMess);
+
         controllerChat=controller;
         newChatUsers.add(userLogin.getId());
         initModelNewChat();
@@ -63,6 +73,11 @@ public class NewChatController extends ChatsController {
         tableColumnLastName.setCellValueFactory(new PropertyValueFactory<User, String>("LastName"));
 
         tableViewUsers.setItems(modelNewChat);
+        tableColumnFirstName2.setCellValueFactory(new PropertyValueFactory<User, String>("FirstName"));
+        tableColumnLastName2.setCellValueFactory(new PropertyValueFactory<User, String>("LastName"));
+
+        tableViewUsers2.setItems(modelNewChat2);
+
 
 
     }
@@ -121,11 +136,19 @@ public class NewChatController extends ChatsController {
     protected void initModelNewChat() {
         Iterable<User> users = serviceUser.printUs();
         List<User> listUsers = new ArrayList<>();
+        List<User> listUsers2 = new ArrayList<>();
         for (User ur : users)
             if (!newChatUsers.contains(ur.getId()))
                 listUsers.add(ur);
+            else
+                if(!Objects.equals(ur.getId(), userLogin.getId()))
+                        listUsers2.add(ur);
+
+
+
 
         modelNewChat.setAll(listUsers);
+        modelNewChat2.setAll(listUsers2);
 
     }
 
@@ -143,7 +166,10 @@ public class NewChatController extends ChatsController {
     public void handleAddUser() {
         try {
             User selected = (User) tableViewUsers.getSelectionModel().getSelectedItem();
+            if( selected==null)
 
+            {buttonAdd.setVisible(false);
+                throw new Exception("Select one user");}
             User found = serviceUser.findOne(selected.getId());
             if (Objects.equals(found.getId(), userLogin.getId()))
                 throw new Exception("This is you");
@@ -154,5 +180,19 @@ public class NewChatController extends ChatsController {
         } catch (Exception e) {
             MessageAlert.showErrorMessage(null, e.getMessage());
         }
+    }
+    public void handleFilter() {
+        Predicate<User> p1 = n -> n.getFirstName().startsWith(textFieldSearch.getText() ) || n.getLastName().startsWith(textFieldSearch.getText());
+        Iterable<User> users = serviceUser.printUs();
+        List<User> userForTile = StreamSupport.stream(users.spliterator(), false)
+                .filter(p1).collect(Collectors.toList());
+
+        modelNewChat.clear();
+        for(User ur:userForTile)
+        {
+            if(!newChatUsers.contains(ur.getId()))
+                modelNewChat.add(ur);
+        }
+
     }
 }

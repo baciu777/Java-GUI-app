@@ -214,9 +214,9 @@ public class ChatsController extends MenuController {
                             lblTextLeft.setStyle("-fx-font-size: 12px;\n" +
                                     "                            -fx-font-weight: bold;\n" +
                                     "                            -fx-text-fill: #4a56e2;");
-                            setGraphic(hBoxLeft);
-                            hBoxLeft.setStyle("-fx-background-color: red");
-                            hBoxLeft.setMaxWidth(300);
+                            //setGraphic(hBoxLeft);
+                            //hBoxLeft.setStyle("-fx-background-color: red");
+                            //hBoxLeft.setMaxWidth(300);
                             /*
                             hBoxLeft.setStyle("-fx-background-color: #2d2d31;" +
                                     "-fx-padding: 10 20 10 20;" +
