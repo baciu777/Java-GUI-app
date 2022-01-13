@@ -2,7 +2,6 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -95,8 +94,10 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="83.0" layoutY="352.0" mnemonicParsing="false" onAction="#handlePDF" text="Extract PDF" />
-      <TextField fx:id="PDFFileName" layoutX="46.0" layoutY="392.0" prefHeight="26.0" prefWidth="318.0" />
+      <Button layoutX="20.0" layoutY="333.0" mnemonicParsing="false" onAction="#showPdfExportDialog" style="-fx-background-color: #e9e3d1;" text="Extract PDF" textFill="#4a3e54">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Button>
 
 
    </children>

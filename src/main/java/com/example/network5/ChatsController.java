@@ -214,8 +214,13 @@ public class ChatsController extends MenuController {
                             lblTextLeft.setStyle("-fx-font-size: 12px;\n" +
                                     "                            -fx-font-weight: bold;\n" +
                                     "                            -fx-text-fill: #4a56e2;");
-                            //lblTextLeft.setTextFill(Color.color(1, 0, 0));
                             setGraphic(hBoxLeft);
+                            hBoxLeft.setStyle("-fx-background-color: red");
+                            hBoxLeft.setMaxWidth(300);
+                            /*
+                            hBoxLeft.setStyle("-fx-background-color: #2d2d31;" +
+                                    "-fx-padding: 10 20 10 20;" +
+                                    "-fx-background-radius: 20");*/
                         } else {
                             lblUserRight.setText(":" + item.getFrom().getFirstName() + " " + item.getFrom().getLastName());
                             lblTextRight.setText(item.getMessage());
