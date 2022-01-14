@@ -12,10 +12,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -43,9 +40,11 @@ public class ChatsController extends MenuController {
 
     @FXML
     TextField newMessage;
-
+    @FXML
+    Label ChatUserName;
     @FXML
     private ListView<Message> lvChatWindow;
+
 
     Observer<MessageTaskChangeEvent> obsMessNew = new Observer<MessageTaskChangeEvent>() {
         @Override
@@ -94,7 +93,7 @@ public class ChatsController extends MenuController {
         tableColumnNameChat.setCellValueFactory(new PropertyValueFactory<Chat, String>("name"));
         tableViewChat.setItems(modelChat);
 
-
+        ChatUserName.setText("");
     }
 
 
@@ -151,14 +150,118 @@ public class ChatsController extends MenuController {
         }
         return false;
     }
+    public String newLinesInString(String s, int i)
+    {
+        return null;
+    }
+    public VBox getReplyLeft(String SenderName, String message, String replied)
+    {
+        Label Name= new Label(SenderName);
+        Label mess = new Label(message);
+        Label rep = new Label(replied);
+        rep.setMaxSize(120,30);
+        rep.setStyle("-fx-background-color:rgb(166, 166, 166);" +
+                "-fx-padding: 3 10 3 10;" +
+                "-fx-background-radius: 15;");
+        VBox container = new VBox();
+        container.getChildren().addAll(Name,rep,mess);
+        Name.setStyle("-fx-text-fill: #e9e3d1;" +
+                "-fx-padding: 0 0 5 13;");
+        mess.setStyle("-fx-background-color:  #e9e3d1;" +
+                "-fx-background-radius: 10;" +
+                "-fx-text-fill: #2d2d31;" +
+                "-fx-padding: 3 10 10 10;");
+        container.setAlignment(Pos.CENTER_LEFT);
+        container.setOnMousePressed(Event ->{ mess.setStyle(
+                "-fx-background-color:  #e9e3d1;" +
+                        "-fx-background-radius: 10;" +
+                        "-fx-text-fill: #2d2d31;" +
+                        "-fx-padding: 3 10 10 10;"+
+                        "-fx-border-color: #2d2d31;" +
+                        "-fx-border-radius: 10;"+
+                        "-fx-border-width: 2;" );});
 
+        return container;
+    }
+    public VBox getReplyRight(String SenderName, String message, String replied)
+    {
+        Label Name= new Label(SenderName);
+        Label mess = new Label(message);
+        Label rep = new Label(replied);
+        rep.setMaxSize(120,30);
+        rep.setStyle("-fx-background-color:rgb(166, 166, 166);" +
+                "-fx-padding: 3 10 3 10;" +
+                "-fx-background-radius: 15;");
+        VBox container = new VBox();
+        container.getChildren().addAll(Name,rep,mess);
+        Name.setStyle("-fx-text-fill: #e9e3d1;" +
+                "-fx-padding: 0 0 5 13;");
+        mess.setStyle("-fx-background-color:  #2d2d31;" +
+                "-fx-background-radius: 10;" +
+                "-fx-text-fill: #e9e3d1;" +
+                "-fx-padding: 3 10 10 10;");
+        container.setAlignment(Pos.CENTER_RIGHT);
+        container.setOnMousePressed(Event ->{ mess.setStyle(
+                "-fx-background-color:  #2d2d31;" +
+                        "-fx-background-radius: 10;" +
+                        "-fx-text-fill: #e9e3d1;" +
+                        "-fx-padding: 3 10 10 10;"+
+                        "-fx-border-color: #e9e3d1;" +
+                        "-fx-border-radius: 10;" );});
+        return container;
+    }
+    public VBox getMessLeft(String SenderName, String message)
+    {
+        Label Name = new Label(SenderName);
+        Label mess = new Label(message);
+        VBox container = new VBox(Name,mess);
+        Name.setStyle("-fx-text-fill: #e9e3d1;" +
+                "-fx-padding: 0 0 5 13;");
+        mess.setStyle("-fx-background-color:  #e9e3d1;" +
+                "-fx-background-radius: 10;" +
+                "-fx-text-fill: #2d2d31;" +
+                "-fx-padding: 3 10 10 10;");
+        container.setAlignment(Pos.CENTER_LEFT);
+        container.setOnMousePressed(Event ->{ mess.setStyle(
+                "-fx-background-color:  #e9e3d1;" +
+                "-fx-background-radius: 10;" +
+                "-fx-text-fill: #2d2d31;" +
+                "-fx-padding: 3 10 10 10;"+
+                "-fx-border-color: #2d2d31;" +
+
+                        "-fx-border-radius: 10;" +
+                        "-fx-border-width: 2;" );});
+        return container;
+    }
+    public VBox getMessRight(String SenderName, String message)
+    {
+        Label Name = new Label(SenderName);
+        Label mess = new Label(message);
+        VBox container = new VBox(Name,mess);
+        Name.setStyle("-fx-text-fill: #e9e3d1;" +
+                "-fx-padding: 0 0 5 13;");
+        mess.setStyle("-fx-background-color:  #2d2d31;" +
+                "-fx-background-radius: 10;" +
+                "-fx-text-fill: #e9e3d1;" +
+                "-fx-padding: 3 10 10 10");
+        container.setAlignment(Pos.CENTER_RIGHT);
+        container.setOnMousePressed(Event ->{ mess.setStyle(
+                "-fx-background-color:  #2d2d31;" +
+                        "-fx-background-radius: 10;" +
+                        "-fx-text-fill: #e9e3d1;" +
+                        "-fx-padding: 3 10 10 10;"+
+                        "-fx-border-color: #e9e3d1;" +
+                        "-fx-border-radius: 10;" );});
+        return container;
+    }
     public void initializeChat() {
         // TODO
 
         Chat selected = (Chat) tableViewChat.getSelectionModel().getSelectedItem();
-        if (selected != null)
+        if (selected != null) {
             chatSelected = selected;
-
+            ChatUserName.setText(chatSelected.getName());
+        }
         if (chatSelected == null)
             return;
         chatMessages.setAll(
@@ -181,8 +284,8 @@ public class ChatsController extends MenuController {
                     hBoxLeft.setSpacing(5);
                     hBoxRight.setAlignment(Pos.CENTER_RIGHT);
                     hBoxRight.setSpacing(5);
-                }
 
+                }
                 @Override
                 protected void updateItem(Message item, boolean empty) {
                     super.updateItem(item, empty);
@@ -191,41 +294,32 @@ public class ChatsController extends MenuController {
                         setText(null);
                         setGraphic(null);
                     } else {
+
                         //AICI INTRA REPLY URILE
                         if(item.getReply()!=null && item.getReply().getId()!=-1L) {
                             if (!item.getFrom().getId().equals(userLogin.getId())) {
-                                lblUserLeft.setText( item.getFrom().getFirstName() + " " + item.getFrom().getLastName() + ": "+"( reply to "+item.getReply().getMessage()+" ) ");
-                                lblTextLeft.setText(item.getMessage());
-                                //lblTextLeft.setTextFill(Color.color(1, 0, 0));
 
-                                setGraphic(hBoxLeft);
+                                VBox content = getReplyLeft(item.getFrom().getFirstName() + " " + item.getFrom().getLastName(), item.getMessage(), item.getReply().getMessage());
+                                setGraphic(content);
                             } else {
-                                lblUserRight.setText(":" + " ( reply to "+item.getReply().getMessage()+" ) "+item.getFrom().getFirstName() + " " + item.getFrom().getLastName());
-                                lblTextRight.setText(item.getMessage());
-                                setGraphic(hBoxRight);
+                                VBox content = getReplyRight(item.getFrom().getFirstName() + " " + item.getFrom().getLastName(),item.getMessage(),item.getReply().getMessage());
+                                setGraphic(content);
                             }
                         }
                         else
                             //AICI INTRA MESAJELE NORMALE
-                        if (!item.getFrom().getId().equals(userLogin.getId())) {
-                            lblUserLeft.setText(item.getFrom().getFirstName() + " " + item.getFrom().getLastName() + ":");
-                            lblTextLeft.setText(item.getMessage());
+                            if (!item.getFrom().getId().equals(userLogin.getId())) {
+                                VBox content = getMessLeft(item.getFrom().getFirstName() + " " + item.getFrom().getLastName(),item.getMessage());
+                                setGraphic(content);
 
-                            lblTextLeft.setStyle("-fx-font-size: 12px;\n" +
-                                    "                            -fx-font-weight: bold;\n" +
-                                    "                            -fx-text-fill: #4a56e2;");
-                            setGraphic(hBoxLeft);
-                            hBoxLeft.setStyle("-fx-background-color: red");
-                            hBoxLeft.setMaxWidth(300);
                             /*
                             hBoxLeft.setStyle("-fx-background-color: #2d2d31;" +
                                     "-fx-padding: 10 20 10 20;" +
                                     "-fx-background-radius: 20");*/
-                        } else {
-                            lblUserRight.setText(":" + item.getFrom().getFirstName() + " " + item.getFrom().getLastName());
-                            lblTextRight.setText(item.getMessage());
-                            setGraphic(hBoxRight);
-                        }
+                            } else {
+                                VBox content = getMessRight(item.getFrom().getFirstName() + " " + item.getFrom().getLastName(),item.getMessage());
+                                setGraphic(content);
+                            }
                     }
                 }
 
