@@ -6,15 +6,15 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(  #726c93,#2d2c30);" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.network5.NotificationsController">
+<AnchorPane prefHeight="495.0" prefWidth="394.0" style="-fx-background-color: #2d2d31;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.network5.NotificationsController">
    <children>
-      <ListView fx:id="listVIewNotifications" layoutX="73.0" layoutY="115.0" prefHeight="249.0" prefWidth="454.0" />
-      <Label layoutX="72.0" layoutY="42.0" text="Notifications" textFill="#e9e3d1">
+      <ListView fx:id="listVIewNotifications" layoutX="36.0" layoutY="116.0" prefHeight="376.0" prefWidth="342.0" stylesheets="@NotifList.css" />
+      <Label layoutX="37.0" layoutY="40.0" text="Notifications" textFill="#e9e3d1">
          <font>
             <Font name="Century Gothic" size="36.0" />
          </font>
       </Label>
-      <Line endX="72.79998779296875" endY="100.30000305175781" startX="527.5" startY="100.29998779296875" stroke="#e9e3d1" />
-      <Line endX="72.79998779296875" endY="100.30000305175781" layoutY="-11.0" startX="527.5" startY="100.29998779296875" stroke="#e9e3d1" />
+      <Line endX="72.79998779296875" endY="100.30000305175781" layoutX="-35.0" startX="434.29290771484375" startY="100.29999542236328" stroke="#e9e3d1" />
+      <Line endX="72.79998779296875" endY="100.30000305175781" layoutX="-36.0" layoutY="-13.0" startX="434.39996337890625" startY="100.29999542236328" stroke="#e9e3d1" />
    </children>
 </AnchorPane>
