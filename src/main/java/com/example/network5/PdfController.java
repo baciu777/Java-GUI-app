@@ -99,6 +99,8 @@ public class PdfController {
                 throw new ValidationException("the ending date is null");
             if (dateE.isAfter(LocalDate.now()))
                 throw new ValidationException("Ending date must not be in the future");
+            if(dateE.isBefore(dateS))
+                throw new ValidationException("The start date should be before the end date");
 
             PDDocument document = new PDDocument();
             PDPage my_page = new PDPage();
