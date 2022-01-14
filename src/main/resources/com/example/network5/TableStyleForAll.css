@@ -4,7 +4,7 @@
 
 .table-view{
     -fx-base:transparent;
-    -fx-background-color: transparent;
+    -fx-background-color: rgba(0,0,0,0.4);
     -fx-border-color: #e9e3d1;
 }
 
@@ -15,7 +15,7 @@
 
 
 .table-view .column-header-background{
-    -fx-background-color:  linear-gradient(  #726c93,#2d2c30)
+    -fx-background-color:  rgba(0,0,0,0.5);
 }
 
 .table-view .column-header-background .label{
@@ -32,5 +32,12 @@
     -fx-border-color:  rgba(0, 0, 0, 0.05);
     -fx-border-radius: 1;
 
+}
+
+.list-cell {
+    -fx-background-color: transparent;
+}
+.list-view {
+    -fx-background-color: transparent;
 }
 
