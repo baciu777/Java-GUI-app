@@ -581,7 +581,7 @@ public class BCrypt {
         }
         return ret;
     }
-
+    //APELARE DIN REPOSITORY SAVE USER
     /**
      * Hash a password using the OpenBSD bcrypt scheme
      * @param password	the password to hash
@@ -682,7 +682,7 @@ public class BCrypt {
     public static String gensalt() {
         return gensalt(GENSALT_DEFAULT_LOG2_ROUNDS);
     }
-
+    //SE APELEAZA IN SERVICE LA VERIFICARE PASSWORD
     /**
      * Check that a plaintext password matches a previously hashed
      * one

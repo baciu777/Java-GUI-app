@@ -58,7 +58,7 @@ public class NotificationsController extends MenuController {
 
     private void displayAppointmentNotification() {
         notifyy();
-        List<Event> listEv = new ArrayList<>();
+        /*List<Event> listEv = new ArrayList<>();
         serviceEvent.printUs().forEach(listEv::add);
 
         for (Event ev : listEv) {
@@ -80,7 +80,7 @@ public class NotificationsController extends MenuController {
             }
 
 
-        }
+        }*/
         initModel();///incercaaam sa fie in ordine
     }
 
