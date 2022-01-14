@@ -159,15 +159,27 @@ public class ChatsController extends MenuController {
         }
         return false;
     }
-    public String newLinesInString(String s, int i)
+    public String newLinesInString(String s, int x)
     {
-        return null;
+
+        StringBuilder c = new StringBuilder(s);
+        for(int i = x; i<s.length(); i = i +x)
+        {
+            while(i<c.length() && c.charAt(i)!=' ')
+            {
+                i++;
+            }
+            c.setCharAt(i,'\n');
+        }
+        String output = c.toString();
+        return output;
     }
     public VBox getReplyLeft(String SenderName, String message, String replied)
     {
         Label Name= new Label(SenderName);
         Label mess = new Label(message);
         Label rep = new Label(replied);
+        mess.setText(newLinesInString(mess.getText(),30));
         rep.setMaxSize(120,30);
         rep.setStyle("-fx-background-color:rgb(166, 166, 166);" +
                 "-fx-padding: 3 10 3 10;" +
@@ -196,6 +208,7 @@ public class ChatsController extends MenuController {
     {
         Label Name= new Label(SenderName);
         Label mess = new Label(message);
+        mess.setText(newLinesInString(mess.getText(),30));
         Label rep = new Label(replied);
         rep.setMaxSize(120,30);
         rep.setStyle("-fx-background-color:rgb(166, 166, 166);" +
@@ -223,6 +236,7 @@ public class ChatsController extends MenuController {
     {
         Label Name = new Label(SenderName);
         Label mess = new Label(message);
+        mess.setText(newLinesInString(mess.getText(),30));
         VBox container = new VBox(Name,mess);
         Name.setStyle("-fx-text-fill: #e9e3d1;" +
                 "-fx-padding: 0 0 5 13;");
@@ -246,6 +260,7 @@ public class ChatsController extends MenuController {
     {
         Label Name = new Label(SenderName);
         Label mess = new Label(message);
+        mess.setText(newLinesInString(mess.getText(),30));
         VBox container = new VBox(Name,mess);
         Name.setStyle("-fx-text-fill: #e9e3d1;" +
                 "-fx-padding: 0 0 5 13;");
