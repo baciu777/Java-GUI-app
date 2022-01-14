@@ -170,7 +170,7 @@ public class UserDbRepository implements Repository<Long, User> {
             ps.setString(4,  text);
 
             String sqlChat = "insert into passwords (usernameu,passwordu) values (?,?)";
- //
+
 
 
             String CryptPassword= BCrypt.hashpw(entity.getPassword(), BCrypt.gensalt(12));

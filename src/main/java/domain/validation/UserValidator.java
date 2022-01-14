@@ -3,6 +3,7 @@ package domain.validation;
 import domain.User;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 /**
  * User validator where is verified the inputs of a potential user
@@ -22,8 +23,11 @@ public class UserValidator implements  Validator<User>{
             throw new ValidationException("the last name must contain only small letters[25 max], except the first one");
         if(!last.matches("^[A-Z].*"))
             throw new ValidationException("the last name must start with a big letter");
-        if(entity.getPassword()=="")
+        if(Objects.equals(entity.getUsername(), ""))
+            throw new ValidationException("the username should not be null");
+        if(Objects.equals(entity.getPassword(), ""))
             throw new ValidationException("the password should not be null");
+
         if(entity.getBirth()==null)
             throw new ValidationException("the date should not be null");
         if(entity.getBirth().isAfter(LocalDate.now()))

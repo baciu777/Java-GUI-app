@@ -260,9 +260,9 @@ public class ServiceUser  {
             throw new ValidationException("Confirmation password incorrect");
 
     }
+
     public void verifyPasswordUser(String passwordUser,User user) {
 
-            String CryptPassword= BCrypt.hashpw(passwordUser, BCrypt.gensalt(12));
 
 
         if(!BCrypt.checkpw(passwordUser,user.getPassword()))

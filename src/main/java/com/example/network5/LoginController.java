@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -15,10 +16,15 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+import org.controlsfx.control.Notifications;
 import service.*;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -80,6 +86,7 @@ public class LoginController {
             servUser.verifyPasswordUser(password,user);
             System.out.println(user);
             initPage();
+            showNotif(user);
             showMessageTaskEditDialog(user);
 
         }
@@ -92,6 +99,32 @@ public class LoginController {
             MessageAlert.showErrorMessage(null,"id null");
         }
 
+    }
+
+    private void showNotif(Page userLogin) {
+        List<Event> listEv = new ArrayList<>();
+        serviceEvent.printUs().forEach(listEv::add);
+
+        for (Event ev : listEv) {
+            long nr = ChronoUnit.DAYS.between(LocalDate.now(), ev.getDate());
+
+            if (nr == 0 && ev.getIds().containsKey(userLogin.getId()) && ev.getIds().get(userLogin.getId()) == 1L
+            ) {
+
+
+                Notifications notificationsBuilder = Notifications.create()
+                        .title("New upcoming event")
+                        .text(ev.getName() + " it s happening today")
+                        .hideAfter(Duration.seconds(5))
+                        .position(Pos.BOTTOM_RIGHT);
+                notificationsBuilder.darkStyle();
+                notificationsBuilder.show();
+
+
+            }
+
+
+        }
     }
 
     private void initPage() {
@@ -152,9 +185,7 @@ public class LoginController {
         try {
             // create a new stage for the popup dialog.
 
-             //AnchorPane content2 =FXMLLoader.load(getClass().getResource("createAccount.fxml"));
 
-            //content.getChildren().setAll(content2);
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("createAccount.fxml"));
 
