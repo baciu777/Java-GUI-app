@@ -322,7 +322,7 @@ public class MenuController {
     }
 
     protected void setLabelName() {
-        idName.setText(userLogin.toString3());
+        idName.setText(userLogin.toString4());
 
     }
 

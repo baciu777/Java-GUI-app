@@ -73,6 +73,7 @@ public class EventsController extends MenuController implements Observer<EventCh
         pagination.setPageFactory(this::createPage);
         // paging=serviceEvent.crea
 
+
     }
 
 
@@ -90,7 +91,7 @@ public class EventsController extends MenuController implements Observer<EventCh
 
     }
 
-    //eventurile vechi nu se afiseaza
+
     protected void initModelEvents(int pageIndex) {
 
 
@@ -104,8 +105,8 @@ public class EventsController extends MenuController implements Observer<EventCh
                 modelEvents.add(ev);
             }
         }
-
-        //modelEvents.setAll(list);
+        //pagination.setMaxPageIndicatorCount((EvList.size())/3+1);
+    //modelEvents.setAll(list);
     }
 
     private Node createPage(int PageIndex) {

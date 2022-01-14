@@ -176,7 +176,9 @@ public class NewChatController extends ChatsController {
 
 
             newChatUsers.add(found.getId());
+            //handleFilter();
             initModelNewChat();
+            handleFilter();
         } catch (Exception e) {
             MessageAlert.showErrorMessage(null, e.getMessage());
         }

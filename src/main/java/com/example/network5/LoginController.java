@@ -84,6 +84,7 @@ public class LoginController {
 
         }
         catch (ValidationException e) {
+            textFieldPassword.setText("");
             MessageAlert.showErrorMessage(null,e.getMessage());
         }
         catch (IllegalArgumentException ee)
