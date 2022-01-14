@@ -105,7 +105,7 @@ public class FriendsController extends MenuController {
 
     public void handleFilter()
     {
-        Predicate<User> p1 = n -> n.getFirstName().startsWith(textFieldSearch.getText());
+        Predicate<User> p1 = n -> n.getFirstName().startsWith(textFieldSearch.getText()) || n.getLastName().startsWith(textFieldSearch.getText());
         Iterable<User> users = serviceF.friends(userLogin.getId());
         List<User> friendshipsList = StreamSupport.stream(users.spliterator(), false)
                 .filter(p1)
