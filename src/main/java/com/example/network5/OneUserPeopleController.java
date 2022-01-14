@@ -55,6 +55,10 @@ public class OneUserPeopleController {
         relation.setStyle("-fx-text-fill:#e9e3d1;" +
                 "-fx-font-family: Century Gothic;" +
                 "-fx-opacity: 70% ");
+        button1.setMaxSize(120,25);
+        button1.setMinSize(120,25);
+        button2.setMaxSize(120,25);
+        button2.setMinSize(120,25);
         button1.setStyle("-fx-background-color: transparent; -fx-border-color: #e9e3d1;" +
                 "-fx-text-fill:#e9e3d1; -fx-font-family: Century Gothic;");
         button2.setStyle("-fx-background-color: transparent; -fx-border-color: #e9e3d1;" +
