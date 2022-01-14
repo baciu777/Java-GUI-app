@@ -4,31 +4,31 @@ import domain.Message;
 import domain.Page;
 import domain.User;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import service.ServiceMessage;
-import service.ServiceUser;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 public class PdfController {
     @FXML
-    TextField PathText;
+    TextField NameField;
     public DatePicker startDate;
     public DatePicker endDate;
-
+    private String path;
     public Page userLogin;
+
 
     public void set(Page user) {
 
@@ -36,11 +36,28 @@ public class PdfController {
 
     }
 
+
     @FXML
     public void initialize() {
 
 
-        PathText.setText("C:/Users/ioana/Documents/GitHub/pdfs/first.pdf");
+        path = "C:/Users/ioana/Documents/GitHub/pdfs/first.pdf";
+        NameField.setText("first.pdf");
+
+    }
+    public void handleDirectory()
+    {
+        Stage stage = new Stage();
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setInitialDirectory(new File("src"));
+        File selectedDirectory = directoryChooser.showDialog(stage);
+
+        System.out.println(selectedDirectory.getAbsolutePath());
+        String s = selectedDirectory.getAbsolutePath();
+        s = s.replace('\\','/');
+        s = s + "/";
+        path = s + NameField.getText();
+
     }
     @FXML
 
@@ -111,7 +128,7 @@ public class PdfController {
 
             System.out.println("Content added");
 
-            document.save(PathText.getText());
+            document.save(path);
 
 
             System.out.println("PDF created");

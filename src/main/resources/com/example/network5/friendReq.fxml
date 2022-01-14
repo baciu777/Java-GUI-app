@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -97,12 +96,14 @@
             </ImageView>
          </graphic>
       </Button>
-      <TableView fx:id="tableViewFriendReq2" layoutX="191.0" layoutY="553.0" prefHeight="164.0" prefWidth="514.0">
+
+      <TableView fx:id="tableViewFriendReq2" layoutX="191.0" layoutY="553.0" prefHeight="146.0" prefWidth="515.0">
+
          <columns>
             <TableColumn fx:id="tableColumnTo2" prefWidth="107.99998474121094" text="To" />
             <TableColumn fx:id="tableColumnStatus2" minWidth="8.79998779296875" prefWidth="103.20001220703125" text="Status" />
-            <TableColumn fx:id="tableColumnDate2" minWidth="0.0" prefWidth="220.0" text="Date" />
-            <TableColumn fx:id="tableColumnUnsent" prefWidth="91.20001220703125" text="Unsend" />
+            <TableColumn fx:id="tableColumnDate2" minWidth="0.0" prefWidth="236.0" text="Date" />
+            <TableColumn fx:id="tableColumnUnsent" prefWidth="60.800048828125" text="Unsend" />
          </columns>
       </TableView>
       <Label layoutX="72.0" layoutY="365.0" prefHeight="44.0" prefWidth="118.0" text="Received" textFill="WHITE">
@@ -115,16 +116,18 @@
             <Font size="20.0" />
          </font>
       </Label>
-      <TableView fx:id="tableViewFriendReq" layoutX="189.0" layoutY="365.0" prefHeight="156.0" prefWidth="514.0">
+
+
+      <TableView fx:id="tableViewFriendReq" layoutX="189.0" layoutY="365.0" prefHeight="154.0" prefWidth="515.0">
+
          <columns>
             <TableColumn fx:id="tableColumnFrom" prefWidth="111.19999694824219" text="From" />
             <TableColumn fx:id="tableColumnStatus" minWidth="8.79998779296875" prefWidth="92.79998779296875" text="Status" />
-            <TableColumn fx:id="tableColumnDate" minWidth="0.0" prefWidth="191.199951171875" text="Date" />
-            <TableColumn fx:id="tableColumnAccept" prefWidth="60.0" text="Accept" />
-            <TableColumn fx:id="tableColumnDecline" prefWidth="56.7999267578125" text="Decline" />
+            <TableColumn fx:id="tableColumnDate" minWidth="0.0" prefWidth="196.0" text="Date" />
+            <TableColumn fx:id="tableColumnAccept" minWidth="8.79998779296875" prefWidth="52.800048828125" text="Accept" />
+            <TableColumn fx:id="tableColumnDecline" minWidth="4.800048828125" prefWidth="55.199951171875" text="Decline" />
          </columns>
       </TableView>
-      <TextField fx:id="SearchingName" layoutX="499.0" layoutY="317.0" prefHeight="26.0" prefWidth="214.0" />
 
 
 
