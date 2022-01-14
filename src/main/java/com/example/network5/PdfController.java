@@ -3,6 +3,7 @@ package com.example.network5;
 import domain.Message;
 import domain.Page;
 import domain.User;
+import domain.validation.ValidationException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
@@ -16,6 +17,7 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.function.Predicate;
@@ -76,6 +78,17 @@ public class PdfController {
     public void handleExecute()
     {
         try{
+            LocalDate dateS=startDate.getValue();
+            LocalDate dateE=endDate.getValue();
+
+            if(!path.endsWith(".pdf"))
+                throw new ValidationException("Please select a pdf type of file");
+            if(dateS.isAfter(LocalDate.now()))
+                throw new ValidationException("Starting date must not be in the future");
+
+            if(dateE.isAfter(LocalDate.now()))
+                throw new ValidationException("Ending date must not be in the future");
+
             PDDocument document = new PDDocument();
             PDPage my_page = new PDPage();
             document.addPage(my_page);
@@ -136,7 +149,11 @@ public class PdfController {
 
 
             document.close();
-        } catch (IOException e) {
+        }catch (ValidationException e)
+        {
+            MessageAlert.showErrorMessage(null,e.getMessage());
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
     }

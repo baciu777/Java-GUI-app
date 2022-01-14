@@ -1,5 +1,7 @@
 package com.example.network5;
 
+import domain.DtoFriendReq;
+import domain.FriendRequest;
 import domain.Page;
 import domain.User;
 import domain.validation.ValidationException;
@@ -14,6 +16,10 @@ import service.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public class CreateAccountController extends MenuController{
 
@@ -63,15 +69,12 @@ public class CreateAccountController extends MenuController{
         String lastName=textFieldLastName.getText();
         LocalDate birth=textFieldBirth.getValue();
         try {
-            //long idd = Long.parseLong(id);
 
-            //User user=new User(firstName,lastName,username,birth);
-
-            //user.setPassword(password);
             serviceUser.verifyUsername(username);
             serviceUser.verifyPassword(password,passwordRepeat);
             serviceUser.save(firstName,lastName,username,password,birth);
             userLogin = serviceUser.findByUsername(username);
+            initPage(userLogin);
             GoToMenu(userLogin);
         }
         catch (ValidationException e) {
@@ -84,6 +87,60 @@ public class CreateAccountController extends MenuController{
             MessageAlert.showErrorMessage(null,"id null");
         }
     }
+    private void initPage(Page user)
+    {
+
+        initModelFriendsUser(user);
+        initModelFriendshipReqUser(user);
+        initModelFriendshipReqUser2(user);
+        initModelChatUser(user);
+
+    }
+    private void initModelChatUser(Page user) {
+        user.setMessages( serviceMessage.userMessages(user));
+    }
+
+    protected void initModelFriendsUser(Page user)
+    {
+        System.out.println(user.getId());
+        user.setFriends(serviceUser.findOne(user.getId()).getFriends());
+    }
+    protected void initModelFriendshipReqUser(Page user) {
+        Predicate<FriendRequest> certainUserRight = x -> x.getId().getRight().equals(user.getId());
+
+        List<DtoFriendReq> friendshipsReqList = StreamSupport.stream(serviceFr.findAllRenew().spliterator(), false)
+                .filter(certainUserRight)
+                .map(x ->
+                {
+                    User u1 = serviceUser.findOne(x.getId().getLeft());
+                    DtoFriendReq pp=new DtoFriendReq(u1.getFirstName() + " " + u1.getLastName(), user.getFirstName() + " " + user.getLastName(), x.getDate(), x.getStatus());
+
+                    return pp;
+                })
+                .collect(Collectors.toList());
+
+        user.setFriendRequestsReceived(friendshipsReqList);
+
+    }
+    protected void initModelFriendshipReqUser2(Page user) {
+        Predicate<FriendRequest> certainUserLeft = x -> x.getId().getLeft().equals(user.getId());
+
+//am facut aici o susta de functie pt findall()
+        List<DtoFriendReq> friendshipsReqList = StreamSupport.stream(serviceFr.findAllRenew().spliterator(), false)
+                .filter(certainUserLeft)
+                .map(x ->
+                {
+
+                    User u1 = serviceUser.findOne(x.getId().getRight());
+                    return new DtoFriendReq(user.getFirstName() + " " + user.getLastName(), u1.getFirstName() + " " + u1.getLastName(), x.getDate(), x.getStatus());
+
+                })
+                .collect(Collectors.toList());
+
+        user.setFriendRequestsSent(friendshipsReqList);
+
+    }
+
     private void GoToMenu(Page user)
     {
         try {

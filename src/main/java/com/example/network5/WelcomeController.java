@@ -54,9 +54,7 @@ public class WelcomeController {
         try {
             // create a new stage for the popup dialog.
 
-            //AnchorPane content2 =FXMLLoader.load(getClass().getResource("createAccount.fxml"));
 
-            //content.getChildren().setAll(content2);
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("loginPage.fxml"));
 
@@ -87,9 +85,7 @@ public class WelcomeController {
         try {
             // create a new stage for the popup dialog.
 
-            //AnchorPane content2 =FXMLLoader.load(getClass().getResource("createAccount.fxml"));
 
-            //content.getChildren().setAll(content2);
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("signupPage.fxml"));
 

@@ -84,7 +84,7 @@ public class MenuController {
             userLogin.setFriendRequestsReceived(friendshipsReqList);
             Predicate<FriendRequest> certainUserLeft = x -> x.getId().getLeft().equals(userLogin.getId());
 
-//am facut aici o susta de functie pt findall()
+            //am facut aici o susta de functie pt findall()
             List<DtoFriendReq> friendshipsReqList2 = StreamSupport.stream(serviceFr.findAllRenew().spliterator(), false)
                     .filter(certainUserLeft)
                     .map(x ->
@@ -297,27 +297,6 @@ public class MenuController {
 
     public void showWelcomeEditDialog() {
         dialogStage.close();
-        //am schimbat aici
-        //try {
-
-        // create a new stage for the popup dialog.
-        // FXMLLoader loader = new FXMLLoader();
-        // loader.setLocation(getClass().getResource("welcomePage.fxml"));
-
-        // AnchorPane root = (AnchorPane) loader.load();
-
-
-        // Scene scene = new Scene(root);
-        //dialogStage.setScene(scene);
-
-        // WelcomeController controller = loader.getController();
-        //controller.setService(serviceUser,serviceMessage,serviceF,serviceFr,serviceEvent,dialogStage);
-
-        //dialogStage.show();
-
-        //} catch (IOException e) {
-        // e.printStackTrace();
-        // }
 
     }
 
