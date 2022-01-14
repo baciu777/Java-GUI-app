@@ -97,7 +97,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <TableView fx:id="tableViewFriendReq2" layoutX="191.0" layoutY="553.0" prefHeight="146.0" prefWidth="522.0">
+      <TableView fx:id="tableViewFriendReq2" layoutX="191.0" layoutY="553.0" prefHeight="164.0" prefWidth="514.0">
          <columns>
             <TableColumn fx:id="tableColumnTo2" prefWidth="107.99998474121094" text="To" />
             <TableColumn fx:id="tableColumnStatus2" minWidth="8.79998779296875" prefWidth="103.20001220703125" text="Status" />
@@ -115,7 +115,7 @@
             <Font size="20.0" />
          </font>
       </Label>
-      <TableView fx:id="tableViewFriendReq" layoutX="189.0" layoutY="365.0" prefHeight="154.0" prefWidth="514.0">
+      <TableView fx:id="tableViewFriendReq" layoutX="189.0" layoutY="365.0" prefHeight="156.0" prefWidth="514.0">
          <columns>
             <TableColumn fx:id="tableColumnFrom" prefWidth="111.19999694824219" text="From" />
             <TableColumn fx:id="tableColumnStatus" minWidth="8.79998779296875" prefWidth="92.79998779296875" text="Status" />

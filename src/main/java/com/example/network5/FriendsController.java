@@ -50,6 +50,7 @@ public class FriendsController extends MenuController {
         }
     };
 
+
     public void set(ServiceUser service, ServiceMessage mess, ServiceFriendship serviceFriendshipNew, ServiceFriendshipRequest serviceFriendRequestt, ServiceEvent servEvent, Stage stage, Page user) {
 
         this.serviceUser = service;
@@ -124,9 +125,9 @@ public class FriendsController extends MenuController {
         @Override
         public void update(FriendChangeEvent friendChangeEvent) {
 
-            if (Objects.equals(friendChangeEvent.getType(), "del") && Objects.equals(friendChangeEvent.getData().getId().getRight(), userLogin.getId())) {
+            //if (Objects.equals(friendChangeEvent.getType(), "del") && Objects.equals(friendChangeEvent.getData().getId().getRight(), userLogin.getId())) {
                 initModelFriendship();
-            }
+           // }
 
         }
     };

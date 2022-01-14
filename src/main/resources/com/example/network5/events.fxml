@@ -99,10 +99,10 @@
             </ImageView>
          </graphic>
       </Button>
-      <TableView fx:id="tableViewEvents" layoutX="80.0" layoutY="411.0" onMouseClicked="#handleGoing" prefHeight="142.0" prefWidth="250.0">
+      <TableView fx:id="tableViewEvents" layoutX="58.0" layoutY="442.0" onMouseClicked="#handleGoing" prefHeight="127.0" prefWidth="278.0">
          <columns>
-            <TableColumn fx:id="tableColumnNameEvent" minWidth="5.0" prefWidth="100.0" text="name" />
-            <TableColumn fx:id="tableColumnDateEvent" prefWidth="170.0" text="date" />
+            <TableColumn fx:id="tableColumnNameEvent" minWidth="5.0" prefWidth="156.0000343322754" text="name" />
+            <TableColumn fx:id="tableColumnDateEvent" prefWidth="115.19993591308594" text="date" />
          </columns>
       </TableView>
       <TextField fx:id="newName" layoutX="494.0" layoutY="450.0" prefHeight="26.0" prefWidth="175.0" />
@@ -116,7 +116,7 @@
             <Font size="18.0" />
          </font></Button>
 
-      <Pagination fx:id="pagination" layoutX="68.0" layoutY="410.0" maxPageIndicatorCount="5" prefHeight="207.0" prefWidth="277.0" />
+      <Pagination fx:id="pagination" layoutX="56.0" layoutY="470.0" maxPageIndicatorCount="3" prefHeight="148.0" prefWidth="278.0" />
       <Label layoutX="422.0" layoutY="443.0" prefHeight="39.0" prefWidth="130.0" text="Name" textAlignment="CENTER" textFill="#e9e3d1">
          <font>
             <Font name="Century Gothic" size="17.0" />
@@ -127,7 +127,7 @@
             <Font name="Century Gothic" size="18.0" />
          </font>
       </Label>
-      <Label layoutX="118.0" layoutY="348.0" prefHeight="34.0" prefWidth="231.0" text="Existing events" textFill="#e9e3d1">
+      <Label layoutX="118.0" layoutY="373.0" prefHeight="34.0" prefWidth="231.0" text="Existing events" textFill="#e9e3d1">
          <font>
             <Font name="Century Gothic" size="25.0" />
          </font>

@@ -26,6 +26,7 @@ import service.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -108,13 +109,21 @@ public class ChatsController extends MenuController {
 
             if ((Objects.equals(ms.getFrom().getId(), userLogin.getId()) ||
                     ms.getTo().contains(serviceUser.findOne(userLogin.getId())))) {
+                String nameGroup="Group ";
+                List<User> listUsersTo=ms.getTo().stream().sorted(Comparator.comparing(User::getId)).collect(Collectors.toList());
+
+                for(User msI:listUsersTo)
+                {
+                    nameGroup=nameGroup+msI.getUsername()+" ";
+                }
                 ms.getTo().forEach(x -> messageInvolved.add(x.getId()));
                 messageInvolved.add(ms.getFrom().getId());
                 List<Long> messageInvolvedSorted = messageInvolved.stream().sorted().collect(Collectors.toList());
 
 
                 if (!containsPeople(messageInvolvedSorted, chats) && messageInvolved.size() > 2) {
-                    Chat chatNew = new Chat("Group " + messageInvolvedSorted, messageInvolvedSorted);
+
+                    Chat chatNew = new Chat(nameGroup, messageInvolvedSorted);
                     chats.add(chatNew);
                 }
                 if (!containsPeople(messageInvolvedSorted, chats) && messageInvolved.size() == 2) {
@@ -138,7 +147,7 @@ public class ChatsController extends MenuController {
 
 
         }
-        System.out.println(userLogin.getMessages().size());
+
         modelChat.setAll(chats);
         return chats;
     }
@@ -214,9 +223,9 @@ public class ChatsController extends MenuController {
                             lblTextLeft.setStyle("-fx-font-size: 12px;\n" +
                                     "                            -fx-font-weight: bold;\n" +
                                     "                            -fx-text-fill: #4a56e2;");
-                            setGraphic(hBoxLeft);
-                            hBoxLeft.setStyle("-fx-background-color: red");
-                            hBoxLeft.setMaxWidth(300);
+                            //setGraphic(hBoxLeft);
+                            //hBoxLeft.setStyle("-fx-background-color: red");
+                            //hBoxLeft.setMaxWidth(300);
                             /*
                             hBoxLeft.setStyle("-fx-background-color: #2d2d31;" +
                                     "-fx-padding: 10 20 10 20;" +
