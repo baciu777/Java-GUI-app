@@ -105,8 +105,7 @@ public class EventsController extends MenuController implements Observer<EventCh
                 modelEvents.add(ev);
             }
         }
-        //pagination.setMaxPageIndicatorCount((EvList.size())/3+1);
-    //modelEvents.setAll(list);
+
     }
 
     private Node createPage(int PageIndex) {

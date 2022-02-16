@@ -125,24 +125,7 @@ public class ServiceEvent implements Observable<EventChangeEvent> {
 
 
     }
-    private Pageable pageable;
 
-    public void setPageSize(int size) {
-        this.size = size;
-    }
-    public int getPageSize() {
-        return size;
-    }
-    public void setPageNumber(int pageNumber) {
-        this.page = pageNumber;
-    }
-
-
-    public Set<Event> getNextEvents() {
-
-        this.page++;
-        return getEventsOnPage(this.page);
-    }
 
     public Set<Event> getEventsOnPage(int page) {
         this.page=page;
@@ -166,4 +149,24 @@ public class ServiceEvent implements Observable<EventChangeEvent> {
     public void notifyObservers(EventChangeEvent t) {
         observers.stream().forEach(x->x.update(t));
     }
+
+    private Pageable pageable;
+
+    public void setPageSize(int size) {
+        this.size = size;
+    }
+    public int getPageSize() {
+        return size;
+    }
+    public void setPageNumber(int pageNumber) {
+        this.page = pageNumber;
+    }
+
+
+    public Set<Event> getNextEvents() {
+
+        this.page++;
+        return getEventsOnPage(this.page);
+    }
+
 }

@@ -169,7 +169,8 @@ public class ChatsController extends MenuController {
             {
                 i++;
             }
-            c.setCharAt(i,'\n');
+            if(i<c.length())
+                c.setCharAt(i,'\n');
         }
         String output = c.toString();
         return output;
